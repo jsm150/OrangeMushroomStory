@@ -92,7 +92,8 @@ scope initialize initializer init
         set s = s + "- 다른 유즈맵을 실행할때 페이탈이 발생하던 현상을 완화했습니다.\n"
         set s = s + "\n"
         set s = s + "10.1\n"
-        set s = s + "- 게임을 종료할 때 워크래프트가 강제로 종료되도록 변경하였습니다."
+        set s = s + "- 게임을 종료할 때 워크래프트가 강제로 종료되도록 변경하였습니다.\n"
+        set s = s + "- -시간 명령어가 삭제되었습니다. 이제 우측 상단에 플레이 타임이 표시됩니다."
         call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "9.8~10.1", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.4\n"
         set s = s + "- 일부 맵들의 코스가 약간 변경되었습니다.\n"
@@ -389,10 +390,7 @@ scope initialize initializer init
         set s = s + "\n"
         set s = s + "-재선택\n"
         set s = s + "현재 스테이지를 변경합니다.\n"
-        set s = s + "총 2번 사용할 수 있으며, 랜덤 월드에서만 사용할 수 있습니다.\n"
-        set s = s + "\n"
-        set s = s + "-시간\n"
-        set s = s + "플레이 타임을 확인합니다.\n"
+        set s = s + "총 2번 사용할 수 있으며, 랜덤 월드에서만 사용할 수 있습니다."
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "명령어1", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "● 전체 명령어\n"
         set s = s + "-연습모드\n"
