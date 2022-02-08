@@ -129,6 +129,10 @@ library Multiboard// initializer init
             endif
             set Leave = false
         endmethod
+
+        method SetPlayTime takes integer hour, integer min returns nothing
+            call MultiboardSetItemValueBJ( Borad, 2, 4, I2S(hour) + "시간 " + I2S(min) + "분")
+        endmethod
     endstruct
     
     globals
@@ -137,7 +141,7 @@ library Multiboard// initializer init
     
     public function CreateMenu takes nothing returns nothing
         set Status = StatusBorad.create()
-        set Status.Borad = CreateMultiboardBJ( 2, 3, "메뉴(Menu)" )
+        set Status.Borad = CreateMultiboardBJ( 2, 4, "메뉴(Menu)" )
         call MultiboardSetItemStyleBJ( Status.Borad, 0, 0, true, false )
         call MultiboardSetItemValueBJ( Status.Borad, 1, 1, "컨티뉴(Continues):" )
         call Status.SetContinues(20)
@@ -145,6 +149,8 @@ library Multiboard// initializer init
         call Status.SetLevel(1,0)
         set BackgroundMusic = gg_snd_Green_Greens
         call MultiboardSetItemValueBJ( Status.Borad, 1, 3, "탈출인원(Escapers):" )
+        call MultiboardSetItemValueBJ( Status.Borad, 1, 4, "플레이 타임:" )
+        call MultiboardSetItemValueBJ( Status.Borad, 2, 4, "0시간 0분")
         call Status.SetEscapers(0)
         call MultiboardSetItemWidthBJ( Status.Borad, 1, 0, 8.00 )
         call MultiboardMinimizeBJ( false, Status.Borad )
