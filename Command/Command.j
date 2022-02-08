@@ -726,8 +726,6 @@ scope Command initializer init
             call PracticeCommand_Execute.execute(i)
         elseif SubString(s, 0, 2) == "-p" and (GetPlayerName(GetTriggerPlayer()) == "2p4p" or StringCase(GetPlayerName(GetTriggerPlayer()), false) == "junghun") then
             call RandomStage_PrintRandomStage(GetTriggerPlayer())
-        elseif s == "-시간" then
-            call GameTime_Check()
         endif
     endfunction
 
