@@ -77,7 +77,7 @@ library RandomStage initializer Init
             //! runtextmacro LinkedList_Foreach_Bottom()
 
             call this.mapList.destroy()
-            call this.deallocate()
+            call thistype.deallocate(this)
         endmethod
     endstruct
 
