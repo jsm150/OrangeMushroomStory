@@ -83,10 +83,10 @@
 //! import "Textmacro\Syntax.j"
 
 // UI
-// //! import "UI\Test.j"
+//! import "UI\SkinFrame.j"
 
 // Test
-//! import "Test\TestCommand.j"
-//! import "Test\MouseTeleport.j"
+// //! import "Test\TestCommand.j"
+// //! import "Test\MouseTeleport.j"
 // //! import "Test\CodePrint.j"
 // //! import "Test\TestMode.j"
