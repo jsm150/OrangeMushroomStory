@@ -1224,6 +1224,7 @@ library Key initializer Init
         set posList = blockLocationLinkedList.create()
         call posList.AddFirst(blockLocation.create(9472, 19328))
         call posList.AddFirst(blockLocation.create(12544, 18048))
+        call posList.AddFirst(blockLocation.create(12544 - 128, 18048))
         call posList.AddFirst(blockLocation.create(12672, 18560))
         //! runtextmacro for("set j = 0", "j < 3")
             call posList.AddFirst(blockLocation.create(12672, 17920 + (128 * j)))
