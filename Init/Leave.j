@@ -43,6 +43,7 @@ scope PlayerLeave initializer init
         set j = j + 1
         endloop
         if HostNumber == i then
+            call JNSetSyncDelay(15)
             set j = 1
             loop
             exitwhen j > PLAYER_MAXINUM
