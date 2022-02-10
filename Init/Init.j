@@ -93,7 +93,10 @@ scope initialize initializer init
         set s = s + "\n"
         set s = s + "10.1\n"
         set s = s + "- 게임을 종료할 때 워크래프트가 강제로 종료되도록 변경하였습니다.\n"
-        set s = s + "- -시간 명령어가 삭제되었습니다. 이제 우측 상단에 플레이 타임이 표시됩니다."
+        set s = s + "- -시간 명령어가 삭제되었습니다. 이제 우측 상단에 플레이 타임이 표시됩니다.\n"
+        set s = s + "- 아랫마을 3-8 열쇠 버그가 수정되었습니다.\n"
+        set s = s + "- 아랫마을 3-6 코스가 수정되었습니다.\n"
+        set s = s + "- 호스트가 나가도 딜레이가 유지됩니다."
         call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "9.8~10.1", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.4\n"
         set s = s + "- 일부 맵들의 코스가 약간 변경되었습니다.\n"
