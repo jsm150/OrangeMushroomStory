@@ -78,7 +78,7 @@ scope SkinFrame initializer Init
     endglobals
 
     private struct SkinPreviewUI
-        private static constant real size = 0.046
+        private static constant real size = 0.044
         private integer frame
         private real posX = 0
         private real posY = 0
@@ -106,7 +106,7 @@ scope SkinFrame initializer Init
         public method Move takes real posX, real posY returns nothing
             set this.posX = posX
             set this.posY = posY
-            call DzFrameSetAbsolutePoint(this.frame, JN_FRAMEPOINT_CENTER, this.posX, this.posY)
+            call DzFrameSetAbsolutePoint(this.frame, JN_FRAMEPOINT_BOTTOM, this.posX, this.posY)
         endmethod
 
         public method Clone takes nothing returns thistype
@@ -150,28 +150,75 @@ scope SkinFrame initializer Init
         endmethod
     endstruct
 
-    private struct SkinPreviewBackgroundUI
-        private static constant real size = 0.17
-        private static constant real posX = 0.665
-        private static constant real posY = 0.3
-        private static string array motionList[3]
-        private static integer frame
-        private integer currentFileIdx = 0
-        private boolean isShow = false
-        private SkinPreviewUI skinUI = 0
+    private struct NameUI
+        private static integer frame = 0
         private integer playerId
 
         public method Show takes nothing returns nothing
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(this.frame, true)
+            endif
+        endmethod
+
+        public method Hide takes nothing returns nothing
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(this.frame, false)
+            endif
+        endmethod
+
+        public static method create takes integer playerId, real posX, real posY returns thistype
+            local thistype this = thistype.allocate()
+            local string playerName = GetPlayerName(Player(playerId))
+            local real size = 0.014
+
+            set this.playerId = playerId
+
+            if thistype.frame == 0 then
+                set thistype.frame = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "TeamLabelTextTemplate", 0)
+                call DzFrameSetFont(thistype.frame, "Fonts\\DFHeiMd.ttf", size, 0)
+                call DzFrameSetEnable(thistype.frame, false)
+                call DzFrameSetAbsolutePoint(thistype.frame, JN_FRAMEPOINT_TOPLEFT, posX, posY)
+                call DzFrameShow(thistype.frame, false)
+            endif
+
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetText(thistype.frame, TeamColor[playerId + 1] + playerName + "        ")
+            endif
+            
+            return this
+        endmethod
+    endstruct
+
+    private struct SkinPreviewBackgroundUI
+        private static constant real size = 0.17
+        private static constant real posX = 0.20
+        private static constant real posY = 0.45
+        private static string array motionList[3]
+        private static integer frame = 0
+        private integer currentFileIdx = 0
+        private boolean isShow = false
+        private SkinPreviewUI skinUI
+        private NameUI nameUI
+        private integer playerId
+
+        public method Show takes nothing returns nothing
+            local real skinOffsetX = 0
+            local real skinOffsetY = -0.033
+
             set this.isShow = true
+
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.frame, this.isShow)
             endif
-            call this.skinUI.Move(thistype.posX, thistype.posY - 0.01)
+
+            call this.skinUI.Move(thistype.posX + skinOffsetX, thistype.posY + skinOffsetY)
             call this.skinUI.Show()
+            call this.nameUI.Show()
         endmethod
 
         public method Hide takes nothing returns nothing
             set this.isShow = false
+            call this.nameUI.Hide()
             call this.skinUI.Hide()
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.frame, this.isShow)
@@ -192,24 +239,27 @@ scope SkinFrame initializer Init
 
         public static method create takes integer playerId returns thistype
             local thistype this = thistype.allocate()
+            local real nameOffsetX = -0.017
+            local real nameOffsetY = -0.036
+
+            if thistype.frame == 0 then
+                set thistype.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                set thistype.motionList[0] = "PreviewBackground001.blp"
+                set thistype.motionList[1] = "PreviewBackground002.blp"
+                set thistype.motionList[2] = "PreviewBackground003.blp"
+
+                call DzFrameSetSize(thistype.frame, thistype.size, thistype.size)
+                call DzFrameSetAbsolutePoint(thistype.frame, JN_FRAMEPOINT_CENTER, thistype.posX, thistype.posY)
+                call DzFrameSetTexture(thistype.frame, thistype.motionList[this.currentFileIdx + 2], 0)
+
+                call DzFrameShow(thistype.frame, false)
+            endif
 
             set this.playerId = playerId
             set this.skinUI = SkinPreviewUIBuilder.Build("Mushroom", playerId)
-
-            call DzFrameSetSize(this.frame, thistype.size, thistype.size)
-            call DzFrameSetAbsolutePoint(this.frame, JN_FRAMEPOINT_CENTER, thistype.posX, thistype.posY)
-            call DzFrameSetTexture(this.frame, thistype.motionList[this.currentFileIdx + 1], 0)
-
-            call DzFrameShow(this.frame, this.isShow)
+            set this.nameUI = NameUI.create(playerId, thistype.posX + nameOffsetX, thistype.posY + nameOffsetY)
 
             return this
-        endmethod
-
-        public static method onInit takes nothing returns nothing
-            set thistype.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-            set thistype.motionList[0] = "PreviewBackground001.blp"
-            set thistype.motionList[1] = "PreviewBackground002.blp"
-            set thistype.motionList[2] = "PreviewBackground003.blp"
         endmethod
     endstruct
 
@@ -261,7 +311,9 @@ scope SkinFrame initializer Init
         call InitSkinAnimationList()
 
         //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
-            set PlayerSkinUI[i] = SkinUI.create(i)
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                set PlayerSkinUI[i] = SkinUI.create(i)
+            endif
         //! runtextmacro for_end("set i = i + 1")
 
         call PlayerSkinUI[0].Open()
