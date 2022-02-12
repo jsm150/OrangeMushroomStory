@@ -23,7 +23,7 @@ scope HotKey initializer Init
         call DzTriggerRegisterKeyEvent(t, 13, 1, true, null)
         call TriggerAddAction(t, function ChatWindowChecker)
 
-        call MouseClick_AddAction(function ChatWindowChecker)
+        call MouseClick_AddDownAction(function ChatWindowChecker)
 
         set t = null
     endfunction
@@ -63,7 +63,7 @@ scope HotKey initializer Init
 
     //! runtextmacro HotKey_Event_Top("Debug")
         debug call JNWriteLog("")
-    //! runtextmacro HotKey_Event_Bottom("JN_OSKEY_F1")
+    //! runtextmacro HotKey_Event_Bottom("JN_OSKEY_P")
 endscope
 
 

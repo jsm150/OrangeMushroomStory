@@ -28,7 +28,7 @@ library MouseTeleport initializer Init needs MouseClick
     endfunction
 
     private function Main takes nothing returns nothing
-        call MouseClick_AddAction(function MouseClick)
+        call MouseClick_AddDownAction(function MouseClick)
         call DestroyTrigger(GetTriggeringTrigger())
     endfunction
     

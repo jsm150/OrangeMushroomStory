@@ -1,14 +1,24 @@
 library MouseClick
     globals
-        private trigger Trigger = null
+        private trigger DownTrigger = null
+        private trigger UpTrigger = null
     endglobals
 
-    public function AddAction takes code c returns nothing
-        if Trigger == null then
-            set Trigger = CreateTrigger()
-            call DzTriggerRegisterMouseEventByCode(Trigger, JN_MOUSE_BUTTON_TYPE_LEFT, 1, true, null)
+    public function AddDownAction takes code c returns nothing
+        if DownTrigger == null then
+            set DownTrigger = CreateTrigger()
+            call DzTriggerRegisterMouseEventByCode(DownTrigger, JN_MOUSE_BUTTON_TYPE_LEFT, 1, true, null)
         endif
 
-        call TriggerAddAction(Trigger, c)
+        call TriggerAddAction(DownTrigger, c)
+    endfunction
+
+    public function AddUpAction takes code c returns nothing
+        if UpTrigger == null then
+            set UpTrigger = CreateTrigger()
+            call DzTriggerRegisterMouseEventByCode(UpTrigger, JN_MOUSE_BUTTON_TYPE_LEFT, 0, true, null)
+        endif
+
+        call TriggerAddAction(UpTrigger, c)
     endfunction
 endlibrary

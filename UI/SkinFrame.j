@@ -263,9 +263,38 @@ scope SkinFrame initializer Init
         endmethod
     endstruct
 
-    private struct SkinUI
+    private struct SkinOpenButtonUI
+        private static integer frame = 0
+        private static constant real size = 0.025
+        private static constant real posX = 0.77
+        private static constant real posY = 0.495
+        private static constant string normalTexture = "SkinUIOpenButtonNormal.blp"
+        private static constant string pressedTexture = "SkinUIOpenButtonPressed.blp"
+        private static constant string mouseOverTexture = "SkinUIOpenButtonMouseOver.blp"
         private SkinPreviewBackgroundUI preview
-        private integer plyaerId
+        private integer playerId
+        private boolean isShow = false
+
+        public method Contains takes real posX, real posY returns boolean
+            // 워크 화면상의 절대좌표
+            local real minX = 1788
+            local real maxX = 1908
+            local real minY = 167
+            local real maxY = 205
+            return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
+        endmethod
+
+        public method ClickDown takes real posX, real posY returns nothing
+            if this.Contains(posX, posY) and GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameSetTexture(thistype.frame, thistype.pressedTexture, 0)
+            endif
+        endmethod
+
+        public method ClickUp takes real posX, real posY returns nothing
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
+            endif
+        endmethod
 
         public method Open takes nothing returns nothing
             call this.preview.Show()
@@ -277,16 +306,35 @@ scope SkinFrame initializer Init
 
         public static method create takes integer playerId returns thistype
             local thistype this = thistype.allocate()
-            set this.plyaerId = playerId
+
+            if thistype.frame == 0 then
+                set thistype.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
+                call DzFrameSetSize(thistype.frame, thistype.size * 2.1, thistype.size)
+                call DzFrameSetAbsolutePoint(thistype.frame, JN_FRAMEPOINT_CENTER, thistype.posX, thistype.posY)
+                
+                call DzFrameShow(thistype.frame, true)
+            endif
+
+            set this.playerId = playerId
             set this.preview = SkinPreviewBackgroundUI.create(playerId)
             return this
         endmethod
     endstruct
 
-
     globals
-        private SkinUI array PlayerSkinUI[PLAYER_MAXINUM]
+        private SkinOpenButtonUI array PlayerSkinUI[PLAYER_MAXINUM]
     endglobals
+
+    private function SkinOpenButtonClickDown takes nothing returns nothing
+        local integer i = GetPlayerId(DzGetTriggerKeyPlayer())
+        call PlayerSkinUI[i].ClickDown(DzGetMouseXRelative(), DzGetMouseYRelative())
+    endfunction
+
+    private function SkinOpenButtonClickUp takes nothing returns nothing
+        local integer i = GetPlayerId(DzGetTriggerKeyPlayer())
+        call PlayerSkinUI[i].ClickUp(DzGetMouseXRelative(), DzGetMouseYRelative())
+    endfunction
 
     private function InitSkinAnimationList takes nothing returns nothing
         local SkinAnimation skin
@@ -309,14 +357,14 @@ scope SkinFrame initializer Init
     private function Init takes nothing returns nothing
         local integer i
         call InitSkinAnimationList()
+        call MouseClick_AddDownAction(function SkinOpenButtonClickDown)
+        call MouseClick_AddUpAction(function SkinOpenButtonClickUp)
 
         //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
             if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                set PlayerSkinUI[i] = SkinUI.create(i)
+                set PlayerSkinUI[i] = SkinOpenButtonUI.create(i)
             endif
         //! runtextmacro for_end("set i = i + 1")
-
-        call PlayerSkinUI[0].Open()
-
+        // call PlayerSkinUI[0].Open()
     endfunction
 endscope
