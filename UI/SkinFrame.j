@@ -407,8 +407,8 @@ scope SkinFrame initializer Init
 
         set t = null
 
-        call MouseClick_AddDownAction(function SkinOpenButtonClickDown, true)
-        call MouseClick_AddUpAction(function SkinOpenButtonClickUp, true)
+        call MouseClick_AddDownAction(function SkinOpenButtonClickDown)
+        call MouseClick_AddUpAction(function SkinOpenButtonClickUp)
     endfunction
 
     private function InitSkinAnimationList takes nothing returns nothing
