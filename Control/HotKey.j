@@ -23,7 +23,7 @@ scope HotKey initializer Init
         call DzTriggerRegisterKeyEvent(t, 13, 1, true, null)
         call TriggerAddAction(t, function ChatWindowChecker)
 
-        call MouseClick_AddDownAction(function ChatWindowChecker)
+        call MouseClick_AddDownAction(function ChatWindowChecker, true)
 
         set t = null
     endfunction

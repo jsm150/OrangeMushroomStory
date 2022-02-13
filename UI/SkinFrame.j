@@ -273,7 +273,8 @@ scope SkinFrame initializer Init
         private static constant string mouseOverTexture = "SkinUIOpenButtonMouseOver.blp"
         private SkinPreviewBackgroundUI preview
         private integer playerId
-        private boolean isShow = false
+        private boolean isOpen = false
+        private boolean isPressed = false
 
         public method Contains takes real posX, real posY returns boolean
             // 워크 화면상의 절대좌표
@@ -285,22 +286,55 @@ scope SkinFrame initializer Init
         endmethod
 
         public method ClickDown takes real posX, real posY returns nothing
-            if this.Contains(posX, posY) and GetLocalPlayer() == Player(this.playerId) then
-                call DzFrameSetTexture(thistype.frame, thistype.pressedTexture, 0)
+            if this.isOpen == true then
+                return
+            endif
+
+            if this.Contains(posX, posY) then
+                set this.isPressed = true
+                if GetLocalPlayer() == Player(this.playerId) then
+                    call DzFrameSetTexture(thistype.frame, thistype.pressedTexture, 0)
+                endif
             endif
         endmethod
 
         public method ClickUp takes real posX, real posY returns nothing
+            if this.isOpen == true then
+                return
+            endif
+
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
             endif
+            
+            if this.Contains(posX, posY) then
+                call this.Open()
+            endif
+
+            set this.isPressed = false
         endmethod
 
-        public method Open takes nothing returns nothing
+        public method MouseOver takes real posX, real posY returns nothing
+            if this.isOpen == true then
+                return
+            endif
+
+            if GetLocalPlayer() == Player(this.playerId) then
+                if this.isPressed == false and this.Contains(posX, posY) then
+                    call DzFrameSetTexture(thistype.frame, thistype.mouseOverTexture, 0)
+                elseif this.isPressed == false then
+                    call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
+                endif
+            endif
+        endmethod
+
+        private method Open takes nothing returns nothing
+            set this.isOpen = true
             call this.preview.Show()
         endmethod
 
         public method Close takes nothing returns nothing
+            set this.isOpen = false
             call this.preview.Hide()
         endmethod
 
@@ -324,16 +358,57 @@ scope SkinFrame initializer Init
 
     globals
         private SkinOpenButtonUI array PlayerSkinUI[PLAYER_MAXINUM]
+        private key SkinOpenButtonClickDownKey
+        private key SkinOpenButtonClickUpKey
+        private key SkinOpenButtonMouseOverKey
     endglobals
 
     private function SkinOpenButtonClickDown takes nothing returns nothing
-        local integer i = GetPlayerId(DzGetTriggerKeyPlayer())
-        call PlayerSkinUI[i].ClickDown(DzGetMouseXRelative(), DzGetMouseYRelative())
+        if GetLocalPlayer() == DzGetTriggerKeyPlayer() then
+            call DzSyncData(I2S(SkinOpenButtonClickDownKey), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
+        endif
     endfunction
 
     private function SkinOpenButtonClickUp takes nothing returns nothing
+        if GetLocalPlayer() == DzGetTriggerKeyPlayer() then
+            call DzSyncData(I2S(SkinOpenButtonClickUpKey), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
+        endif
+    endfunction
+
+    private function SkinOpenButtonClickDownSync takes nothing returns nothing
         local integer i = GetPlayerId(DzGetTriggerKeyPlayer())
-        call PlayerSkinUI[i].ClickUp(DzGetMouseXRelative(), DzGetMouseYRelative())
+        local string s = DzGetTriggerSyncData()
+        local real x = S2R(JNStringSplit(s,", ",0))
+        local real y = S2R(JNStringSplit(s,", ",1))
+        call PlayerSkinUI[i].ClickDown(x, y)
+    endfunction
+
+    private function SkinOpenButtonClickUpSync takes nothing returns nothing
+        local integer i = GetPlayerId(DzGetTriggerKeyPlayer())
+        local string s = DzGetTriggerSyncData()
+        local real x = S2R(JNStringSplit(s,", ",0))
+        local real y = S2R(JNStringSplit(s,", ",1))
+        call PlayerSkinUI[i].ClickUp(x, y)
+    endfunction
+
+    // private function SkinOpenButtonMouseOver takes nothing returns nothing
+    //     local integer i = GetPlayerId(GetLocalPlayer())
+    //     call PlayerSkinUI[i].ClickUp(DzGetMouseXRelative(), DzGetMouseYRelative())
+    // endfunction
+
+    private function InitMouseAction takes nothing returns nothing
+        local trigger t = CreateTrigger()
+        call DzTriggerRegisterSyncData(t, I2S(SkinOpenButtonClickDownKey), false)
+        call TriggerAddAction(t, function SkinOpenButtonClickDownSync)
+
+        set t = CreateTrigger()
+        call DzTriggerRegisterSyncData(t, I2S(SkinOpenButtonClickUpKey), false)
+        call TriggerAddAction(t, function SkinOpenButtonClickUpSync)
+
+        set t = null
+
+        call MouseClick_AddDownAction(function SkinOpenButtonClickDown, true)
+        call MouseClick_AddUpAction(function SkinOpenButtonClickUp, true)
     endfunction
 
     private function InitSkinAnimationList takes nothing returns nothing
@@ -357,14 +432,12 @@ scope SkinFrame initializer Init
     private function Init takes nothing returns nothing
         local integer i
         call InitSkinAnimationList()
-        call MouseClick_AddDownAction(function SkinOpenButtonClickDown)
-        call MouseClick_AddUpAction(function SkinOpenButtonClickUp)
+        call InitMouseAction()
 
         //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
             if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
                 set PlayerSkinUI[i] = SkinOpenButtonUI.create(i)
             endif
         //! runtextmacro for_end("set i = i + 1")
-        // call PlayerSkinUI[0].Open()
     endfunction
 endscope
