@@ -23,7 +23,8 @@ scope HotKey initializer Init
         call DzTriggerRegisterKeyEvent(t, 13, 1, true, null)
         call TriggerAddAction(t, function ChatWindowChecker)
 
-        call MouseClick_AddDownAction(function ChatWindowChecker, true)
+        set t = CreateTrigger()
+        call DzTriggerRegisterMouseEventByCode(t, JN_MOUSE_BUTTON_TYPE_LEFT, 1, false, function ChatWindowChecker)
 
         set t = null
     endfunction
