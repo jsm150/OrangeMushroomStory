@@ -265,6 +265,7 @@ library SkinFrame initializer Init needs TeamColor
 
     private struct SkinOpenButtonUI
         private static integer frame = 0
+        private static integer dummyFrame = 0
         private static constant real size = 0.025
         private static constant real posX = 0.77
         private static constant real posY = 0.495
@@ -315,16 +316,14 @@ library SkinFrame initializer Init needs TeamColor
         endmethod
 
         public method MouseOver takes real posX, real posY returns nothing
-            if this.isOpen == true then
+            if this.isOpen == true or this.isPressed then
                 return
             endif
 
-            if GetLocalPlayer() == Player(this.playerId) then
-                if this.isPressed == false and this.Contains(posX, posY) then
-                    call DzFrameSetTexture(thistype.frame, thistype.mouseOverTexture, 0)
-                elseif this.isPressed == false then
-                    call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
-                endif
+            if this.Contains(posX, posY) then
+                call DzFrameSetTexture(thistype.frame, thistype.mouseOverTexture, 0)
+            else
+                call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
             endif
         endmethod
 
@@ -338,21 +337,31 @@ library SkinFrame initializer Init needs TeamColor
             call this.preview.Hide()
         endmethod
 
+        public static method SetMouseOverEvent takes code c returns nothing
+            call DzFrameSetScriptByCode(thistype.dummyFrame, JN_FRAMEEVENT_MOUSE_ENTER, c, false)
+            call DzFrameSetScriptByCode(thistype.dummyFrame, JN_FRAMEEVENT_MOUSE_LEAVE, c, false)
+        endmethod
+
         public static method create takes integer playerId returns thistype
             local thistype this = thistype.allocate()
-
-            if thistype.frame == 0 then
-                set thistype.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
-                call DzFrameSetSize(thistype.frame, thistype.size * 2.1, thistype.size)
-                call DzFrameSetAbsolutePoint(thistype.frame, JN_FRAMEPOINT_CENTER, thistype.posX, thistype.posY)
-                
-                call DzFrameShow(thistype.frame, true)
-            endif
-
+            
             set this.playerId = playerId
             set this.preview = SkinPreviewBackgroundUI.create(playerId)
             return this
+        endmethod
+
+        public static method onInit takes nothing returns nothing
+            set thistype.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
+            call DzFrameSetSize(thistype.frame, thistype.size * 2.1, thistype.size)
+            call DzFrameSetAbsolutePoint(thistype.frame, JN_FRAMEPOINT_CENTER, thistype.posX, thistype.posY)
+
+            set thistype.dummyFrame = DzCreateFrameByTagName("BUTTON", "", DzGetGameUI(), "", 0)
+            call DzFrameSetSize(thistype.dummyFrame, thistype.size * 2.1, thistype.size)
+            call DzFrameSetAbsolutePoint(thistype.dummyFrame, JN_FRAMEPOINT_CENTER, thistype.posX, thistype.posY)
+            
+            call DzFrameShow(thistype.frame, true)
+            call DzFrameShow(thistype.dummyFrame, true)
         endmethod
     endstruct
 
@@ -387,10 +396,10 @@ library SkinFrame initializer Init needs TeamColor
         call PlayerSkinUI[i].ClickUp(x, y)
     endfunction
 
-    // private function SkinOpenButtonMouseOver takes nothing returns nothing
-    //     local integer i = GetPlayerId(GetLocalPlayer())
-    //     call PlayerSkinUI[i].ClickUp(DzGetMouseXRelative(), DzGetMouseYRelative())
-    // endfunction
+    private function SkinOpenButtonMouseOver takes nothing returns nothing
+        local integer i = GetPlayerId(GetLocalPlayer())
+        call PlayerSkinUI[i].MouseOver(DzGetMouseXRelative(), DzGetMouseYRelative())
+    endfunction
 
     private function InitMouseAction takes nothing returns nothing
         local trigger t = CreateTrigger()
@@ -400,6 +409,8 @@ library SkinFrame initializer Init needs TeamColor
         set t = CreateTrigger()
         call DzTriggerRegisterSyncData(t, I2S(SkinOpenButtonClickUpKey), false)
         call TriggerAddAction(t, function SkinOpenButtonClickUpSync)
+
+        call SkinOpenButtonUI.SetMouseOverEvent(function SkinOpenButtonMouseOver)
 
         set t = null
     endfunction
