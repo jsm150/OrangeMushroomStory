@@ -8,7 +8,7 @@ scope HotKey initializer Init
         set onEnter[i] = S2I(JNGetTriggerSyncData()) != 0
     endfunction
     
-    private function ChatWindowChecker takes nothing returns nothing
+    public function ChatWindowChecker takes nothing returns nothing
         if DzGetTriggerKeyPlayer() == GetLocalPlayer() then
             call DzSyncData("onEnter", I2S(BytePtr[pGameDll + 0xD04FEC]))
         endif
@@ -22,8 +22,6 @@ scope HotKey initializer Init
         set t = CreateTrigger()
         call DzTriggerRegisterKeyEvent(t, 13, 1, true, null)
         call TriggerAddAction(t, function ChatWindowChecker)
-
-        call MouseClick_AddDownAction(function ChatWindowChecker)
 
         set t = null
     endfunction

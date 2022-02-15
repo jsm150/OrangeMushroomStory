@@ -1,4 +1,4 @@
-scope SkinFrame initializer Init
+library SkinFrame initializer Init needs TeamColor
 
     private struct SkinAnimation
         private static hashtable motionList = InitHashtable()
@@ -363,20 +363,16 @@ scope SkinFrame initializer Init
         private key SkinOpenButtonMouseOverKey
     endglobals
 
-    private function SkinOpenButtonClickDown takes nothing returns nothing
-        if GetLocalPlayer() == DzGetTriggerKeyPlayer() then
-            call DzSyncData(I2S(SkinOpenButtonClickDownKey), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
-        endif
+    public function SkinOpenButtonClickDown takes nothing returns nothing
+        call DzSyncData(I2S(SkinOpenButtonClickDownKey), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
     endfunction
 
-    private function SkinOpenButtonClickUp takes nothing returns nothing
-        if GetLocalPlayer() == DzGetTriggerKeyPlayer() then
-            call DzSyncData(I2S(SkinOpenButtonClickUpKey), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
-        endif
+    public function SkinOpenButtonClickUp takes nothing returns nothing
+        call DzSyncData(I2S(SkinOpenButtonClickUpKey), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
     endfunction
 
     private function SkinOpenButtonClickDownSync takes nothing returns nothing
-        local integer i = GetPlayerId(DzGetTriggerKeyPlayer())
+        local integer i = GetPlayerId(DzGetTriggerSyncPlayer())
         local string s = DzGetTriggerSyncData()
         local real x = S2R(JNStringSplit(s,", ",0))
         local real y = S2R(JNStringSplit(s,", ",1))
@@ -384,7 +380,7 @@ scope SkinFrame initializer Init
     endfunction
 
     private function SkinOpenButtonClickUpSync takes nothing returns nothing
-        local integer i = GetPlayerId(DzGetTriggerKeyPlayer())
+        local integer i = GetPlayerId(DzGetTriggerSyncPlayer())
         local string s = DzGetTriggerSyncData()
         local real x = S2R(JNStringSplit(s,", ",0))
         local real y = S2R(JNStringSplit(s,", ",1))
@@ -406,9 +402,6 @@ scope SkinFrame initializer Init
         call TriggerAddAction(t, function SkinOpenButtonClickUpSync)
 
         set t = null
-
-        call MouseClick_AddDownAction(function SkinOpenButtonClickDown)
-        call MouseClick_AddUpAction(function SkinOpenButtonClickUp)
     endfunction
 
     private function InitSkinAnimationList takes nothing returns nothing
@@ -440,4 +433,4 @@ scope SkinFrame initializer Init
             endif
         //! runtextmacro for_end("set i = i + 1")
     endfunction
-endscope
+endlibrary
