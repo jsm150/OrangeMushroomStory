@@ -13,7 +13,13 @@ library MethodEvent
         endmethod
 
         public static method AddAction takes trigger t, integer object, string moduleName, string structName, string mathodName returns nothing
-            local string func = "sa__" + moduleName + "___" + structName + "_" + mathodName
+            local string func = "sa__"
+
+            if StringLength(moduleName) == 0 then
+                set func = func + structName + "_" + mathodName
+            else
+                set func = func + moduleName + "___" + structName + "_" + mathodName
+            endif
 
             call SaveStr(H, methodKey, GetHandleId(t), func)
             call SaveInteger(H, objectKey, GetHandleId(t), object)
@@ -29,4 +35,3 @@ endlibrary
         endif
     endmethod
 //! endtextmacro
-
