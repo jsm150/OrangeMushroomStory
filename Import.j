@@ -51,6 +51,7 @@
 //! import "Library\GravityChanger.j"
 //! import "Library\Jumper.j"
 //! import "Library\KeySwitch.j"
+//! import "Library\MethodEvent.j"
 //! import "Library\MorphStone.j"
 //! import "Library\MovePortal.j"
 //! import "Library\MultiBorad.j"

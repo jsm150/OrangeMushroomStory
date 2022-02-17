@@ -77,7 +77,7 @@ library SkinFrame initializer Init needs TeamColor
         private SkinAnimationLinkedList SkinAnimationList
     endglobals
 
-    private struct SkinPreviewUI
+    private struct SkinUI
         private static constant real size = 0.044
         private integer frame
         private real posX = 0
@@ -138,12 +138,12 @@ library SkinFrame initializer Init needs TeamColor
         endmethod
     endstruct
 
-    private struct SkinPreviewUIBuilder
-        public static method Build takes string name, integer playerId returns SkinPreviewUI
+    private struct SkinUIBuilder
+        public static method Build takes string name, integer playerId returns SkinUI
             local SkinAnimationNode node
             //! runtextmacro LinkedList_Foreach_Top("node", "SkinAnimationList")
                 if node.Item.Equals(name) then
-                    return SkinPreviewUI.create(node.Item.Clone(), playerId)
+                    return SkinUI.create(node.Item.Clone(), playerId)
                 endif
             //! runtextmacro LinkedList_Foreach_Bottom()
             return 0
@@ -189,7 +189,7 @@ library SkinFrame initializer Init needs TeamColor
         endmethod
     endstruct
 
-    private struct SkinPreviewBackgroundUI
+    private struct SkinSelectWindow
         private static constant real size = 0.17
         private static constant real posX = 0.20
         private static constant real posY = 0.45
@@ -197,7 +197,7 @@ library SkinFrame initializer Init needs TeamColor
         private static integer frame = 0
         private integer currentFileIdx = 0
         private boolean isShow = false
-        private SkinPreviewUI skinUI
+        private SkinUI skinUI
         private NameUI nameUI
         private integer playerId
 
@@ -205,6 +205,8 @@ library SkinFrame initializer Init needs TeamColor
             local real skinOffsetX = 0
             local real skinOffsetY = -0.033
 
+            debug call JNWriteLog("  SkinSelectWindow_Show")
+            debug call JNWriteLog("  SkinSelectWindow_Show Frame : " + I2S(thistype.frame))
             set this.isShow = true
 
             if GetLocalPlayer() == Player(this.playerId) then
@@ -225,7 +227,7 @@ library SkinFrame initializer Init needs TeamColor
             endif
         endmethod
 
-        public method ChangeSkin takes SkinPreviewUI skinUI returns nothing
+        public method ChangeSkin takes SkinUI skinUI returns nothing
             if this.skinUI != 0 then
                 call this.skinUI.destroy()
             endif
@@ -256,14 +258,14 @@ library SkinFrame initializer Init needs TeamColor
             endif
 
             set this.playerId = playerId
-            set this.skinUI = SkinPreviewUIBuilder.Build("Mushroom", playerId)
+            set this.skinUI = SkinUIBuilder.Build("Mushroom", playerId)
             set this.nameUI = NameUI.create(playerId, thistype.posX + nameOffsetX, thistype.posY + nameOffsetY)
 
             return this
         endmethod
     endstruct
 
-    private struct SkinOpenButtonUI
+    private struct ButtonUI
         private static integer frame = 0
         private static integer dummyFrame = 0
         private static constant real size = 0.025
@@ -272,10 +274,10 @@ library SkinFrame initializer Init needs TeamColor
         private static constant string normalTexture = "SkinUIOpenButtonNormal.blp"
         private static constant string pressedTexture = "SkinUIOpenButtonPressed.blp"
         private static constant string mouseOverTexture = "SkinUIOpenButtonMouseOver.blp"
-        private SkinPreviewBackgroundUI preview
+        private static key buttonKey
         private integer playerId
-        private boolean isOpen = false
         private boolean isPressed = false
+        private boolean isOpen = false
 
         public method Contains takes real posX, real posY returns boolean
             // 워크 화면상의 절대좌표
@@ -286,11 +288,7 @@ library SkinFrame initializer Init needs TeamColor
             return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
         endmethod
 
-        public method ClickDown takes real posX, real posY returns nothing
-            if this.isOpen == true then
-                return
-            endif
-
+        public method ButtonDown takes real posX, real posY returns nothing
             if this.Contains(posX, posY) then
                 set this.isPressed = true
                 if GetLocalPlayer() == Player(this.playerId) then
@@ -299,23 +297,19 @@ library SkinFrame initializer Init needs TeamColor
             endif
         endmethod
 
-        public method ClickUp takes real posX, real posY returns nothing
-            if this.isOpen == true then
-                return
-            endif
+        public method ButtonUp takes nothing returns nothing
+            set this.isPressed = false
 
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
             endif
-            
-            if this.Contains(posX, posY) then
-                call this.Open()
-            endif
-
-            set this.isPressed = false
         endmethod
 
-        public method MouseOver takes real posX, real posY returns nothing
+        public method ChangeOfStatus takes boolean isOpen returns nothing
+            set this.isOpen = isOpen
+        endmethod
+
+        private method MouseOver takes real posX, real posY returns nothing
             if this.isOpen == true or this.isPressed then
                 return
             endif
@@ -327,26 +321,14 @@ library SkinFrame initializer Init needs TeamColor
             endif
         endmethod
 
-        private method Open takes nothing returns nothing
-            set this.isOpen = true
-            call this.preview.Show()
-        endmethod
-
-        public method Close takes nothing returns nothing
-            set this.isOpen = false
-            call this.preview.Hide()
-        endmethod
-
-        public static method SetMouseOverEvent takes code c returns nothing
-            call DzFrameSetScriptByCode(thistype.dummyFrame, JN_FRAMEEVENT_MOUSE_ENTER, c, false)
-            call DzFrameSetScriptByCode(thistype.dummyFrame, JN_FRAMEEVENT_MOUSE_LEAVE, c, false)
+        private static method MouseOverEvent takes nothing returns nothing
+            local thistype this = GetPlayerId(GetLocalPlayer()) + 1
+            call this.MouseOver(DzGetMouseXRelative(), DzGetMouseYRelative())            
         endmethod
 
         public static method create takes integer playerId returns thistype
             local thistype this = thistype.allocate()
-            
             set this.playerId = playerId
-            set this.preview = SkinPreviewBackgroundUI.create(playerId)
             return this
         endmethod
 
@@ -359,61 +341,71 @@ library SkinFrame initializer Init needs TeamColor
             set thistype.dummyFrame = DzCreateFrameByTagName("BUTTON", "", DzGetGameUI(), "", 0)
             call DzFrameSetSize(thistype.dummyFrame, thistype.size * 2.1, thistype.size)
             call DzFrameSetAbsolutePoint(thistype.dummyFrame, JN_FRAMEPOINT_CENTER, thistype.posX, thistype.posY)
-            
-            call DzFrameShow(thistype.frame, true)
+
+            call DzFrameSetScriptByCode(thistype.dummyFrame, JN_FRAMEEVENT_MOUSE_ENTER, function thistype.MouseOverEvent, false)
+            call DzFrameSetScriptByCode(thistype.dummyFrame, JN_FRAMEEVENT_MOUSE_LEAVE, function thistype.MouseOverEvent, false)
+
+
+
             call DzFrameShow(thistype.dummyFrame, true)
+            call DzFrameShow(thistype.frame, true)
+        endmethod
+    endstruct
+    
+    private struct PlayerSkinSelect
+        private ButtonUI buttonUI
+        private SkinSelectWindow skinSelectWindow
+        private boolean isOpen = false
+
+        private method Open takes nothing returns nothing
+            set this.isOpen = true
+            debug call JNWriteLog("  PlayerSkinSelect_Open")
+            call this.buttonUI.ChangeOfStatus(this.isOpen)
+            call this.skinSelectWindow.Show()
+        endmethod
+
+        private method Close takes nothing returns nothing
+            set this.isOpen = false
+            call this.buttonUI.ChangeOfStatus(this.isOpen)
+            call this.skinSelectWindow.Hide()
+        endmethod
+
+        public method ClickDown takes real posX, real posY returns nothing
+            if this.isOpen == false then
+                call this.buttonUI.ButtonDown(posX, posY)
+            endif
+        endmethod
+
+        public method ClickUp takes real posX, real posY returns nothing
+            if this.isOpen == false then
+                call this.buttonUI.ButtonUp()
+                if this.buttonUI.Contains(posX, posY) then
+                    call this.Open()
+                endif
+            endif
+        endmethod
+
+        public static method create takes integer playerId returns thistype
+            local thistype this = thistype.allocate()
+            set this.buttonUI = ButtonUI.create(playerId)
+            set this.skinSelectWindow = SkinSelectWindow.create(playerId)
+            return this
         endmethod
     endstruct
 
     globals
-        private SkinOpenButtonUI array PlayerSkinUI[PLAYER_MAXINUM]
-        private key SkinOpenButtonClickDownKey
-        private key SkinOpenButtonClickUpKey
-        private key SkinOpenButtonMouseOverKey
+        private PlayerSkinSelect array PlayerSkinUI[PLAYER_MAXINUM]
     endglobals
+    
 
-    public function SkinOpenButtonClickDown takes nothing returns nothing
-        call DzSyncData(I2S(SkinOpenButtonClickDownKey), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
-    endfunction
-
-    public function SkinOpenButtonClickUp takes nothing returns nothing
-        call DzSyncData(I2S(SkinOpenButtonClickUpKey), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
-    endfunction
-
-    private function SkinOpenButtonClickDownSync takes nothing returns nothing
-        local integer i = GetPlayerId(DzGetTriggerSyncPlayer())
-        local string s = DzGetTriggerSyncData()
-        local real x = S2R(JNStringSplit(s,", ",0))
-        local real y = S2R(JNStringSplit(s,", ",1))
+    //! runtextmacro Make_ButtonMouseEvent_Top("SkinOpenButtonClickDown")
         call PlayerSkinUI[i].ClickDown(x, y)
-    endfunction
+    //! runtextmacro Make_ButtonMouseEvent_Bottom("SkinOpenButtonClickDown")
 
-    private function SkinOpenButtonClickUpSync takes nothing returns nothing
-        local integer i = GetPlayerId(DzGetTriggerSyncPlayer())
-        local string s = DzGetTriggerSyncData()
-        local real x = S2R(JNStringSplit(s,", ",0))
-        local real y = S2R(JNStringSplit(s,", ",1))
+    //! runtextmacro Make_ButtonMouseEvent_Top("SkinOpenButtonClickUp")
         call PlayerSkinUI[i].ClickUp(x, y)
-    endfunction
+    //! runtextmacro Make_ButtonMouseEvent_Bottom("SkinOpenButtonClickUp")
 
-    private function SkinOpenButtonMouseOver takes nothing returns nothing
-        local integer i = GetPlayerId(GetLocalPlayer())
-        call PlayerSkinUI[i].MouseOver(DzGetMouseXRelative(), DzGetMouseYRelative())
-    endfunction
-
-    private function InitMouseAction takes nothing returns nothing
-        local trigger t = CreateTrigger()
-        call DzTriggerRegisterSyncData(t, I2S(SkinOpenButtonClickDownKey), false)
-        call TriggerAddAction(t, function SkinOpenButtonClickDownSync)
-
-        set t = CreateTrigger()
-        call DzTriggerRegisterSyncData(t, I2S(SkinOpenButtonClickUpKey), false)
-        call TriggerAddAction(t, function SkinOpenButtonClickUpSync)
-
-        call SkinOpenButtonUI.SetMouseOverEvent(function SkinOpenButtonMouseOver)
-
-        set t = null
-    endfunction
 
     private function InitSkinAnimationList takes nothing returns nothing
         local SkinAnimation skin
@@ -436,12 +428,41 @@ library SkinFrame initializer Init needs TeamColor
     private function Init takes nothing returns nothing
         local integer i
         call InitSkinAnimationList()
-        call InitMouseAction()
 
         //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
             if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                set PlayerSkinUI[i] = SkinOpenButtonUI.create(i)
+                set PlayerSkinUI[i] = PlayerSkinSelect.create(i)
             endif
         //! runtextmacro for_end("set i = i + 1")
+        
     endfunction
 endlibrary
+
+//! textmacro Make_ButtonMouseEvent_Top takes funcName
+    globals
+        private key $funcName$Key
+    endglobals
+
+    public function $funcName$ takes nothing returns nothing
+        call DzSyncData(I2S($funcName$Key), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
+    endfunction
+
+    private function $funcName$Sync takes nothing returns nothing
+        local integer i = GetPlayerId(DzGetTriggerSyncPlayer())
+        local string s = DzGetTriggerSyncData()
+        local real x = S2R(JNStringSplit(s,", ",0))
+        local real y = S2R(JNStringSplit(s,", ",1))
+//! endtextmacro
+
+//! textmacro Make_ButtonMouseEvent_Bottom takes funcName
+    endfunction
+
+    private struct $funcName$Struct
+        public static method onInit takes nothing returns nothing
+            local trigger t = CreateTrigger()
+            call DzTriggerRegisterSyncData(t, I2S($funcName$Key), false)
+            call TriggerAddAction(t, function $funcName$Sync)
+            set t = null
+        endmethod
+    endstruct
+//! endtextmacro
