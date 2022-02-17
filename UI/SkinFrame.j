@@ -1,40 +1,34 @@
-library SkinFrame initializer Init needs TeamColor
+library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     private struct SkinAnimation
         private static hashtable motionList = InitHashtable()
         private string name
         private integer fileCount = 0
-        private integer currentIdx = 0
         private real motionDelay
-        private tick timer
         private boolean playing = false
         
-        private static method ChangeAnimation takes nothing returns nothing
-            local tick t = tick.getExpired()
-            local thistype this = t.data
-            local integer frame = t.data2
 
-            if this.playing == false then
-                return
-            endif
+        private method ChangeAnimation takes integer frame returns nothing
+            local integer currentIdx = 0
 
-            call DzFrameSetTexture(frame, LoadStr(thistype.motionList, this, currentIdx), 0)
-
-            set this.currentIdx = this.currentIdx + 1
-            if this.currentIdx >= this.fileCount then
-                set this.currentIdx = 0
-            endif
-
-            call this.timer.start(this.motionDelay, false, function thistype.ChangeAnimation)
+            set this.playing = true
+            loop
+                exitwhen this.playing == false
+                call DzFrameSetTexture(frame, LoadStr(thistype.motionList, this, currentIdx), 0)
+                set currentIdx = currentIdx + 1
+                if currentIdx >= this.fileCount then
+                    set currentIdx = 0
+                endif
+                
+                call TriggerSleepActionByTimer(this.motionDelay)
+            endloop
         endmethod
 
         public method Run takes integer frame returns nothing
-            set this.playing = true
-            set this.timer.data2 = frame
-            call this.timer.start(0, false, function thistype.ChangeAnimation)
+            call this.ChangeAnimation.execute(frame)
         endmethod
 
-        public method Stop takes integer frame returns nothing
+        public method Stop takes nothing returns nothing
             set this.playing = false
         endmethod
 
@@ -60,13 +54,11 @@ library SkinFrame initializer Init needs TeamColor
             local thistype this = thistype.allocate()
             set this.motionDelay = motionDelay
             set this.name = name
-            set this.timer = tick.create(this)
             return this
         endmethod
 
         public method destroy takes nothing returns nothing
             call FlushChildHashtable(thistype.motionList, this)
-            call this.timer.destroy()
             call thistype.deallocate(this)
         endmethod
     endstruct
@@ -89,7 +81,7 @@ library SkinFrame initializer Init needs TeamColor
 
         public method Hide takes nothing returns nothing
             set this.isShow = false
-            call skinAnimation.Stop(this.frame)
+            call skinAnimation.Stop()
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.frame, this.isShow)
             endif
@@ -205,8 +197,6 @@ library SkinFrame initializer Init needs TeamColor
             local real skinOffsetX = 0
             local real skinOffsetY = -0.033
 
-            debug call JNWriteLog("  SkinSelectWindow_Show")
-            debug call JNWriteLog("  SkinSelectWindow_Show Frame : " + I2S(thistype.frame))
             set this.isShow = true
 
             if GetLocalPlayer() == Player(this.playerId) then
@@ -359,7 +349,6 @@ library SkinFrame initializer Init needs TeamColor
 
         private method Open takes nothing returns nothing
             set this.isOpen = true
-            debug call JNWriteLog("  PlayerSkinSelect_Open")
             call this.buttonUI.ChangeOfStatus(this.isOpen)
             call this.skinSelectWindow.Show()
         endmethod
