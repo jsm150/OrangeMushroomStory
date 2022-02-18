@@ -139,11 +139,8 @@ library StoneStatue initializer Init needs Key
     private struct stoneStatue // 석상
         region Region
         rect Rect
-        trigger InTrg
-        trigger OutTrg
         boolean IsOn
         blocks Blocks
-
         integer World
         integer Stage
 
@@ -186,8 +183,7 @@ library StoneStatue initializer Init needs Key
             return false
         endmethod
 
-        static method InAction takes nothing returns nothing
-            local thistype this = eventStruct.e
+        private method InAction takes nothing returns nothing
             local unit u = GetTriggerUnit()
 
             if this.TypeCondition(u) and this.IsOn == false then
@@ -200,8 +196,7 @@ library StoneStatue initializer Init needs Key
             set u = null
         endmethod
 
-        static method OutAction takes nothing returns nothing
-            local thistype this = eventStruct.e
+        private method OutAction takes nothing returns nothing
             local unit u = GetTriggerUnit()
 
             if this.TypeCondition(u) and this.RectInUnit() == false then
@@ -212,6 +207,32 @@ library StoneStatue initializer Init needs Key
             endif
 
             set u = null
+        endmethod
+
+        public static method create takes rect r, integer world, integer stage returns thistype
+            local thistype this = thistype.allocate()
+            local trigger t = CreateTrigger()
+
+            set this.Region = CreateRegion()
+            set this.Rect = r
+
+            call RegionAddRect(this.Region, this.Rect)
+
+            set this.World = world
+            set this.Stage = stage
+            set this.IsOn = false
+
+            set this.Blocks = blocks.create()
+
+            call EventMethod.AddByEvaluate(t, this, this.InAction)
+            call TriggerRegisterEnterRegion(t, this.Region, null)
+
+            set t = CreateTrigger()
+            call EventMethod.AddByEvaluate(t, this, this.OutAction)
+            call TriggerRegisterLeaveRegion(t, this.Region, null)
+
+            set t = null
+            return this
         endmethod
     endstruct
 
@@ -248,34 +269,12 @@ library StoneStatue initializer Init needs Key
         endloop
     endfunction
 
-    private function CreateStoneStatue takes rect r, integer world, integer stage returns stoneStatue
-        local stoneStatue st = stoneStatue.create()
-        set st.Region = CreateRegion()
-        set st.Rect = r
-
-        call RegionAddRect(st.Region, st.Rect)
-
-        set st.World = world
-        set st.Stage = stage
-        set st.IsOn = false
-
-        set st.InTrg = eventStruct.register(st, 0, function stoneStatue.InAction)
-        call TriggerRegisterEnterRegion(st.InTrg, st.Region, null)
-
-        set st.OutTrg = eventStruct.register(st, 0, function stoneStatue.OutAction)
-        call TriggerRegisterLeaveRegion(st.OutTrg, st.Region, null)
-
-        set st.Blocks = blocks.create()
-
-        return st
-    endfunction
-
     private function RegisterStoneStatue takes nothing returns nothing
         local integer i
         local stoneStatue st
 
         // -------------------------------------------------------
-        set st = CreateStoneStatue(gg_rct_StoneStatue001, 12, 3)
+        set st = stoneStatue.create(gg_rct_StoneStatue001, 12, 3)
         set i = 0
         loop
             exitwhen i > 3
@@ -300,7 +299,7 @@ library StoneStatue initializer Init needs Key
 
 
         // -------------------------------------------------------
-        set st = CreateStoneStatue(gg_rct_StoneStatue004, 12, 5)
+        set st = stoneStatue.create(gg_rct_StoneStatue004, 12, 5)
         set i = 0
         loop
             exitwhen i > 2
@@ -328,7 +327,7 @@ library StoneStatue initializer Init needs Key
 
 
         // -------------------------------------------------------
-        set st = CreateStoneStatue(gg_rct_StoneStatue003, 12, 7)
+        set st = stoneStatue.create(gg_rct_StoneStatue003, 12, 7)
         set i = 0
         loop
             exitwhen i > 5
@@ -390,7 +389,7 @@ library StoneStatue initializer Init needs Key
 
 
         // -------------------------------------------------------
-        set st = CreateStoneStatue(gg_rct_StoneStatue002, 12, 8)
+        set st = stoneStatue.create(gg_rct_StoneStatue002, 12, 8)
 
         set i = 0
         loop

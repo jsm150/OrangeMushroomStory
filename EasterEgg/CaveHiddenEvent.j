@@ -25,16 +25,15 @@ library CaveHiddenEvent initializer Init
         integer UnitArrow
         trigger Trigger
 
-        static method KeyRemoveAction takes nothing returns nothing
-            local thistype obj = eventStruct.e
-            call obj.SetSizeAndTransparency()
+        public method KeyRemoveAction takes nothing returns nothing
+            call this.SetSizeAndTransparency()
 
-            if obj.transparency > 90 then
-                call DestroyTrigger(obj.Trigger)
-                call RemoveUnit(obj.Unit)
+            if this.transparency > 90 then
+                call DestroyTrigger(this.Trigger)
+                call RemoveUnit(this.Unit)
                 
-                set obj.Trigger = null
-                set obj.Unit = null
+                set this.Trigger = null
+                set this.Unit = null
             endif
         endmethod
 
@@ -112,20 +111,19 @@ library CaveHiddenEvent initializer Init
             call obj.destroy()
         endmethod
 
-        static method OnEnterRegion takes nothing returns nothing
-            local thistype obj = eventStruct.e
+        public method OnEnterRegion takes nothing returns nothing
             local integer i = 0
 
             loop
                 exitwhen i >= 7
-                // exitwhen i >= 2
-                if GetPlayerId(GetOwningPlayer(GetTriggerUnit())) != i and RectContainsUnit(obj.Rects[i], OrangeMushroom[i + 1]) == false then
+                // exitwhen i >= 1
+                if GetPlayerId(GetOwningPlayer(GetTriggerUnit())) != i and RectContainsUnit(this.Rects[i], OrangeMushroom[i + 1]) == false then
                     return
                 endif
                 set i = i + 1
             endloop
 
-            call obj.KeyboardEventStart()
+            call this.KeyboardEventStart()
         endmethod
 
         //! runtextmacro Make_Keyboard_Event_Method("ArrowDownEvent", "KeyInfo.DownArrow")
@@ -146,7 +144,7 @@ library CaveHiddenEvent initializer Init
                 set this.accessNumber = this.accessNumber + 1
 
                 if this.accessNumber == 7 then
-                // if this.accessNumber == 2 then
+                // if this.accessNumber == 1 then
                     call SetFilter(1.00, 100, 100, 100, 0, 100, 100, 100, 100 )
                     call SetDoodadAnimation(GetRectMinX(this.NoticeRect), GetRectMaxY(this.NoticeRect), 128.00, id, false, this.Hint, false)
 
@@ -161,10 +159,14 @@ library CaveHiddenEvent initializer Init
         method SetKeyboardTrigger takes nothing returns nothing
             local integer i = 0
 
-            set this.KeyboardTrigger[0] = eventStruct.register(this, 0, function thistype.ArrowDownEvent)
-            set this.KeyboardTrigger[1] = eventStruct.register(this, 0, function thistype.ArrowLeftEvent)
-            set this.KeyboardTrigger[2] = eventStruct.register(this, 0, function thistype.ArrowRightEvent)
-            set this.KeyboardTrigger[3] = eventStruct.register(this, 0, function thistype.ArrowUpEvent)
+            set this.KeyboardTrigger[0] = CreateTrigger()
+            call EventMethod.AddByEvaluate(this.KeyboardTrigger[0], this, this.ArrowDownEvent)
+            set this.KeyboardTrigger[1] = CreateTrigger()
+            call EventMethod.AddByEvaluate(this.KeyboardTrigger[1], this, this.ArrowLeftEvent)
+            set this.KeyboardTrigger[2] = CreateTrigger()
+            call EventMethod.AddByEvaluate(this.KeyboardTrigger[2], this, this.ArrowRightEvent)
+            set this.KeyboardTrigger[3] = CreateTrigger()
+            call EventMethod.AddByEvaluate(this.KeyboardTrigger[3], this, this.ArrowUpEvent)
 
             loop
                 exitwhen i >= 7
@@ -214,7 +216,8 @@ library CaveHiddenEvent initializer Init
                 endif
 
                 set this.Key[i] = KeyInfo.create()
-                set this.Key[i].Trigger = eventStruct.register(this.Key[i], 0, function KeyInfo.KeyRemoveAction)
+                set this.Key[i].Trigger = CreateTrigger()
+                call EventMethod.AddByEvaluate(this.Key[i].Trigger, this.Key[i], KeyInfo.KeyRemoveAction)
 
                 set idx = GetRandomInt(0, 3)
                 set this.Key[i].UnitArrow = KeyList2[idx]
@@ -269,26 +272,29 @@ library CaveHiddenEvent initializer Init
         //! runtextmacro Make_Keyboard_Event_Method2("ArrowRightEvent", "KeyInfo.RightArrow")
         //! runtextmacro Make_Keyboard_Event_Method2("ArrowUpEvent", "KeyInfo.UpArrow")
 
-        static method StartInputKey takes nothing returns nothing
-            local thistype obj = eventStruct.e
+        public method StartInputKey takes nothing returns nothing
             local integer i = 0
 
-            set obj.KeyboardTrigger[0] = eventStruct.register(obj, 0, function thistype.ArrowDownEvent)
-            set obj.KeyboardTrigger[1] = eventStruct.register(obj, 0, function thistype.ArrowLeftEvent)
-            set obj.KeyboardTrigger[2] = eventStruct.register(obj, 0, function thistype.ArrowRightEvent)
-            set obj.KeyboardTrigger[3] = eventStruct.register(obj, 0, function thistype.ArrowUpEvent)
+            set this.KeyboardTrigger[0] = CreateTrigger()
+            call EventMethod.AddByEvaluate(this.KeyboardTrigger[0], this, this.ArrowDownEvent)
+            set this.KeyboardTrigger[1] = CreateTrigger()
+            call EventMethod.AddByEvaluate(this.KeyboardTrigger[1], this, this.ArrowLeftEvent)
+            set this.KeyboardTrigger[2] = CreateTrigger()
+            call EventMethod.AddByEvaluate(this.KeyboardTrigger[2], this, this.ArrowRightEvent)
+            set this.KeyboardTrigger[3] = CreateTrigger()
+            call EventMethod.AddByEvaluate(this.KeyboardTrigger[3], this, this.ArrowUpEvent)
 
             loop
                 exitwhen i >= 7
-                call TriggerRegisterPlayerEvent(obj.KeyboardTrigger[0], Player(i), EVENT_PLAYER_ARROW_DOWN_DOWN)
-                call TriggerRegisterPlayerEvent(obj.KeyboardTrigger[1], Player(i), EVENT_PLAYER_ARROW_LEFT_DOWN)
-                call TriggerRegisterPlayerEvent(obj.KeyboardTrigger[2], Player(i), EVENT_PLAYER_ARROW_RIGHT_DOWN)
-                call TriggerRegisterPlayerEvent(obj.KeyboardTrigger[3], Player(i), EVENT_PLAYER_ARROW_UP_DOWN)
+                call TriggerRegisterPlayerEvent(this.KeyboardTrigger[0], Player(i), EVENT_PLAYER_ARROW_DOWN_DOWN)
+                call TriggerRegisterPlayerEvent(this.KeyboardTrigger[1], Player(i), EVENT_PLAYER_ARROW_LEFT_DOWN)
+                call TriggerRegisterPlayerEvent(this.KeyboardTrigger[2], Player(i), EVENT_PLAYER_ARROW_RIGHT_DOWN)
+                call TriggerRegisterPlayerEvent(this.KeyboardTrigger[3], Player(i), EVENT_PLAYER_ARROW_UP_DOWN)
                 set i = i + 1
             endloop
 
-            call DestroyTrigger(obj.EventStartTrigger)
-            set obj.EventStartTrigger = null
+            call DestroyTrigger(this.EventStartTrigger)
+            set this.EventStartTrigger = null
         endmethod
 
         method KeyDownAction takes integer arrow returns nothing
@@ -417,7 +423,8 @@ library CaveHiddenEvent initializer Init
                 set j = j + 1
             endloop
 
-            set Objects[i].EventStartTrigger = eventStruct.register(Objects[i], 0, function CaveHiddenObject.OnEnterRegion)
+            set Objects[i].EventStartTrigger = CreateTrigger()
+            call EventMethod.AddByEvaluate(Objects[i].EventStartTrigger, Objects[i], CaveHiddenObject.OnEnterRegion)
             call TriggerRegisterEnterRegion(Objects[i].EventStartTrigger, Objects[i].Region, null)
 
             set i = i + 1
@@ -462,7 +469,8 @@ library CaveHiddenEvent initializer Init
     private function InitCaveOpenKey takes nothing returns nothing
         local CaveOpenKey obj = CaveOpenKey.create()
 
-        set obj.EventStartTrigger = eventStruct.register(obj, CaveOpenKey.eventId, function CaveOpenKey.StartInputKey)
+        set obj.EventStartTrigger = CreateTrigger()
+        call EventMethod.AddByEvaluate(obj.EventStartTrigger, obj, CaveOpenKey.StartInputKey)
 
         set obj.Region = CreateRegion()
         call RegionAddRect(obj.Region, gg_rct_Cave)
@@ -493,19 +501,17 @@ endlibrary
 
 
 //! textmacro Make_Keyboard_Event_Method takes FuncName, Arrow
-static method $FuncName$ takes nothing returns nothing
-    local thistype obj = eventStruct.e
-    local integer i = GetPlayerId(GetTriggerPlayer())
+    private method $FuncName$ takes nothing returns nothing
+        local integer i = GetPlayerId(GetTriggerPlayer())
 
-    if RectContainsUnit(obj.Rects[obj.accessNumber], OrangeMushroom[i + 1]) and obj.accessNumber == i then
-        call obj.KeyDownAction(i, $Arrow$)
-    endif
-endmethod
+        if RectContainsUnit(this.Rects[this.accessNumber], OrangeMushroom[i + 1]) and this.accessNumber == i then
+            call this.KeyDownAction(i, $Arrow$)
+        endif
+    endmethod
 //! endtextmacro
 
 //! textmacro Make_Keyboard_Event_Method2 takes FuncName, Arrow
-    static method $FuncName$ takes nothing returns nothing
-        local thistype obj = eventStruct.e
-        call obj.KeyDownAction($Arrow$)
+    private method $FuncName$ takes nothing returns nothing
+        call this.KeyDownAction($Arrow$)
     endmethod
 //! endtextmacro

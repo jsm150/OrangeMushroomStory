@@ -154,9 +154,7 @@ library Key initializer Init
         private collisionLinkedList resetList
         private boolean isExecuted
 
-        static method Execute takes nothing returns nothing
-            local thistype this = eventStruct.e
-
+        private method Execute takes nothing returns nothing
             if this.isExecuted == false and TypeCondition() == true then
                 call this.Action()                
             endif
@@ -189,21 +187,17 @@ library Key initializer Init
 
         static method create takes rect r, integer keyType, collisionLinkedList actionList, collisionLinkedList resetList returns thistype
             local thistype this = thistype.allocate()
+            local trigger t = CreateTrigger()
             set this.keyRect = r
             set this.keyType = keyType
             set this.actionList = actionList
             set this.resetList = resetList
+            call TriggerRegisterEnterRectSimple(t, r)
+            call EventMethod.AddByEvaluate(t, this, this.Execute)
+            set t = null
             return this
         endmethod
     endstruct
-
-    private function keyEvent_new takes rect r, integer keyType, collisionLinkedList actionList, collisionLinkedList resetList returns keyEvent
-        local keyEvent obj = keyEvent.create(r, keyType, actionList, resetList)
-        local trigger t = eventStruct.register(obj, 0, function keyEvent.Execute)
-        call TriggerRegisterEnterRectSimple(t, r)
-        set t = null
-        return obj
-    endfunction
     
     //! runtextmacro Make_LinkedList("keyEvent", "0")
 
@@ -264,7 +258,7 @@ library Key initializer Init
         
 
         public static method SaveEvent takes nothing returns nothing
-            call eventList.AddFirst(keyEvent_new(keyRect, keyType, actionList, resetList))
+            call eventList.AddFirst(keyEvent.create(keyRect, keyType, actionList, resetList))
         endmethod
 
         public static method AddAction takes blockLocationLinkedList posList, string ActionType returns nothing
@@ -351,7 +345,7 @@ library Key initializer Init
         call actionList.AddFirst(removeCollision.create(posList, redInvisibleToDeco))
         call resetList.AddFirst(createCollision.create(posList, redVisibleToDeco))
 
-        call eventList.AddFirst(keyEvent_new(gg_rct_Key10_6_001, RED_KEY_ID, actionList, resetList))
+        call eventList.AddFirst(keyEvent.create(gg_rct_Key10_6_001, RED_KEY_ID, actionList, resetList))
 
         set actionList = collisionLinkedList.create()
         set resetList = collisionLinkedList.create()
@@ -373,7 +367,7 @@ library Key initializer Init
         call actionList.AddFirst(createCollision.create(posList, yellowVisibleToDeco))
         call resetList.AddFirst(removeCollision.create(posList, yellowInvisibleToDeco))
 
-        call eventList.AddFirst(keyEvent_new(gg_rct_Key10_6_002, YELLOW_KEY_ID, actionList, resetList))
+        call eventList.AddFirst(keyEvent.create(gg_rct_Key10_6_002, YELLOW_KEY_ID, actionList, resetList))
 
         set actionList = collisionLinkedList.create()
         set resetList = collisionLinkedList.create()
@@ -397,7 +391,7 @@ library Key initializer Init
         call actionList.AddFirst(createCollision.create(posList, blueVisibleToDeco))
         call resetList.AddFirst(removeCollision.create(posList, blueInvisibleToDeco))
 
-        call eventList.AddFirst(keyEvent_new(gg_rct_Key10_6_003, BLUE_KEY_ID, actionList, resetList))
+        call eventList.AddFirst(keyEvent.create(gg_rct_Key10_6_003, BLUE_KEY_ID, actionList, resetList))
 
         set actionList = collisionLinkedList.create()
         set resetList = collisionLinkedList.create()
@@ -434,7 +428,7 @@ library Key initializer Init
         call actionList.AddFirst(removeCollision.create(posList3, skinForTile.create(RightRailTerrain)))
         call resetList.AddFirst(removeCollision.create(posList3, skinForTile.create(BACKGROUND_TILE)))
 
-        call eventList.AddFirst(keyEvent_new(gg_rct_Key10_6_004, WHITE_KEY_ID, actionList, resetList))
+        call eventList.AddFirst(keyEvent.create(gg_rct_Key10_6_004, WHITE_KEY_ID, actionList, resetList))
 
         call keyMap.Add(10, 6, eventList)
 
@@ -528,7 +522,7 @@ library Key initializer Init
 
         call actionList.AddFirst(createCollision.create(posList, blueVisibleToDeco))
 
-        call eventList.AddFirst(keyEvent_new(gg_rct_Key10_8_001, RED_KEY_ID, actionList, resetList))
+        call eventList.AddFirst(keyEvent.create(gg_rct_Key10_8_001, RED_KEY_ID, actionList, resetList))
 
         set actionList = collisionLinkedList.create()
         set resetList = collisionLinkedList.create()
@@ -560,7 +554,7 @@ library Key initializer Init
         call actionList.AddFirst(createCollision.create(posList, yellowVisibleToDeco))
         call resetList.AddFirst(removeCollision.create(posList, yellowInvisibleToDeco))
 
-        call eventList.AddFirst(keyEvent_new(gg_rct_Key10_8_002, YELLOW_KEY_ID, actionList, resetList))
+        call eventList.AddFirst(keyEvent.create(gg_rct_Key10_8_002, YELLOW_KEY_ID, actionList, resetList))
 
         set actionList = collisionLinkedList.create()
         set resetList = collisionLinkedList.create()
@@ -589,7 +583,7 @@ library Key initializer Init
         call actionList.AddFirst(createCollision.create(posList, blueVisibleToDeco))
         call resetList.AddFirst(removeCollision.create(posList, blueInvisibleToDeco))
 
-        call eventList.AddFirst(keyEvent_new(gg_rct_Key10_8_003, BLUE_KEY_ID, actionList, resetList))
+        call eventList.AddFirst(keyEvent.create(gg_rct_Key10_8_003, BLUE_KEY_ID, actionList, resetList))
 
         set actionList = collisionLinkedList.create()
         set resetList = collisionLinkedList.create()
@@ -601,7 +595,7 @@ library Key initializer Init
         call actionList.AddFirst(removeCollision.create(posList, whiteInvisibleToDeco))
         call resetList.AddFirst(createCollision.create(posList, whiteVisibleToDeco))
 
-        call eventList.AddFirst(keyEvent_new(gg_rct_Key10_8_004, WHITE_KEY_ID, actionList, resetList))
+        call eventList.AddFirst(keyEvent.create(gg_rct_Key10_8_004, WHITE_KEY_ID, actionList, resetList))
 
         call keyMap.Add(10, 8, eventList)
 

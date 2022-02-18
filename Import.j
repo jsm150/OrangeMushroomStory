@@ -62,7 +62,7 @@
 //! import "Library\ShortTeleport.j"
 //! import "Library\StageClear.j"
 //! import "Library\StoneStatue.j"
-//! import "Library\StructEvent.j"
+//! import "Library\StructList.j"
 //! import "Library\TeamColor.j"
 //! import "Library\TeleportMoon.j"
 //! import "Library\TeleportStone.j"

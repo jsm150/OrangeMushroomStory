@@ -27,8 +27,7 @@ scope HotKey initializer Init
     endfunction
 
     private struct Event
-        static method Execute takes nothing returns nothing
-            local thistype this = eventStruct.e
+        private method Execute takes nothing returns nothing
             local integer i = GetPlayerId(DzGetTriggerKeyPlayer())
 
             if onEnter[i] == false then
@@ -43,7 +42,8 @@ scope HotKey initializer Init
 
         static method create takes integer keyId returns thistype
             local thistype this = thistype.allocate()
-            local trigger t = eventStruct.register(this, 0, function thistype.Execute)
+            local trigger t = CreateTrigger()
+            call EventMethod.AddByEvaluate(t, this, this.Execute)
             call DzTriggerRegisterKeyEvent(t, keyId, 1, true, null)
 
             set t = null
