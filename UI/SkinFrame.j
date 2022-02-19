@@ -182,12 +182,16 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     endstruct
 
     private struct SkinSelectWindow
-        private static constant real size = 0.17
-        private static constant real posX = 0.20
-        private static constant real posY = 0.45
-        private static string array motionList[3]
-        private static integer frame = 0
-        private integer currentFileIdx = 0
+        private static constant real size = 0.27
+        private static constant real posX = 0.1
+        private static constant real posY = 0.5
+        private static integer topFrame1 = 0
+        private static integer topFrame2 = 0
+        private static integer topFrame3 = 0
+        private static integer previewFrame = 0
+        private static integer bannerFrame = 0
+        private static integer inventoryTopFrame = 0
+        private static integer inventoryBottomFrame = 0
         private boolean isShow = false
         private SkinUI skinUI
         private NameUI nameUI
@@ -200,7 +204,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             set this.isShow = true
 
             if GetLocalPlayer() == Player(this.playerId) then
-                call DzFrameShow(this.frame, this.isShow)
+                call DzFrameShow(this.topFrame1, this.isShow)
+                call DzFrameShow(this.topFrame2, this.isShow)
+                call DzFrameShow(this.topFrame3, this.isShow)
+                call DzFrameShow(this.previewFrame, this.isShow)
+                call DzFrameShow(this.bannerFrame, this.isShow)
+                call DzFrameShow(this.inventoryTopFrame, this.isShow)
+                call DzFrameShow(this.inventoryBottomFrame, this.isShow)
             endif
 
             call this.skinUI.Move(thistype.posX + skinOffsetX, thistype.posY + skinOffsetY)
@@ -213,7 +223,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call this.nameUI.Hide()
             call this.skinUI.Hide()
             if GetLocalPlayer() == Player(this.playerId) then
-                call DzFrameShow(this.frame, this.isShow)
+                call DzFrameShow(this.topFrame1, this.isShow)
+                call DzFrameShow(this.topFrame2, this.isShow)
+                call DzFrameShow(this.topFrame3, this.isShow)
+                call DzFrameShow(this.previewFrame, this.isShow)
+                call DzFrameShow(this.bannerFrame, this.isShow)
+                call DzFrameShow(this.inventoryTopFrame, this.isShow)
+                call DzFrameShow(this.inventoryBottomFrame, this.isShow)
             endif
         endmethod
 
@@ -234,17 +250,46 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local real nameOffsetX = -0.017
             local real nameOffsetY = -0.036
 
-            if thistype.frame == 0 then
-                set thistype.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                set thistype.motionList[0] = "PreviewBackground001.blp"
-                set thistype.motionList[1] = "PreviewBackground002.blp"
-                set thistype.motionList[2] = "PreviewBackground003.blp"
+            if thistype.topFrame1 == 0 then
+                set thistype.topFrame1 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                set thistype.topFrame2 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                set thistype.topFrame3 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                set thistype.previewFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                set thistype.bannerFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                set thistype.inventoryTopFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                set thistype.inventoryBottomFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
 
-                call DzFrameSetSize(thistype.frame, thistype.size, thistype.size)
-                call DzFrameSetAbsolutePoint(thistype.frame, JN_FRAMEPOINT_CENTER, thistype.posX, thistype.posY)
-                call DzFrameSetTexture(thistype.frame, thistype.motionList[this.currentFileIdx + 2], 0)
+                call DzFrameSetSize(thistype.topFrame1, 0.06, 0.05)
+                call DzFrameSetSize(thistype.topFrame2, thistype.size - 0.06, 0.05)
+                call DzFrameSetSize(thistype.topFrame3, thistype.size, 0.05)
+                call DzFrameSetSize(thistype.previewFrame, thistype.size, 0.218)
+                call DzFrameSetSize(thistype.bannerFrame, thistype.size, thistype.size * 1.4 - 0.218)
+                call DzFrameSetSize(thistype.inventoryTopFrame, thistype.size, 0.181)
+                call DzFrameSetSize(thistype.inventoryBottomFrame, thistype.size, thistype.size * 1.4 - 0.181)
 
-                call DzFrameShow(thistype.frame, false)
+                call DzFrameSetTexture(thistype.topFrame1, "SkinWindowTop1.blp", 0)
+                call DzFrameSetTexture(thistype.topFrame2, "SkinWindowTop2.blp", 0)
+                call DzFrameSetTexture(thistype.topFrame3, "SkinWindowTop3.blp", 0)
+                call DzFrameSetTexture(thistype.previewFrame, "SkinWindowPreview.blp", 0)
+                call DzFrameSetTexture(thistype.bannerFrame, "SkinWindowBanner.blp", 0)
+                call DzFrameSetTexture(thistype.inventoryTopFrame, "SkinWindowInventoryTop.blp", 0)
+                call DzFrameSetTexture(thistype.inventoryBottomFrame, "SkinWindowInventoryBottom.blp", 0)
+
+                call DzFrameSetAbsolutePoint(thistype.topFrame1, JN_FRAMEPOINT_TOPLEFT, thistype.posX, thistype.posY)
+                call DzFrameSetPoint(thistype.topFrame2, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame1, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
+                call DzFrameSetPoint(thistype.topFrame3, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame2, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
+                call DzFrameSetPoint(thistype.previewFrame, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame1, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
+                call DzFrameSetPoint(thistype.bannerFrame, JN_FRAMEPOINT_TOPLEFT, thistype.previewFrame, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
+                call DzFrameSetPoint(thistype.inventoryTopFrame, JN_FRAMEPOINT_TOPLEFT, thistype.previewFrame, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
+                call DzFrameSetPoint(thistype.inventoryBottomFrame, JN_FRAMEPOINT_TOPLEFT, thistype.inventoryTopFrame, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
+
+                call DzFrameShow(thistype.topFrame1, false)
+                call DzFrameShow(thistype.topFrame2, false)
+                call DzFrameShow(thistype.topFrame3, false)
+                call DzFrameShow(thistype.previewFrame, false)
+                call DzFrameShow(thistype.bannerFrame, false)
+                call DzFrameShow(thistype.inventoryTopFrame, false)
+                call DzFrameShow(thistype.inventoryBottomFrame, false)
             endif
 
             set this.playerId = playerId
@@ -264,7 +309,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private static constant string normalTexture = "SkinUIOpenButtonNormal.blp"
         private static constant string pressedTexture = "SkinUIOpenButtonPressed.blp"
         private static constant string mouseOverTexture = "SkinUIOpenButtonMouseOver.blp"
-        private static key buttonKey
         private integer playerId
         private boolean isPressed = false
         private boolean isOpen = false
@@ -313,7 +357,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
         private static method MouseOverEvent takes nothing returns nothing
             local thistype this = GetPlayerId(GetLocalPlayer()) + 1
-            call this.MouseOver(DzGetMouseXRelative(), DzGetMouseYRelative())            
+            call this.MouseOver(DzGetMouseXRelative(), DzGetMouseYRelative())
         endmethod
 
         public static method create takes integer playerId returns thistype
@@ -334,8 +378,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
             call DzFrameSetScriptByCode(thistype.dummyFrame, JN_FRAMEEVENT_MOUSE_ENTER, function thistype.MouseOverEvent, false)
             call DzFrameSetScriptByCode(thistype.dummyFrame, JN_FRAMEEVENT_MOUSE_LEAVE, function thistype.MouseOverEvent, false)
-
-
 
             call DzFrameShow(thistype.dummyFrame, true)
             call DzFrameShow(thistype.frame, true)
