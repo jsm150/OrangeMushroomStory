@@ -46,7 +46,7 @@ library CaveHiddenEvent initializer Init
         method destroy takes nothing returns nothing
             call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorDamage.mdl", GetUnitX(this.Unit), GetUnitY(this.Unit)))
             call RemoveUnit(this.Unit)
-            call DestroyTrigger(this.Trigger)
+            call EventMethod.Destroy(this.Trigger)
 
             set this.Trigger = null
             set this.Unit = null
@@ -97,7 +97,7 @@ library CaveHiddenEvent initializer Init
                 set this.Rects[i] = null
 
                 if i < 4 then
-                    call DestroyTrigger(this.KeyboardTrigger[i])
+                    call EventMethod.Destroy(this.KeyboardTrigger[i])
                     set this.KeyboardTrigger[i] = null
                 endif
 
@@ -258,7 +258,7 @@ library CaveHiddenEvent initializer Init
 
             loop
                 exitwhen i >= 4
-                call DestroyTrigger(this.KeyboardTrigger[i])
+                call EventMethod.Destroy(this.KeyboardTrigger[i])
                 set this.KeyboardTrigger[i] = null
 
                 set i = i + 1
@@ -293,7 +293,7 @@ library CaveHiddenEvent initializer Init
                 set i = i + 1
             endloop
 
-            call DestroyTrigger(this.EventStartTrigger)
+            call EventMethod.Destroy(this.EventStartTrigger)
             set this.EventStartTrigger = null
         endmethod
 
