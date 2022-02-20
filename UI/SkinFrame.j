@@ -1,5 +1,14 @@
 library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
+    private function GetMouseFrameX takes integer posX returns real
+        return posX / (DzGetWindowWidth() / 0.8)
+    endfunction
+
+    private function GetMouseFrameY takes integer posY returns real
+        local integer height = DzGetWindowHeight()
+        return (height - posY) / (height / 0.6)
+    endfunction
+
     private struct SkinAnimation
         private static hashtable motionList = InitHashtable()
         private string name
@@ -198,8 +207,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private integer playerId
 
         public method Show takes nothing returns nothing
-            local real skinOffsetX = 0
-            local real skinOffsetY = -0.033
+            local real skinOffsetX = 0.145
+            local real skinOffsetY = -0.2052
 
             set this.isShow = true
 
@@ -247,8 +256,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
         public static method create takes integer playerId returns thistype
             local thistype this = thistype.allocate()
-            local real nameOffsetX = -0.017
-            local real nameOffsetY = -0.036
+            local real nameOffsetX = 0.128
+            local real nameOffsetY = -0.2082
 
             if thistype.topFrame1 == 0 then
                 set thistype.topFrame1 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
@@ -315,10 +324,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
         public method Contains takes real posX, real posY returns boolean
             // 워크 화면상의 절대좌표
-            local real minX = 1788
-            local real maxX = 1908
-            local real minY = 167
-            local real maxY = 205
+            local real minX = 0.745
+            local real maxX = 0.795
+            local real minY = 0.486
+            local real maxY = 0.508
             return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
         endmethod
 
@@ -357,7 +366,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
         private static method MouseOverEvent takes nothing returns nothing
             local thistype this = GetPlayerId(GetLocalPlayer()) + 1
-            call this.MouseOver(DzGetMouseXRelative(), DzGetMouseYRelative())
+            call this.MouseOver(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
         endmethod
 
         public static method create takes integer playerId returns thistype
@@ -430,11 +439,11 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     
 
     //! runtextmacro Make_ButtonMouseEvent_Top("SkinOpenButtonClickDown")
-        call PlayerSkinUI[i].ClickDown(x, y)
+        call PlayerSkinUI[i].ClickDown(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
     //! runtextmacro Make_ButtonMouseEvent_Bottom("SkinOpenButtonClickDown")
 
     //! runtextmacro Make_ButtonMouseEvent_Top("SkinOpenButtonClickUp")
-        call PlayerSkinUI[i].ClickUp(x, y)
+        call PlayerSkinUI[i].ClickUp(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
     //! runtextmacro Make_ButtonMouseEvent_Bottom("SkinOpenButtonClickUp")
 
 
