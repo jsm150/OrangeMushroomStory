@@ -183,8 +183,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     private struct SkinSelectWindow
         private static constant real size = 0.27
-        private static constant real posX = 0.1
-        private static constant real posY = 0.5
+        private static constant real posX = 0.06
+        private static constant real posY = 0.55
         private static integer topFrame1 = 0
         private static integer topFrame2 = 0
         private static integer topFrame3 = 0
@@ -259,13 +259,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                 set thistype.inventoryTopFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
                 set thistype.inventoryBottomFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
 
-                call DzFrameSetSize(thistype.topFrame1, 0.06, 0.05)
-                call DzFrameSetSize(thistype.topFrame2, thistype.size - 0.06, 0.05)
-                call DzFrameSetSize(thistype.topFrame3, thistype.size, 0.05)
-                call DzFrameSetSize(thistype.previewFrame, thistype.size, 0.218)
-                call DzFrameSetSize(thistype.bannerFrame, thistype.size, thistype.size * 1.4 - 0.218)
-                call DzFrameSetSize(thistype.inventoryTopFrame, thistype.size, 0.181)
-                call DzFrameSetSize(thistype.inventoryBottomFrame, thistype.size, thistype.size * 1.4 - 0.181)
+                call DzFrameSetSize(thistype.topFrame1, thistype.size * 0.222, thistype.size * 0.185)
+                call DzFrameSetSize(thistype.topFrame2, thistype.size - thistype.size * 0.222, thistype.size * 0.185)
+                call DzFrameSetSize(thistype.topFrame3, thistype.size, thistype.size * 0.185)
+                call DzFrameSetSize(thistype.previewFrame, thistype.size, thistype.size * 0.8074)
+                call DzFrameSetSize(thistype.bannerFrame, thistype.size, thistype.size * 1.4 - thistype.size * 0.8074)
+                call DzFrameSetSize(thistype.inventoryTopFrame, thistype.size, thistype.size * 0.67)
+                call DzFrameSetSize(thistype.inventoryBottomFrame, thistype.size, thistype.size * 1.4 - thistype.size * 0.67)
 
                 call DzFrameSetTexture(thistype.topFrame1, "SkinWindowTop1.blp", 0)
                 call DzFrameSetTexture(thistype.topFrame2, "SkinWindowTop2.blp", 0)
