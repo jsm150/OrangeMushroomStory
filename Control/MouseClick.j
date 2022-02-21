@@ -1,11 +1,11 @@
 scope MouseClick initializer Init
     private function DownAsync takes nothing returns nothing
-        call SkinFrame_SkinOpenButtonClickDown()
+        call SkinFrame_MouseClickDown()
     endfunction
 
     private function UpAsync takes nothing returns nothing
         call HotKey_ChatWindowChecker()
-        call SkinFrame_SkinOpenButtonClickUp()
+        call SkinFrame_MouseClickUp()
     endfunction
 
     private function Init takes nothing returns nothing
