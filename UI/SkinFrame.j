@@ -20,9 +20,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private method ChangeAnimation takes integer frame, integer playerId returns nothing
             local integer currentIdx = 0
 
-            set this.playing = true
             loop
-                exitwhen this.playing == false
                 if GetLocalPlayer() == Player(playerId) then
                     call DzFrameSetTexture(frame, LoadStr(thistype.motionList, this, currentIdx), 0)
                 endif
@@ -31,11 +29,16 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                     set currentIdx = 0
                 endif
                 
+                if this.motionDelay == 0 or this.playing == false then
+                    return
+                endif
+
                 call TriggerSleepActionByTimer(this.motionDelay)
             endloop
         endmethod
 
         public method Run takes integer frame, integer playerId returns nothing
+            set this.playing = true
             call this.ChangeAnimation.execute(frame, playerId)
         endmethod
 
@@ -119,6 +122,102 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
     endstruct
 
+    private struct Inventory
+        private static constant integer size = 20
+        private static integer array framePool[thistype.size]
+        private static real maxX = 0.385
+        private static real minX = 0.340
+        private static real minY = 0.388
+        private static real maxY = 0.446
+        private static real offsetX = 0.051
+        private static real offsetY = -0.063
+        private integer page = 1
+        private integer playerId
+        private sList skinList
+
+        public method Show takes nothing returns nothing
+            local integer skinIdx
+            local integer frameIdx
+            local integer max = thistype.size * this.page
+
+            if max > this.skinList.size then
+                set max = this.skinList.size
+            endif
+
+            set frameIdx = 0
+            //! runtextmacro for("set skinIdx = thistype.size * (this.page - 1)", "skinIdx < max")
+                call SkinAnimation(this.skinList[skinIdx]).Run(thistype.framePool[frameIdx], playerId)
+                if GetLocalPlayer() == Player(this.playerId) then
+                    call DzFrameShow(thistype.framePool[frameIdx], true)
+                endif
+                set frameIdx = frameIdx + 1
+            //! runtextmacro for_end("set skinIdx = skinIdx + 1")
+        endmethod
+
+        public method Hide takes nothing returns nothing
+            local integer skinIdx
+            local integer frameIdx
+            local integer max = thistype.size * this.page
+
+            if max > this.skinList.size then
+                set max = this.skinList.size
+            endif
+
+            set frameIdx = 0
+            //! runtextmacro for("set skinIdx = thistype.size * (this.page - 1)", "skinIdx < max")
+                call SkinAnimation(this.skinList[skinIdx]).Stop()
+                if GetLocalPlayer() == Player(this.playerId) then
+                    call DzFrameShow(thistype.framePool[frameIdx], false)
+                endif
+                set frameIdx = frameIdx + 1
+            //! runtextmacro for_end("set skinIdx = skinIdx + 1")
+        endmethod
+        
+        public method NextPage takes nothing returns nothing
+            if this.page >= R2I((this.skinList.size - 1) / thistype.size) + 1 then
+                return
+            endif
+
+            call this.Hide()
+            set this.page = this.page + 1
+            call this.Show()
+        endmethod
+
+        public method PrevPage takes nothing returns nothing
+            if this.page <= 1 then
+                return
+            endif
+
+            call this.Hide()
+            set this.page = this.page - 1
+            call this.Show()
+        endmethod
+
+        public static method create takes sList skinList, integer playerId returns thistype
+            local thistype this = thistype.allocate()
+            local real offsetY = -0.009
+            local integer i
+
+            if thistype.framePool[0] == 0 then
+                //! runtextmacro for("set i = 0", "i < thistype.size")
+                    set thistype.framePool[i] = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+                    call DzFrameSetSize(thistype.framePool[i], 0.044, 0.044)
+                    call DzFrameShow(thistype.framePool[i], false)
+                    call DzFrameSetAbsolutePoint(thistype.framePool[i], JN_FRAMEPOINT_TOPLEFT, /*
+                        */ thistype.minX + thistype.offsetX * ModuloInteger(i, 5), /*
+                        */ thistype.maxY + offsetY + thistype.offsetY * R2I(i / 5) /*
+                */  )
+                //! runtextmacro for_end("set i = i + 1")
+                    
+                // call DzFrameSetAbsolutePoint(thistype.framePool[0], JN_FRAMEPOINT_TOPLEFT, thistype.minX, thistype.maxY + offsetY)
+            endif
+            
+            set this.skinList = skinList
+            set this.playerId = playerId
+            return this
+        endmethod
+    endstruct
+
     private struct SkinSelectWindow
         private static constant real size = 0.27
         private static constant real posX = 0.06
@@ -133,6 +232,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private static integer skinFrame
         private boolean isShow = false
         private SkinAnimation skinAnimation
+        private Inventory inventory
         private NameUI nameUI
         private integer playerId
 
@@ -161,11 +261,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
             call this.skinAnimation.Run(thistype.skinFrame, this.playerId)
             call this.nameUI.Show()
+            call this.inventory.Show()
         endmethod
 
         public method Hide takes nothing returns nothing
             set this.isShow = false
 
+            call this.inventory.Hide()
             call this.skinAnimation.Stop()
             call this.nameUI.Hide()
             if GetLocalPlayer() == Player(this.playerId) then
@@ -188,64 +290,66 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             endif
         endmethod
 
-        public static method create takes integer playerId returns thistype
+        public static method create takes integer playerId, sList skinList returns thistype
             local thistype this = thistype.allocate()
             local real nameOffsetX = 0.128
             local real nameOffsetY = -0.2082
-            local real skinOffsetX = 0.145
-            local real skinOffsetY = -0.2052
-
-            if thistype.topFrame1 == 0 then
-                set thistype.topFrame1 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                set thistype.topFrame2 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                set thistype.topFrame3 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                set thistype.previewFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                set thistype.bannerFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                set thistype.inventoryTopFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                set thistype.inventoryBottomFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                set thistype.skinFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-
-                call DzFrameSetSize(thistype.topFrame1, thistype.size * 0.222, thistype.size * 0.185)
-                call DzFrameSetSize(thistype.topFrame2, thistype.size - thistype.size * 0.222, thistype.size * 0.185)
-                call DzFrameSetSize(thistype.topFrame3, thistype.size, thistype.size * 0.185)
-                call DzFrameSetSize(thistype.previewFrame, thistype.size, thistype.size * 0.8074)
-                call DzFrameSetSize(thistype.bannerFrame, thistype.size, thistype.size * 1.4 - thistype.size * 0.8074)
-                call DzFrameSetSize(thistype.inventoryTopFrame, thistype.size, thistype.size * 0.67)
-                call DzFrameSetSize(thistype.inventoryBottomFrame, thistype.size, thistype.size * 1.4 - thistype.size * 0.67)
-                call DzFrameSetSize(thistype.skinFrame, 0.044, 0.044)
-
-                call DzFrameSetTexture(thistype.topFrame1, "SkinWindowTop1.blp", 0)
-                call DzFrameSetTexture(thistype.topFrame2, "SkinWindowTop2.blp", 0)
-                call DzFrameSetTexture(thistype.topFrame3, "SkinWindowTop3.blp", 0)
-                call DzFrameSetTexture(thistype.previewFrame, "SkinWindowPreview.blp", 0)
-                call DzFrameSetTexture(thistype.bannerFrame, "SkinWindowBanner.blp", 0)
-                call DzFrameSetTexture(thistype.inventoryTopFrame, "SkinWindowInventoryTop.blp", 0)
-                call DzFrameSetTexture(thistype.inventoryBottomFrame, "SkinWindowInventoryBottom.blp", 0)
-
-                call DzFrameSetAbsolutePoint(thistype.topFrame1, JN_FRAMEPOINT_TOPLEFT, thistype.posX, thistype.posY)
-                call DzFrameSetPoint(thistype.topFrame2, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame1, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
-                call DzFrameSetPoint(thistype.topFrame3, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame2, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
-                call DzFrameSetPoint(thistype.previewFrame, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame1, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
-                call DzFrameSetPoint(thistype.bannerFrame, JN_FRAMEPOINT_TOPLEFT, thistype.previewFrame, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
-                call DzFrameSetPoint(thistype.inventoryTopFrame, JN_FRAMEPOINT_TOPLEFT, thistype.previewFrame, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
-                call DzFrameSetPoint(thistype.inventoryBottomFrame, JN_FRAMEPOINT_TOPLEFT, thistype.inventoryTopFrame, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
-                call DzFrameSetAbsolutePoint(thistype.skinFrame, JN_FRAMEPOINT_BOTTOM, thistype.posX + skinOffsetX, thistype.posY + skinOffsetY)
-
-                call DzFrameShow(thistype.topFrame1, false)
-                call DzFrameShow(thistype.topFrame2, false)
-                call DzFrameShow(thistype.topFrame3, false)
-                call DzFrameShow(thistype.previewFrame, false)
-                call DzFrameShow(thistype.bannerFrame, false)
-                call DzFrameShow(thistype.inventoryTopFrame, false)
-                call DzFrameShow(thistype.inventoryBottomFrame, false)
-                call DzFrameShow(thistype.skinFrame, false)
-            endif
-
+            
             set this.playerId = playerId
+            set this.inventory = Inventory.create(skinList, playerId)
             set this.skinAnimation = SkinAnimation(SkinAnimationList[0]).Clone()
             set this.nameUI = NameUI.create(playerId, thistype.posX + nameOffsetX, thistype.posY + nameOffsetY)
 
             return this
+        endmethod
+
+        private static method onInit takes nothing returns nothing
+            local real skinOffsetX = 0.145
+            local real skinOffsetY = -0.2052
+
+            set thistype.topFrame1 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            set thistype.topFrame2 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            set thistype.topFrame3 = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            set thistype.previewFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            set thistype.bannerFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            set thistype.inventoryTopFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            set thistype.inventoryBottomFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            set thistype.skinFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+
+            call DzFrameSetSize(thistype.topFrame1, thistype.size * 0.222, thistype.size * 0.185)
+            call DzFrameSetSize(thistype.topFrame2, thistype.size - thistype.size * 0.222, thistype.size * 0.185)
+            call DzFrameSetSize(thistype.topFrame3, thistype.size, thistype.size * 0.185)
+            call DzFrameSetSize(thistype.previewFrame, thistype.size, thistype.size * 0.8074)
+            call DzFrameSetSize(thistype.bannerFrame, thistype.size, thistype.size * 1.4 - thistype.size * 0.8074)
+            call DzFrameSetSize(thistype.inventoryTopFrame, thistype.size, thistype.size * 0.67)
+            call DzFrameSetSize(thistype.inventoryBottomFrame, thistype.size, thistype.size * 1.4 - thistype.size * 0.67)
+            call DzFrameSetSize(thistype.skinFrame, 0.044, 0.044)
+
+            call DzFrameSetTexture(thistype.topFrame1, "SkinWindowTop1.blp", 0)
+            call DzFrameSetTexture(thistype.topFrame2, "SkinWindowTop2.blp", 0)
+            call DzFrameSetTexture(thistype.topFrame3, "SkinWindowTop3.blp", 0)
+            call DzFrameSetTexture(thistype.previewFrame, "SkinWindowPreview.blp", 0)
+            call DzFrameSetTexture(thistype.bannerFrame, "SkinWindowBanner.blp", 0)
+            call DzFrameSetTexture(thistype.inventoryTopFrame, "SkinWindowInventoryTop.blp", 0)
+            call DzFrameSetTexture(thistype.inventoryBottomFrame, "SkinWindowInventoryBottom.blp", 0)
+
+            call DzFrameSetAbsolutePoint(thistype.topFrame1, JN_FRAMEPOINT_TOPLEFT, thistype.posX, thistype.posY)
+            call DzFrameSetPoint(thistype.topFrame2, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame1, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
+            call DzFrameSetPoint(thistype.topFrame3, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame2, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
+            call DzFrameSetPoint(thistype.previewFrame, JN_FRAMEPOINT_TOPLEFT, thistype.topFrame1, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
+            call DzFrameSetPoint(thistype.bannerFrame, JN_FRAMEPOINT_TOPLEFT, thistype.previewFrame, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
+            call DzFrameSetPoint(thistype.inventoryTopFrame, JN_FRAMEPOINT_TOPLEFT, thistype.previewFrame, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
+            call DzFrameSetPoint(thistype.inventoryBottomFrame, JN_FRAMEPOINT_TOPLEFT, thistype.inventoryTopFrame, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
+            call DzFrameSetAbsolutePoint(thistype.skinFrame, JN_FRAMEPOINT_BOTTOM, thistype.posX + skinOffsetX, thistype.posY + skinOffsetY)
+
+            call DzFrameShow(thistype.topFrame1, false)
+            call DzFrameShow(thistype.topFrame2, false)
+            call DzFrameShow(thistype.topFrame3, false)
+            call DzFrameShow(thistype.previewFrame, false)
+            call DzFrameShow(thistype.bannerFrame, false)
+            call DzFrameShow(thistype.inventoryTopFrame, false)
+            call DzFrameShow(thistype.inventoryBottomFrame, false)
+            call DzFrameShow(thistype.skinFrame, false)
         endmethod
     endstruct
 
@@ -315,7 +419,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             return this
         endmethod
 
-        public static method onInit takes nothing returns nothing
+        private static method onInit takes nothing returns nothing
             set thistype.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
             call DzFrameSetTexture(thistype.frame, thistype.normalTexture, 0)
             call DzFrameSetSize(thistype.frame, thistype.size * 2.1, thistype.size)
@@ -367,10 +471,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             endif
         endmethod
 
-        public static method create takes integer playerId returns thistype
+        public static method create takes integer playerId, sList skinList returns thistype
             local thistype this = thistype.allocate()
             set this.buttonUI = ButtonUI.create(playerId)
-            set this.skinSelectWindow = SkinSelectWindow.create(playerId)
+            set this.skinSelectWindow = SkinSelectWindow.create(playerId, skinList)
             return this
         endmethod
     endstruct
@@ -381,6 +485,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     
 
     //! runtextmacro Make_ButtonMouseEvent_Top("MouseClickDown")
+        debug call JNWriteLog("  x: " + R2S(GetMouseFrameX(DzGetMouseXRelative())))
+        debug call JNWriteLog("  y: " + R2S(GetMouseFrameY(DzGetMouseYRelative())))
         call PlayerSkinUI[i].ClickDown(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
     //! runtextmacro Make_ButtonMouseEvent_Bottom("MouseClickDown")
 
@@ -394,10 +500,140 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         
         set SkinAnimationList = sList.create()
 
-        set skin = SkinAnimation.create(0.250, "Mushroom")
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Orange Mushroom")
         call skin.AddMotion("Mushroom001.blp")
         call skin.AddMotion("Mushroom002.blp")
         call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Blue Mushroom")
+        call skin.AddMotion("BlueMushroom001.blp")
+        call skin.AddMotion("BlueMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Zombie Mushroom")
+        call skin.AddMotion("ZombieMushroom001.blp")
+        call skin.AddMotion("ZombieMushroom002.blp")
+        call SkinAnimationList.add(skin)
+        
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Mushrooms")
+        call skin.AddMotion("PileMushroom001.blp")
+        call skin.AddMotion("PileMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Bloctopus")
+        call skin.AddMotion("Bloctopus001.blp")
+        call skin.AddMotion("Bloctopus002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "King Bloctopus")
+        call skin.AddMotion("KingBloctopus001.blp")
+        call skin.AddMotion("KingBloctopus002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Pink Mushroom")
+        call skin.AddMotion("PinkMushroom001.blp")
+        call skin.AddMotion("PinkMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0, "Box")
+        call skin.AddMotion("BoxPlayer001.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Slime")
+        call skin.AddMotion("Slime001.blp")
+        call skin.AddMotion("Slime002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Bubbling")
+        call skin.AddMotion("Bubbling001.blp")
+        call skin.AddMotion("Bubbling002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Propelly")
+        call skin.AddMotion("Propelly001.blp")
+        call skin.AddMotion("Propelly006.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.100, "Cube Slime")
+        call skin.AddMotion("CubeSlime001.blp")
+        call skin.AddMotion("CubeSlime002.blp")
+        call skin.AddMotion("CubeSlime003.blp")
+        call skin.AddMotion("CubeSlime004.blp")
+        call skin.AddMotion("CubeSlime005.blp")
+        call skin.AddMotion("CubeSlime006.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Yeti")
+        call skin.AddMotion("Yeti001.blp")
+        call skin.AddMotion("Yeti002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0, "Ribbon Pig")
+        call skin.AddMotion("RibbonPig001.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0, "Lupin")
+        call skin.AddMotion("Lupin001.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Coke Mushroom")
+        call skin.AddMotion("CokeMushroom001.blp")
+        call skin.AddMotion("CokeMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0, "Sentinel")
+        call skin.AddMotion("Sentinel001.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Doodle")
+        call skin.AddMotion("DoodleMushroom001.blp")
+        call skin.AddMotion("DoodleMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Coketump")
+        call skin.AddMotion("CokeTump001.blp")
+        call skin.AddMotion("CokeTump002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
 
         set skin = SkinAnimation.create(0.125, "Meso")
         call skin.AddMotion("Meso001.blp")
@@ -405,15 +641,80 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skin.AddMotion("Meso004.blp")
         call skin.AddMotion("Meso003.blp")
         call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Catcher")
+        call skin.AddMotion("Catcher001.blp")
+        call skin.AddMotion("Catcher002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Original Red Mushroom")
+        call skin.AddMotion("RedOriginalMushroom001.blp")
+        call skin.AddMotion("RedOriginalMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Original Blue Mushroom")
+        call skin.AddMotion("BlueOriginalMushroom001.blp")
+        call skin.AddMotion("BlueOriginalMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Original Teal Mushroom")
+        call skin.AddMotion("TealOriginalMushroom001.blp")
+        call skin.AddMotion("TealOriginalMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Original Purple Mushroom")
+        call skin.AddMotion("PurpleOriginalMushroom001.blp")
+        call skin.AddMotion("PurpleOriginalMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Original Yellow Mushroom")
+        call skin.AddMotion("YellowOriginalMushroom001.blp")
+        call skin.AddMotion("YellowOriginalMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Original Green Mushroom")
+        call skin.AddMotion("GreenOriginalMushroom001.blp")
+        call skin.AddMotion("GreenOriginalMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinAnimation.create(0.250, "Original Black Mushroom")
+        call skin.AddMotion("BlackOriginalMushroom001.blp")
+        call skin.AddMotion("BlackOriginalMushroom002.blp")
+        call SkinAnimationList.add(skin)
     endfunction
 
     private function Init takes nothing returns nothing
         local integer i
+        local sList skinList
         call InitSkinAnimationList()
 
         //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
             if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                set PlayerSkinUI[i] = PlayerSkinSelect.create(i)
+                set skinList = sList.create()
+                call skinList.add(SkinAnimation(SkinAnimationList[21]).Clone())
+                call skinList.add(SkinAnimation(SkinAnimationList[22]).Clone())
+                call skinList.add(SkinAnimation(SkinAnimationList[23]).Clone())
+                call skinList.add(SkinAnimation(SkinAnimationList[24]).Clone())
+                call skinList.add(SkinAnimation(SkinAnimationList[25]).Clone())
+                call skinList.add(SkinAnimation(SkinAnimationList[26]).Clone())
+                call skinList.add(SkinAnimation(SkinAnimationList[27]).Clone())
+                set PlayerSkinUI[i] = PlayerSkinSelect.create(i, skinList)
             endif
         //! runtextmacro for_end("set i = i + 1")
         
@@ -440,7 +741,7 @@ endlibrary
     endfunction
 
     private struct $funcName$Struct
-        public static method onInit takes nothing returns nothing
+        private static method onInit takes nothing returns nothing
             local trigger t = CreateTrigger()
             call DzTriggerRegisterSyncData(t, I2S($funcName$Key), false)
             call TriggerAddAction(t, function $funcName$Sync)
