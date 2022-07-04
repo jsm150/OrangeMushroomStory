@@ -191,7 +191,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local integer i = 0
             //! runtextmacro for("set i = 0", "i < thistype.size")
                 if MousePosInInventory(posX, posY, i) and HasSkinInInventory(i) then
-                    debug call JNWriteLog("  " + I2S(i) + "번째 인벤토리 칸 클릭")
                     call ChangeSkin(i, window)
                     return
                 endif
@@ -297,7 +296,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private NameUI nameUI
         private integer playerId
 
-        public method CloseButtonContains takes real posX, real posY returns boolean
+        public method MousePosInCloseButton takes real posX, real posY returns boolean
             // 워크 화면상의 절대좌표
             local real minX = 0.570
             local real maxX = 0.592
@@ -306,8 +305,29 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
         endmethod
 
+        private method MousePosInPageDown takes real posX, real posY returns boolean
+            local real minX = 0.504
+            local real maxX = 0.538
+            local real minY = 0.145
+            local real maxY = 0.187
+            return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
+        endmethod
+
+        private method MousePosInPageUp takes real posX, real posY returns boolean
+            local real minX = 0.544
+            local real maxX = 0.580
+            local real minY = 0.145
+            local real maxY = 0.187
+            return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
+        endmethod
+
         public method ClickDown takes real posX, real posY returns nothing
             call this.inventory.ClickDown(posX, posY, this)
+            if this.MousePosInPageDown(posX, posY) then
+                call this.inventory.PrevPage()
+            elseif this.MousePosInPageUp(posX, posY) then
+                call this.inventory.NextPage()
+            endif
         endmethod
 
         public method Show takes nothing returns nothing
@@ -524,7 +544,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                 call this.buttonUI.ButtonDown(posX, posY)
                 return
             endif
-            if this.skinSelectWindow.CloseButtonContains(posX, posY) then
+            if this.skinSelectWindow.MousePosInCloseButton(posX, posY) then
                 call this.Close()
             endif
             call this.skinSelectWindow.ClickDown(posX, posY)
@@ -553,8 +573,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     
 
     //! runtextmacro Make_ButtonMouseEvent_Top("MouseClickDown")
-        // debug call JNWriteLog("  x: " + R2S(GetMouseFrameX(DzGetMouseXRelative())))
-        // debug call JNWriteLog("  y: " + R2S(GetMouseFrameY(DzGetMouseYRelative())))
+        debug call JNWriteLog("  x: " + R2S(GetMouseFrameX(DzGetMouseXRelative())))
+        debug call JNWriteLog("  y: " + R2S(GetMouseFrameY(DzGetMouseYRelative())))
         call PlayerSkinUI[i].ClickDown(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
     //! runtextmacro Make_ButtonMouseEvent_Bottom("MouseClickDown")
 
@@ -803,8 +823,20 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skinList.add(SkinAnimation(SkinAnimationList[9]).Clone())
         call skinList.add(SkinAnimation(SkinAnimationList[10]).Clone())
         call skinList.add(SkinAnimation(SkinAnimationList[11]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[12]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[13]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[14]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[15]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[16]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[17]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[18]).Clone())
         call skinList.add(SkinAnimation(SkinAnimationList[19]).Clone())
         call skinList.add(SkinAnimation(SkinAnimationList[20]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[21]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[22]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[23]).Clone())
+        call skinList.add(SkinAnimation(SkinAnimationList[24]).Clone())
+
 
 
         return skinList
