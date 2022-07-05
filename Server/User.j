@@ -138,6 +138,19 @@ scope User initializer Init
         endloop
     endfunction
 
+    //! runtextmacro SetClearListToSync("CaptainJack")
+    //! runtextmacro SetClearListToSync("Subway")
+    //! runtextmacro SetClearListToSync("Valentine")
+    //! runtextmacro SetClearListToSync("Beach")
+    //! runtextmacro SetClearListToSync("Coke")
+    //! runtextmacro SetClearListToSync("WorldChallenge")
+    //! runtextmacro SetClearListToSync("Cafe")
+    //! runtextmacro SetClearListToSync("Desert")
+    //! runtextmacro SetClearListToSync("Forest")
+    //! runtextmacro SetClearListToSync("IceCave")
+    //! runtextmacro SetClearListToSync("DownTown")
+    //! runtextmacro SetClearListToSync("Random")
+
     private function LoadUserData takes nothing returns nothing
         local integer i = 0
         local integer temp = 0
@@ -150,18 +163,18 @@ scope User initializer Init
                 if GetLocalPlayer() == Player(i) then
                     call JNObjectCharacterInit(mapId, name, secretKey, clearListName)
                 endif
-                set UserList[i].ClearList.CaptainJack = JNObjectCharacterGetInt(name, "CaptainJack")
-                set UserList[i].ClearList.Subway = JNObjectCharacterGetInt(name, "Subway")
-                set UserList[i].ClearList.Valentine = JNObjectCharacterGetInt(name, "Valentine")
-                set UserList[i].ClearList.Beach = JNObjectCharacterGetInt(name, "Beach")
-                set UserList[i].ClearList.Coke = JNObjectCharacterGetInt(name, "Coke")
-                set UserList[i].ClearList.WorldChallenge = JNObjectCharacterGetInt(name, "WorldChallenge")
-                set UserList[i].ClearList.Cafe = JNObjectCharacterGetInt(name, "Cafe")
-                set UserList[i].ClearList.Desert = JNObjectCharacterGetInt(name, "Desert")
-                set UserList[i].ClearList.Forest = JNObjectCharacterGetInt(name, "Forest")
-                set UserList[i].ClearList.IceCave = JNObjectCharacterGetInt(name, "IceCave")
-                set UserList[i].ClearList.DownTown = JNObjectCharacterGetInt(name, "DownTown")
-                set UserList[i].ClearList.Random = JNObjectCharacterGetInt(name, "Random")
+                call SetClearListByCaptainJackToSync(i, name, "CaptainJack")
+                call SetClearListBySubwayToSync(i, name, "Subway")
+                call SetClearListByValentineToSync(i, name, "Valentine")
+                call SetClearListByBeachToSync(i, name, "Beach")
+                call SetClearListByCokeToSync(i, name, "Coke")
+                call SetClearListByWorldChallengeToSync(i, name, "WorldChallenge")
+                call SetClearListByCafeToSync(i, name, "Cafe")
+                call SetClearListByDesertToSync(i, name, "Desert")
+                call SetClearListByForestToSync(i, name, "Forest")
+                call SetClearListByIceCaveToSync(i, name, "IceCave")
+                call SetClearListByDownTownToSync(i, name, "DownTown")
+                call SetClearListByRandomToSync(i, name, "Random")
             endif
             set i = i + 1
         endloop
@@ -174,3 +187,31 @@ scope User initializer Init
         call LoadUserData()
     endfunction
 endscope
+
+//! textmacro SetClearListToSync takes world
+    globals
+        private key $world$Key
+    endglobals
+
+    private function SetClearListBy$world$ToSync takes integer idx, string name, string world returns nothing
+        if GetLocalPlayer() == Player(idx) then
+            call DzSyncData(I2S($world$Key), I2S(idx) + "," + I2S(JNObjectCharacterGetInt(name, world)))
+        endif
+    endfunction
+
+    private function SetClearListBy$world$ takes nothing returns nothing
+        local string s = DzGetTriggerSyncData()
+        local integer idx = S2I(JNStringSplit(s,",",0))
+        local integer cnt = S2I(JNStringSplit(s,",",1))
+        set UserList[idx].ClearList.$world$ = cnt
+    endfunction
+
+    private struct SetClearListToSyncInit$world$
+        private static method onInit takes nothing returns nothing
+            local trigger t = CreateTrigger()
+            call DzTriggerRegisterSyncData(t, I2S($world$Key), false)
+            call TriggerAddAction(t, function SetClearListBy$world$)
+            set t = null
+        endmethod
+    endstruct
+//! endtextmacro
