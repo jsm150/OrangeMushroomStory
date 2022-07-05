@@ -573,13 +573,11 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     
 
     //! runtextmacro Make_ButtonMouseEvent_Top("MouseClickDown")
-        debug call JNWriteLog("  x: " + R2S(GetMouseFrameX(DzGetMouseXRelative())))
-        debug call JNWriteLog("  y: " + R2S(GetMouseFrameY(DzGetMouseYRelative())))
-        call PlayerSkinUI[i].ClickDown(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
+        call PlayerSkinUI[i].ClickDown(x, y)
     //! runtextmacro Make_ButtonMouseEvent_Bottom("MouseClickDown")
 
     //! runtextmacro Make_ButtonMouseEvent_Top("MouseClickUp")
-        call PlayerSkinUI[i].ClickUp(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
+        call PlayerSkinUI[i].ClickUp(x, y)
     //! runtextmacro Make_ButtonMouseEvent_Bottom("MouseClickUp")
 
 
@@ -857,8 +855,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     private function Init takes nothing returns nothing
         local trigger t = CreateTrigger()
-        call TriggerRegisterTimerEvent(t, 2, false)
-        call TriggerAddCondition(t, Filter(function Main))
+        call TriggerRegisterTimerEvent(t, 3, false)
+        call TriggerAddAction(t, function Main)
         set t = null
 
         call InitSkinAnimationList()
@@ -871,7 +869,7 @@ endlibrary
     endglobals
 
     public function $funcName$ takes nothing returns nothing
-        call DzSyncData(I2S($funcName$Key), R2S(DzGetMouseXRelative())+", "+R2S(DzGetMouseYRelative()))
+        call DzSyncData(I2S($funcName$Key), R2S(GetMouseFrameX(DzGetMouseXRelative()))+", "+R2S(GetMouseFrameY(DzGetMouseYRelative())))
     endfunction
 
     private function $funcName$Sync takes nothing returns nothing
