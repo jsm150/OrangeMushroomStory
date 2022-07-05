@@ -815,8 +815,11 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         local sList skinList = sList.create()
         local integer i = 0
 
+        // 주황 버섯
+        call skinList.add(SkinAnimation(SkinAnimationList[0]).Clone())
+
         if User_UserList[id].GetClearCountByWorldId(5) >= 1 then
-            //! runtextmacro for("set i = 0", "i <= 7")
+            //! runtextmacro for("set i = 1", "i <= 7")
                 call skinList.add(SkinAnimation(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
