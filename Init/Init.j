@@ -96,8 +96,12 @@ scope initialize initializer init
         set s = s + "- -시간 명령어가 삭제되었습니다. 이제 우측 상단에 플레이 타임이 표시됩니다.\n"
         set s = s + "- 아랫마을 3-8 열쇠 버그가 수정되었습니다.\n"
         set s = s + "- 아랫마을 3-6 코스가 수정되었습니다.\n"
-        set s = s + "- 호스트가 나가도 딜레이가 유지됩니다."
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "9.8~10.1", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 호스트가 나가도 딜레이가 유지됩니다.\n"
+        set s = s + "10.2\n"
+        set s = s + "- 스킨 인벤토리가 추가되었습니다.\n"
+        set s = s + "  스킨은 월드를 클리어 하면 추가됩니다.\n"
+        set s = s + "  발렌타인 데이, 해변, 코-크 월드만 지원합니다.\n"
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "9.8~10.2", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.4\n"
         set s = s + "- 일부 맵들의 코스가 약간 변경되었습니다.\n"
         set s = s + "- 플레이어가 게임을 나갔을 때 스테이지가 클리어 되던 버그가 수정되었습니다.\n"
@@ -684,8 +688,8 @@ scope initialize initializer init
         call PauseGame(false)
         call DzFrameHideInterface()
         call DzFrameEditBlackBorders(0, 0)
-         call DzFrameSetAbsolutePoint(DzFrameGetChatMessage(), JN_FRAMEPOINT_LEFT, 0.02, 0.4)
-         call DzFrameSetAbsolutePoint(DzFrameGetUnitMessage(), JN_FRAMEPOINT_CENTER, 0.3, 0.4)
+        call DzFrameSetAbsolutePoint(DzFrameGetChatMessage(), JN_FRAMEPOINT_LEFT, 0.02, 0.4)
+        call DzFrameSetAbsolutePoint(DzFrameGetUnitMessage(), JN_FRAMEPOINT_CENTER, 0.3, 0.4)
         call DzFrameShow(DzFrameGetMinimap(), false)
         call DestroyTrigger( GetTriggeringTrigger() )
         call EnableDragSelect( false, false )

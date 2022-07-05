@@ -1,14 +1,19 @@
-library MouseClick
-    globals
-        private trigger Trigger = null
-    endglobals
-
-    public function AddAction takes code c returns nothing
-        if Trigger == null then
-            set Trigger = CreateTrigger()
-            call DzTriggerRegisterMouseEventByCode(Trigger, JN_MOUSE_BUTTON_TYPE_LEFT, 1, true, null)
-        endif
-
-        call TriggerAddAction(Trigger, c)
+scope MouseClick initializer Init
+    private function DownAsync takes nothing returns nothing
+        call SkinFrame_MouseClickDown()
     endfunction
-endlibrary
+
+    private function UpAsync takes nothing returns nothing
+        call HotKey_ChatWindowChecker()
+        call SkinFrame_MouseClickUp()
+    endfunction
+
+    private function Init takes nothing returns nothing
+        local trigger t = CreateTrigger()
+        call DzTriggerRegisterMouseEventByCode(t, JN_MOUSE_BUTTON_TYPE_LEFT, 1, false, function DownAsync)
+        set t = CreateTrigger()
+        call DzTriggerRegisterMouseEventByCode(t, JN_MOUSE_BUTTON_TYPE_LEFT, 0, false, function UpAsync)
+
+        set t = null
+    endfunction
+endscope

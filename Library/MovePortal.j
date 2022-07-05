@@ -7,21 +7,29 @@ library MovePortal initializer Init needs MushroomMoving, Water
     endglobals
 
     private struct Object
-        public trigger EnterTrigger
-        public trigger LeaveTrigger
         public region Region
         public rect Rect
         public boolean array CanMove[15]
         public Object Next
 
         public static method create takes rect r returns thistype
-            local integer i = 1
             local thistype this = thistype.allocate()
+            local trigger t = CreateTrigger()
+            local integer i = 1
 
             set this.Region = CreateRegion()
             set this.Rect = r
 
             call RegionAddRect(this.Region, this.Rect)
+
+            call EventMethod.AddByEvaluate(t, this, this.EnterRegion)
+            call TriggerRegisterEnterRegion(t, this.Region, null)
+
+            set t = CreateTrigger()
+            call EventMethod.AddByEvaluate(t, this, this.LeaveRegion)
+            call TriggerRegisterLeaveRegion(t, this.Region, null)
+
+            set t = null
 
             loop
                 exitwhen i >= 15
@@ -40,8 +48,7 @@ library MovePortal initializer Init needs MushroomMoving, Water
             set this.CanMove[id] = true
         endmethod
 
-        public static method LeaveRegion takes nothing returns nothing
-            local thistype this = eventStruct.e
+        public method LeaveRegion takes nothing returns nothing
             local unit u = GetTriggerUnit()
             local integer id = GetPlayerId(GetOwningPlayer(GetTriggerUnit())) + 1
             local integer i = 1
@@ -71,8 +78,7 @@ library MovePortal initializer Init needs MushroomMoving, Water
             set u = null
         endmethod
 
-        public static method EnterRegion takes nothing returns nothing
-            local thistype this = eventStruct.e
+        public method EnterRegion takes nothing returns nothing
             local unit u = GetTriggerUnit()
             local integer id = GetPlayerId(GetOwningPlayer(u)) + 1
             local integer i = 1
@@ -189,14 +195,6 @@ library MovePortal initializer Init needs MushroomMoving, Water
         endloop
     endfunction
 
-    private function SetTrigger takes Object o returns nothing
-        set o.EnterTrigger = eventStruct.register(o, 0, function Object.EnterRegion)
-        call TriggerRegisterEnterRegion(o.EnterTrigger, o.Region, null)
-
-        set o.LeaveTrigger = eventStruct.register(o, 0, function Object.LeaveRegion)
-        call TriggerRegisterLeaveRegion(o.LeaveTrigger, o.Region, null)
-    endfunction
-
     private function ObjectCreate takes rect r1, rect r2 returns nothing
         local Object obj1 = Object.create(r1)
         local Object obj2 = Object.create(r2)
@@ -204,9 +202,6 @@ library MovePortal initializer Init needs MushroomMoving, Water
 
         set obj1.Next = obj2
         set obj2.Next = obj1
-
-        call SetTrigger(obj1)
-        call SetTrigger(obj2)
 
         call objectLoc.AddItem(obj1)
         call objectLoc.AddItem(obj2)

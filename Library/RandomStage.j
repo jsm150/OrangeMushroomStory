@@ -46,7 +46,7 @@ library RandomStage initializer Init
             local integer i
             local MapNode node
 
-            debug call JNWriteLog(I2S(this.WeightTotal))
+            debug call JNWriteLog("  가중치 합 : " + I2S(this.WeightTotal))
 
             //! runtextmacro for("set i = 1", "i <= 10") // stage 8개 + 재선택 2번
                 set random = GetRandomInt(1, this.WeightTotal)

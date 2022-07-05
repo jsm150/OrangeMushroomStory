@@ -11,18 +11,18 @@
 
 //! textmacro Make_LinkedList takes Type, Init
     public struct $Type$Node
-        $Type$ Item
-        $Type$Node Next = 0
-        $Type$Node Prev = 0
+        public $Type$ Item
+        public $Type$Node Next = 0
+        public $Type$Node Prev = 0
 
-        method destroy takes nothing returns nothing
+        public method destroy takes nothing returns nothing
             set this.Next = 0
             set this.Prev = 0
             set this.Item = $Init$
             call thistype.deallocate(this)
         endmethod
 
-        static method create takes $Type$ t returns thistype
+        public static method create takes $Type$ t returns thistype
             local thistype this = thistype.allocate()
             set this.Item = t
             return this
@@ -30,11 +30,16 @@
     endstruct
 
     public struct $Type$LinkedList
-        integer Count = 0
-        $Type$Node First = 0
-        $Type$Node Last = 0
+        public integer Count = 0
+        public $Type$Node First = 0
+        public $Type$Node Last = 0
 
-        method Contains takes $Type$ arg returns boolean
+        public method destroy takes nothing returns nothing
+            call this.Clear()
+            call thistype.deallocate(this)
+        endmethod
+
+        public method Contains takes $Type$ arg returns boolean
             local $Type$Node node = this.First
                 
             loop
@@ -48,7 +53,7 @@
             return false
         endmethod
 
-        method Clear takes nothing returns nothing
+        public method Clear takes nothing returns nothing
             local $Type$Node node = this.First
             local $Type$Node next
 
@@ -64,7 +69,7 @@
             set this.Count = 0
         endmethod
 
-        method RemoveNode takes $Type$Node node returns nothing
+        public method RemoveNode takes $Type$Node node returns nothing
             local $Type$Node next = node.Next
             local $Type$Node prev = node.Prev
 
@@ -84,7 +89,7 @@
             call node.destroy()
         endmethod
 
-        method Remove takes $Type$ arg returns nothing
+        public method Remove takes $Type$ arg returns nothing
             local $Type$Node node = this.First
             local $Type$Node next
             local $Type$Node prev
@@ -99,7 +104,7 @@
             endloop
         endmethod
 
-        method RemoveAll takes $Type$ arg returns nothing
+        public method RemoveAll takes $Type$ arg returns nothing
             local $Type$Node node = this.First
             local $Type$Node next
             local $Type$Node prev
@@ -116,7 +121,7 @@
             endloop
         endmethod
         
-        method RemoveFirst takes nothing returns nothing
+        public method RemoveFirst takes nothing returns nothing
             local $Type$Node first = this.First
             if first == 0 then
                 return
@@ -127,7 +132,7 @@
             call first.destroy()
         endmethod
 
-        method RemoveLast takes nothing returns nothing
+        public method RemoveLast takes nothing returns nothing
             local $Type$Node last = this.Last
             if last == 0 then
                 return
@@ -138,7 +143,7 @@
             call last.destroy()
         endmethod
 
-        method AddFirst takes $Type$ t returns nothing
+        public method AddFirst takes $Type$ t returns nothing
             local $Type$Node node = $Type$Node.create(t)
 
             if this.First != 0 then
@@ -151,7 +156,7 @@
             set this.Count = this.Count + 1
         endmethod
 
-        method AddLast takes $Type$ t returns nothing
+        public method AddLast takes $Type$ t returns nothing
             local $Type$Node node = $Type$Node.create(t)
 
             if this.Last != 0 then
@@ -162,11 +167,6 @@
             endif
             set this.Last = node
             set this.Count = this.Count + 1
-        endmethod
-
-        public method destroy takes nothing returns nothing
-            call this.Clear()
-            call thistype.deallocate(this)
         endmethod
     endstruct
 //! endtextmacro

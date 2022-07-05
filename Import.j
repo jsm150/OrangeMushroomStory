@@ -51,6 +51,7 @@
 //! import "Library\GravityChanger.j"
 //! import "Library\Jumper.j"
 //! import "Library\KeySwitch.j"
+//! import "Library\MethodEvent.j"
 //! import "Library\MorphStone.j"
 //! import "Library\MovePortal.j"
 //! import "Library\MultiBorad.j"
@@ -61,7 +62,7 @@
 //! import "Library\ShortTeleport.j"
 //! import "Library\StageClear.j"
 //! import "Library\StoneStatue.j"
-//! import "Library\StructEvent.j"
+//! import "Library\StructList.j"
 //! import "Library\TeamColor.j"
 //! import "Library\TeleportMoon.j"
 //! import "Library\TeleportStone.j"
@@ -83,10 +84,11 @@
 //! import "Textmacro\Syntax.j"
 
 // UI
-// //! import "UI\Test.j"
+//! import "UI\SkinFrame.j"
 
 // Test
-//! import "Test\TestCommand.j"
-//! import "Test\MouseTeleport.j"
 // //! import "Test\CodePrint.j"
+// //! import "Test\HandleProfiler.j"
+// //! import "Test\MouseTeleport.j"
+// //! import "Test\TestCommand.j"
 // //! import "Test\TestMode.j"
