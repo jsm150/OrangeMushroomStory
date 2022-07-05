@@ -803,39 +803,17 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for("set i = 0", "i <= 7")
                 call skinList.add(SkinAnimation(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
-        elseif User_UserList[id].GetClearCountByWorldId(6) >= 1 then
+        endif
+        if User_UserList[id].GetClearCountByWorldId(6) >= 1 then
             //! runtextmacro for("set i = 8", "i <= 14")
                 call skinList.add(SkinAnimation(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-
-        call skinList.add(SkinAnimation(SkinAnimationList[0]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[1]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[2]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[3]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[4]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[5]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[6]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[7]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[8]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[9]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[10]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[11]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[12]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[13]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[14]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[15]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[16]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[17]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[18]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[19]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[20]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[21]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[22]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[23]).Clone())
-        call skinList.add(SkinAnimation(SkinAnimationList[24]).Clone())
-
-
+        if User_UserList[id].GetClearCountByWorldId(7) >= 1 then
+            //! runtextmacro for("set i = 15", "i <= 21")
+                call skinList.add(SkinAnimation(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
 
         return skinList
     endfunction
