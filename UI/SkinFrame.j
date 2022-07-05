@@ -481,6 +481,14 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             set this.isOpen = isOpen
         endmethod
 
+        public method Hide takes nothing returns nothing
+            call DzFrameShow(thistype.frame, false)
+        endmethod
+
+        public method Show takes nothing returns nothing
+            call DzFrameShow(thistype.frame, true)
+        endmethod
+
         private method MouseOver takes real posX, real posY returns nothing
             if this.isOpen == true or this.isPressed then
                 return
@@ -557,6 +565,14 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                     call this.Open()
                 endif
             endif
+        endmethod
+
+        public method ShowButton takes nothing returns nothing
+            call this.buttonUI.Show()
+        endmethod
+
+        public method HideButton takes nothing returns nothing
+            call this.buttonUI.Hide()
         endmethod
 
         public static method create takes integer playerId, sList skinList returns thistype
@@ -816,6 +832,17 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endif
 
         return skinList
+    endfunction
+
+    public function ShowSkinInventoryButton takes boolean isVisible returns nothing
+        local integer i = 0
+        //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+            if isVisible then
+                call PlayerSkinUI[i].ShowButton()
+            else
+                call PlayerSkinUI[i].HideButton()
+            endif
+        //! runtextmacro for_end("set i = i + 1")
     endfunction
 
     private function Main takes nothing returns nothing
