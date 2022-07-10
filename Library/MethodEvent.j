@@ -89,4 +89,43 @@ library MethodEvent needs StructList
             call DestroyTrigger(t)
         endmethod
     endstruct
+
+    struct Events
+        private static constant integer DUMMY_DESTRUCTABLE_TYPE_ID = 'OTis'
+        private static hashtable H = InitHashtable()
+        private static trigger T = null
+
+        public static method GetEvent takes integer eventKey returns integer
+            return LoadInteger(H, eventKey, 0)
+        endmethod
+
+        public static method Raise takes integer eventKey, integer eventObject returns nothing
+            local destructable d = LoadDestructableHandle( H,0,eventKey )
+
+            if d != null then
+                call SaveInteger(H, eventKey, 0, eventObject)
+                call DestructableRestoreLife(d, GetDestructableMaxLife(d), true)
+                call KillDestructable( d )
+            endif
+
+            set d = null
+        endmethod
+
+        public static method Add takes integer eventKey, integer object, methodPtr action returns trigger
+            local destructable d = LoadDestructableHandle( H,0,eventKey )
+            set T = CreateTrigger()
+
+            if d == null then
+                set d = CreateDestructable(DUMMY_DESTRUCTABLE_TYPE_ID,0,0,0,0,0)
+                call KillDestructable( d )
+                call SaveDestructableHandle( H,0,eventKey,d )
+            endif
+
+            call TriggerRegisterDeathEvent( T, d )
+            call EventMethod.AddByEvaluate(T, object, action)
+            set d = null
+
+            return T
+        endmethod
+    endstruct
 endlibrary

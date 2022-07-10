@@ -1,4 +1,8 @@
 library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
+    globals
+        private key characterSkinChangeKey
+        private key decorateSkinChangeKey
+    endglobals
 
     private function GetMouseFrameX takes integer posX returns real
         return posX / (DzGetWindowWidth() / 0.8)
@@ -9,13 +13,15 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         return (height - posY) / (height / 0.6)
     endfunction
 
-    private struct SkinAnimation
+    private struct SkinInfo
         private static hashtable motionList = InitHashtable()
         private integer id
         private string name
+        private real size
         private integer fileCount = 0
         private real motionDelay
         private boolean playing = false
+        private integer inventoryClickedEventKey
         
         public method GetId takes nothing returns integer
             return this.id
@@ -25,6 +31,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local integer currentIdx = 0
 
             if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetSize(frame, this.size, this.size)
                 call DzFrameSetTexture(frame, LoadStr(thistype.motionList, this, currentIdx), 0)
             endif
 
@@ -54,8 +61,12 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             set this.playing = false
         endmethod
 
+        public method ChangeSkin takes integer playerId, SkinSelectWindow window returns nothing
+            call Events.Raise(inventoryClickedEventKey, InventoryCharactorSkinClickedEvent.create(playerId + 1, this, window))
+        endmethod
+
         public method Clone takes nothing returns thistype
-            local thistype copy = thistype.create(this.motionDelay, this.name, this.id)
+            local thistype copy = thistype.create(this.motionDelay, this.name, this.id, this.size, this.inventoryClickedEventKey)
             local integer i
             //! runtextmacro for("set i = 0", "i < this.fileCount")
                 call copy.AddMotion(LoadStr(thistype.motionList, this, i))
@@ -72,11 +83,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             return this.id == id
         endmethod
 
-        public static method create takes real motionDelay, string name, integer id returns thistype
+        public static method create takes real motionDelay, string name, integer id, real size, integer inventoryClickedEventKey returns thistype
             local thistype this = thistype.allocate()
             set this.motionDelay = motionDelay
             set this.name = name
             set this.id = id
+            set this.size = size
+            set this.inventoryClickedEventKey = inventoryClickedEventKey
             return this
         endmethod
 
@@ -156,35 +169,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
 
         private method ChangeSkin takes integer itemIdx, SkinSelectWindow window returns nothing
-            local SkinAnimation skin = this.skinList[(page - 1) * thistype.size + itemIdx]
-            local integer id = this.playerId + 1
-            local real x = GetUnitX(OrangeMushroom[id])
-            local real y = GetUnitY(OrangeMushroom[id])
-
-            if GravityChanger_Loading == false then
-                set OrangeMushroomType[id] = skin.GetId()
-
-                if MorphState[id] == false then
-                    call RemoveUnit(OrangeMushroom[id])
-
-                    if GravityChanger_State == false then
-                        set OrangeMushroom[id] = CreateUnit(Player(id-1), OrangeMushroomType[id], x, y, 270 )
-                    else
-                        set OrangeMushroom[id] = CreateUnit(Player(id-1), OrangeMushroomType[id], x, y, 90 )
-                    endif
-
-                    call SetUnitBlendTime(OrangeMushroom[id], 0.00)
-                    call SetUnitPosition(OrangeMushroom[id], x, y)
-
-                    if LevelClearState[id] == false then
-                        call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\StaffOfPurification\\PurificationCaster.mdl", x, y ))
-                    else
-                        call ShowUnit(OrangeMushroom[id], false)
-                    endif
-    
-                    call window.ChangeSkin(skin.Clone())
-                endif
-            endif
+            local SkinInfo skin = this.skinList[(page - 1) * thistype.size + itemIdx]
+            call skin.ChangeSkin(this.playerId, window)
         endmethod
 
         public method ClickDown takes real posX, real posY, SkinSelectWindow window returns nothing
@@ -208,7 +194,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
             set frameIdx = 0
             //! runtextmacro for("set skinIdx = thistype.size * (this.page - 1)", "skinIdx < max")
-                call SkinAnimation(this.skinList[skinIdx]).Run(thistype.framePool[frameIdx], playerId)
+                call SkinInfo(this.skinList[skinIdx]).Run(thistype.framePool[frameIdx], playerId)
                 if GetLocalPlayer() == Player(this.playerId) then
                     call DzFrameShow(thistype.framePool[frameIdx], true)
                 endif
@@ -227,7 +213,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
             set frameIdx = 0
             //! runtextmacro for("set skinIdx = thistype.size * (this.page - 1)", "skinIdx < max")
-                call SkinAnimation(this.skinList[skinIdx]).Stop()
+                call SkinInfo(this.skinList[skinIdx]).Stop()
                 if GetLocalPlayer() == Player(this.playerId) then
                     call DzFrameShow(thistype.framePool[frameIdx], false)
                 endif
@@ -263,7 +249,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             if thistype.framePool[0] == 0 then
                 //! runtextmacro for("set i = 0", "i < thistype.size")
                     set thistype.framePool[i] = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
-                    call DzFrameSetSize(thistype.framePool[i], 0.044, 0.044)
                     call DzFrameShow(thistype.framePool[i], false)
                     call DzFrameSetAbsolutePoint(thistype.framePool[i], JN_FRAMEPOINT_CENTER, /*
                         */ (thistype.minX + thistype.maxX) / 2 + thistype.offsetX * ModuloInteger(i, 5), /*
@@ -291,7 +276,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private static integer inventoryBottomFrame = 0
         private static integer skinFrame
         private boolean isShow = false
-        private SkinAnimation skinAnimation
+        private SkinInfo skinAnimation
         private Inventory inventory
         private NameUI nameUI
         private integer playerId
@@ -367,7 +352,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             endif
         endmethod
 
-        public method ChangeSkin takes SkinAnimation skinAnimation returns nothing
+        public method ChangeSkin takes SkinInfo skinAnimation returns nothing
             call this.skinAnimation.destroy()
             set this.skinAnimation = skinAnimation
             if this.isShow then
@@ -382,7 +367,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             
             set this.playerId = playerId
             set this.inventory = Inventory.create(skinList, playerId)
-            set this.skinAnimation = SkinAnimation(SkinAnimationList[0]).Clone()
+            set this.skinAnimation = SkinInfo(SkinAnimationList[0]).Clone()
             set this.nameUI = NameUI.create(playerId, thistype.posX + nameOffsetX, thistype.posY + nameOffsetY)
 
             return this
@@ -408,7 +393,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call DzFrameSetSize(thistype.bannerFrame, thistype.size, thistype.size * 1.4 - thistype.size * 0.8074)
             call DzFrameSetSize(thistype.inventoryTopFrame, thistype.size, thistype.size * 0.67)
             call DzFrameSetSize(thistype.inventoryBottomFrame, thistype.size, thistype.size * 1.4 - thistype.size * 0.67)
-            call DzFrameSetSize(thistype.skinFrame, 0.044, 0.044)
 
             call DzFrameSetTexture(thistype.topFrame1, "SkinWindowTop1.blp", 0)
             call DzFrameSetTexture(thistype.topFrame2, "SkinWindowTop2.blp", 0)
@@ -583,6 +567,86 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
     endstruct
 
+    struct InventoryCharactorSkinClickedEvent
+        private integer id
+        private SkinInfo skinInfo
+        private SkinSelectWindow skinSelectWindow
+
+        public method operator Id takes nothing returns integer
+            return this.id
+        endmethod
+
+        public method operator Skin takes nothing returns SkinInfo
+            return this.skinInfo
+        endmethod
+
+        public method operator Window takes nothing returns SkinSelectWindow
+            return this.skinSelectWindow
+        endmethod
+        
+        public static method create takes integer id, SkinInfo skinInfo, SkinSelectWindow skinSelectWindow returns thistype
+            local thistype this = thistype.allocate()
+            set this.id = id
+            set this.skinInfo = skinInfo
+            set this.skinSelectWindow = skinSelectWindow
+            return this
+        endmethod
+    endstruct
+
+    private struct DecorateSkinChange
+        
+
+    endstruct
+
+    private struct CharacterSkinChange
+        public method Apply takes nothing returns nothing
+            local InventoryCharactorSkinClickedEvent ev = Events.GetEvent(characterSkinChangeKey)
+            local integer id = ev.Id
+            local SkinInfo skin = ev.Skin
+            local SkinSelectWindow window = ev.Window
+
+            local real x = GetUnitX(OrangeMushroom[id])
+            local real y = GetUnitY(OrangeMushroom[id])
+
+            if GravityChanger_Loading == false then
+                set OrangeMushroomType[id] = skin.GetId()
+
+                if MorphState[id] == false then
+                    call RemoveUnit(OrangeMushroom[id])
+
+                    if GravityChanger_State == false then
+                        set OrangeMushroom[id] = CreateUnit(Player(id-1), OrangeMushroomType[id], x, y, 270 )
+                    else
+                        set OrangeMushroom[id] = CreateUnit(Player(id-1), OrangeMushroomType[id], x, y, 90 )
+                    endif
+
+                    call SetUnitBlendTime(OrangeMushroom[id], 0.00)
+                    call SetUnitPosition(OrangeMushroom[id], x, y)
+
+                    if LevelClearState[id] == false then
+                        call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\StaffOfPurification\\PurificationCaster.mdl", x, y ))
+                    else
+                        call ShowUnit(OrangeMushroom[id], false)
+                    endif
+    
+                    call window.ChangeSkin(skin.Clone())
+                endif
+            endif
+
+            call ev.destroy()
+        endmethod
+
+        public static method create takes nothing returns thistype
+            local thistype this = thistype.allocate()
+            call Events.Add(characterSkinChangeKey, this, this.Apply)
+            return this
+        endmethod
+
+        private static method onInit takes nothing returns nothing
+            call thistype.create()
+        endmethod
+    endstruct
+
     globals
         private PlayerSkinSelect array PlayerSkinUI[PLAYER_MAXINUM]
     endglobals
@@ -601,89 +665,89 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
      * 순서 바꾸면 안됩니다.   /
      * =====================*/
     private function InitSkinAnimationList takes nothing returns nothing
-        local SkinAnimation skin
+        local SkinInfo skin
         
         set SkinAnimationList = sList.create()
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Orange Mushroom", 'hpea')
+        set skin = SkinInfo.create(0.250, "Orange Mushroom", 'hpea', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Mushroom001.blp")
         call skin.AddMotion("Mushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Blue Mushroom", 'uaco')
+        set skin = SkinInfo.create(0.250, "Blue Mushroom", 'uaco', 0.044, characterSkinChangeKey)
         call skin.AddMotion("BlueMushroom001.blp")
         call skin.AddMotion("BlueMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Zombie Mushroom", 'ushd')
+        set skin = SkinInfo.create(0.250, "Zombie Mushroom", 'ushd', 0.044, characterSkinChangeKey)
         call skin.AddMotion("ZombieMushroom001.blp")
         call skin.AddMotion("ZombieMushroom002.blp")
         call SkinAnimationList.add(skin)
         
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Mushrooms", 'ugho')
+        set skin = SkinInfo.create(0.250, "Mushrooms", 'ugho', 0.044, characterSkinChangeKey)
         call skin.AddMotion("PileMushroom001.blp")
         call skin.AddMotion("PileMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Bloctopus", 'uabo')
+        set skin = SkinInfo.create(0.250, "Bloctopus", 'uabo', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Bloctopus001.blp")
         call skin.AddMotion("Bloctopus002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "King Bloctopus", 'umtw')
+        set skin = SkinInfo.create(0.250, "King Bloctopus", 'umtw', 0.044, characterSkinChangeKey)
         call skin.AddMotion("KingBloctopus001.blp")
         call skin.AddMotion("KingBloctopus002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Pink Mushroom", 'ucry')
+        set skin = SkinInfo.create(0.250, "Pink Mushroom", 'ucry', 0.044, characterSkinChangeKey)
         call skin.AddMotion("PinkMushroom001.blp")
         call skin.AddMotion("PinkMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0, "Box", 'ugar')
+        set skin = SkinInfo.create(0, "Box", 'ugar', 0.044, characterSkinChangeKey)
         call skin.AddMotion("BoxPlayer001.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Slime", 'uban')
+        set skin = SkinInfo.create(0.250, "Slime", 'uban', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Slime001.blp")
         call skin.AddMotion("Slime002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Bubbling", 'unec')
+        set skin = SkinInfo.create(0.250, "Bubbling", 'unec', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Bubbling001.blp")
         call skin.AddMotion("Bubbling002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Propelly", 'uobs')
+        set skin = SkinInfo.create(0.250, "Propelly", 'uobs', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Propelly001.blp")
         call skin.AddMotion("Propelly006.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.100, "Cube Slime", 'ufro')
+        set skin = SkinInfo.create(0.100, "Cube Slime", 'ufro', 0.044, characterSkinChangeKey)
         call skin.AddMotion("CubeSlime001.blp")
         call skin.AddMotion("CubeSlime002.blp")
         call skin.AddMotion("CubeSlime003.blp")
@@ -694,53 +758,53 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Yeti", 'earc')
+        set skin = SkinInfo.create(0.250, "Yeti", 'earc', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Yeti001.blp")
         call skin.AddMotion("Yeti002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0, "Ribbon Pig", 'esen')
+        set skin = SkinInfo.create(0, "Ribbon Pig", 'esen', 0.044, characterSkinChangeKey)
         call skin.AddMotion("RibbonPig001.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0, "Lupin", 'edry')
+        set skin = SkinInfo.create(0, "Lupin", 'edry', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Lupin001.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Coke Mushroom", 'ehpr')
+        set skin = SkinInfo.create(0.250, "Coke Mushroom", 'ehpr', 0.044, characterSkinChangeKey)
         call skin.AddMotion("CokeMushroom001.blp")
         call skin.AddMotion("CokeMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0, "Sentinel", 'edot')
+        set skin = SkinInfo.create(0, "Sentinel", 'edot', 0.09, characterSkinChangeKey)
         call skin.AddMotion("Sentinel001.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Doodle", 'echm')
+        set skin = SkinInfo.create(0.250, "Doodle", 'echm', 0.044, characterSkinChangeKey)
         call skin.AddMotion("DoodleMushroom001.blp")
         call skin.AddMotion("DoodleMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Coketump", 'edoc')
+        set skin = SkinInfo.create(0.250, "Coketump", 'edoc', 0.044, characterSkinChangeKey)
         call skin.AddMotion("CokeTump001.blp")
         call skin.AddMotion("CokeTump002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.125, "Meso", 'emtg')
+        set skin = SkinInfo.create(0.125, "Meso", 'emtg', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Meso001.blp")
         call skin.AddMotion("Meso002.blp")
         call skin.AddMotion("Meso004.blp")
@@ -749,65 +813,77 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Catcher", 'efdr')
+        set skin = SkinInfo.create(0.250, "Catcher", 'efdr', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Catcher001.blp")
         call skin.AddMotion("Catcher002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Horny Mushroom", 'nnsw')
+        set skin = SkinInfo.create(0.250, "Horny Mushroom", 'nnsw', 0.044, characterSkinChangeKey)
         call skin.AddMotion("HornyMushroom001.blp")
         call skin.AddMotion("HornyMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Original Red Mushroom", 'nmyr')
+        set skin = SkinInfo.create(0.250, "Original Red Mushroom", 'nmyr', 0.044, characterSkinChangeKey)
         call skin.AddMotion("RedOriginalMushroom001.blp")
         call skin.AddMotion("RedOriginalMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Original Blue Mushroom", 'nnrg')
+        set skin = SkinInfo.create(0.250, "Original Blue Mushroom", 'nnrg', 0.044, characterSkinChangeKey)
         call skin.AddMotion("BlueOriginalMushroom001.blp")
         call skin.AddMotion("BlueOriginalMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Original Teal Mushroom", 'nhyc')
+        set skin = SkinInfo.create(0.250, "Original Teal Mushroom", 'nhyc', 0.044, characterSkinChangeKey)
         call skin.AddMotion("TealOriginalMushroom001.blp")
         call skin.AddMotion("TealOriginalMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Original Purple Mushroom", 'nmpe')
+        set skin = SkinInfo.create(0.250, "Original Purple Mushroom", 'nmpe', 0.044, characterSkinChangeKey)
         call skin.AddMotion("PurpleOriginalMushroom001.blp")
         call skin.AddMotion("PurpleOriginalMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Original Yellow Mushroom", 'nanm')
+        set skin = SkinInfo.create(0.250, "Original Yellow Mushroom", 'nanm', 0.044, characterSkinChangeKey)
         call skin.AddMotion("YellowOriginalMushroom001.blp")
         call skin.AddMotion("YellowOriginalMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Original Green Mushroom", 'nanb')
+        set skin = SkinInfo.create(0.250, "Original Green Mushroom", 'nanb', 0.044, characterSkinChangeKey)
         call skin.AddMotion("GreenOriginalMushroom001.blp")
         call skin.AddMotion("GreenOriginalMushroom002.blp")
         call SkinAnimationList.add(skin)
 
         //====================================================
 
-        set skin = SkinAnimation.create(0.250, "Original Black Mushroom", 'nanc')
+        set skin = SkinInfo.create(0.250, "Original Black Mushroom", 'nanc', 0.044, characterSkinChangeKey)
         call skin.AddMotion("BlackOriginalMushroom001.blp")
         call skin.AddMotion("BlackOriginalMushroom002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0, "Mushmom", 'nanw', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Mushmom001.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0, "PinkBean", 'n000', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Pinkbean001.blp")
         call SkinAnimationList.add(skin)
     endfunction
 
@@ -816,22 +892,30 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         local integer i = 0
 
         // 주황 버섯
-        call skinList.add(SkinAnimation(SkinAnimationList[0]).Clone())
+        call skinList.add(SkinInfo(SkinAnimationList[0]).Clone())
 
-        if User_UserList[id].GetClearCountByWorldId(5) >= 1 then
+        if User_UserList[id].GetClearCountByWorldId(5) >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 1", "i <= 7")
-                call skinList.add(SkinAnimation(SkinAnimationList[i]).Clone())
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-        if User_UserList[id].GetClearCountByWorldId(6) >= 1 then
+        if User_UserList[id].GetClearCountByWorldId(6) >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 8", "i <= 14")
-                call skinList.add(SkinAnimation(SkinAnimationList[i]).Clone())
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-        if User_UserList[id].GetClearCountByWorldId(7) >= 1 then
+        if User_UserList[id].GetClearCountByWorldId(7) >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 15", "i <= 21")
-                call skinList.add(SkinAnimation(SkinAnimationList[i]).Clone())
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(8) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 22", "i <= 29")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(10) >= 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[30]).Clone())
         endif
 
         return skinList
