@@ -1,7 +1,7 @@
 scope MouseClick initializer Init
     private function DownAsync takes nothing returns nothing
         call SkinFrame_MouseClickDown()
-        call MouseTeleport_MouseClick()
+        // call MouseTeleport_MouseClick()
     endfunction
 
     private function UpAsync takes nothing returns nothing

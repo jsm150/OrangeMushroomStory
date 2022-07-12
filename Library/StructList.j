@@ -11,6 +11,27 @@ library StructList
             return this
         endmethod
 
+        method sort takes boolean ascending returns nothing
+            local integer i = 0
+            local integer j = 0
+            local integer idx = 0
+            local integer temp = 0
+
+            //! runtextmacro for("set i = 0", "i < this.S - 1")
+                set idx = i
+                //! runtextmacro for("set j = i + 1", "j < this.S")
+                    if (ascending and this[idx] > this[j]) or (not(ascending) and this[idx] < this[j]) then
+                        set idx = j
+                    endif
+                //! runtextmacro for_end("set j = j + 1")
+                
+                set temp = this[idx]
+                call SaveInteger( H, 0, this*8192 + idx, this[i] )
+                call SaveInteger( H, 0, this*8192 + i, temp )
+                call SaveInteger( F, 0, this*8192 + temp, i+1 )
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
+
         method add takes integer dst returns nothing
             local integer pos = LoadInteger( F, 0, this*8192 + dst )
             if pos > 0 and pos <= .S then
@@ -53,4 +74,3 @@ library StructList
         endmethod
     endstruct
 endlibrary
-// [출처] StructList 1.00 (워크래프트3 리포지드 유즈맵 포럼 [W3UMF]) | 작성자 동동주
