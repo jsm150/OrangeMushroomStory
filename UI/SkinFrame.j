@@ -202,6 +202,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private integer decorateType
         private integer priority
 
+        public method operator Type takes nothing returns integer
+            return this.decorateType
+        endmethod
+
         public method Clone takes nothing returns thistype
             local thistype copy = thistype.create(this.Delay, this.Name, this.Id, this.Size, /*
                 */ this.offsetX, this.offsetY, this.decorateType, this.priority, this.EventKey)
@@ -807,10 +811,11 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     private struct DecorateSkinChange
         public method Apply takes nothing returns nothing
             local InventoryClickedEvent ev = Events.GetEvent(decorateSkinChangeKey)
-            local integer id = ev.Id + 1
+            local integer id = ev.Id
             local DecorateSkinInfo skin = ev.Skin
             local SkinSelectWindow window = ev.Window
 
+            call Decorate_AddDecorate(id, skin.Id, skin.Type)
             call window.ChangeDecorateSkin(skin.CreateDecorateSkin())
 
             call ev.destroy()
@@ -858,8 +863,9 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                         call ShowUnit(OrangeMushroom[id], false)
                     endif
     
-                    call window.ChangeSkin(skin.Clone())
                 endif
+                
+                call window.ChangeSkin(skin.Clone())
             endif
 
             call ev.destroy()

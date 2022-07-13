@@ -1151,7 +1151,7 @@ library Stage initializer init
                     call RemoveUnit(OrangeMushroom[i])
                     set OrangeMushroom[i] = CreateUnit(Player(i-1), OrangeMushroomType[i], GetRectMinX(StartRect)+(128*(i-1)), GetRectCenterY(StartRect), 270 )
                     call SetUnitBlendTime(OrangeMushroom[i], 0.00)
-                    call SetUnitFacing( OrangeMushroomFloorSkin[i], 270 )
+                    call Decorate_SetUnitAngle(i - 1, 270)
                 endif
 
                 if Status.World == 6 and Status.Level == 8 then
@@ -1179,14 +1179,11 @@ library Stage initializer init
                 set LevelClearState[i] = false
                 set Observer_ViewNumber[i] = 0
                 call UnitRemoveAbility( OrangeMushroom[i], 'Aloc' )
-                call UnitRemoveAbility( OrangeMushroomSkin[i], 'Aloc' )
-                call UnitRemoveAbility( OrangeMushroomFloorSkin[i], 'Aloc' )
+                call Decorate_SetAbility(i - 1, 'Aloc', false)
                 call ShowUnitShow(OrangeMushroom[i])
-                call ShowUnitShow(OrangeMushroomSkin[i])
-                call ShowUnitShow(OrangeMushroomFloorSkin[i])
+                call Decorate_UnitShow(i - 1, true)
                 call UnitAddAbility( OrangeMushroom[i], 'Aloc' )
-                call UnitAddAbility( OrangeMushroomSkin[i], 'Aloc' )
-                call UnitAddAbility( OrangeMushroomFloorSkin[i], 'Aloc' )
+                call Decorate_SetAbility(i - 1, 'Aloc', true)
                 call SetTextTagVisibility(NameTextTag[i], true)
                 set Water_State[i] = IsUnitInRegion(Water_Rects, OrangeMushroom[i])
             endif

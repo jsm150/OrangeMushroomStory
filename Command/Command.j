@@ -698,24 +698,24 @@ scope Command initializer init
             call CodeMain()
         elseif SubString(s, 0, 4) == "-" + StringCase(WorldKey_Code2[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 4 then
             call CodeMain2()
-        elseif SubString(s, 0, 9) == "-code " + StringCase(WorldKey_Code3[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 9 then
-            call CodeMain3(1)
-        elseif SubString(s, 0, 10) == "-code2 " + StringCase(WorldKey_Code4[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 10 then
-            call CodeMain3(2)
-        elseif SubString(s, 0, 10) == "-code3 " + StringCase(WorldKey_Code5[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 10 then
-            call CodeMain3(3)
-        elseif SubString(s, 0, 10) == "-code4 " + StringCase(WorldKey_Code7[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 10 then
-            call CodeMain3(5)
-        elseif SubString(s, 0, 10) == "-scode " + StringCase(WorldKey_Code8[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 10 then
-            call CodeMain3(4)
-        elseif SubString(s, 0, 11) == "-scode2 " + StringCase(WorldKey_Code6[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 11 then
-            call CodeMain3(6)
-        elseif SubString(s, 0, 11) == "-scode3 " + StringCase(WorldKey_Code9[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 11 then
-            call SkinCodeMain()
-        elseif SubString(s, 0, 11) == "-scode4 " + StringCase(WorldKey_Code11[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 11 then
-            call FloorSkinCodeMain()
-        elseif SubString(s, 0, 11) == "-scode5 " + StringCase(WorldKey_Code12[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 11 then
-            call CodeMain3(7)
+        // elseif SubString(s, 0, 9) == "-code " + StringCase(WorldKey_Code3[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 9 then
+        //     call CodeMain3(1)
+        // elseif SubString(s, 0, 10) == "-code2 " + StringCase(WorldKey_Code4[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 10 then
+        //     call CodeMain3(2)
+        // elseif SubString(s, 0, 10) == "-code3 " + StringCase(WorldKey_Code5[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 10 then
+        //     call CodeMain3(3)
+        // elseif SubString(s, 0, 10) == "-code4 " + StringCase(WorldKey_Code7[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 10 then
+        //     call CodeMain3(5)
+        // elseif SubString(s, 0, 10) == "-scode " + StringCase(WorldKey_Code8[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 10 then
+        //     call CodeMain3(4)
+        // elseif SubString(s, 0, 11) == "-scode2 " + StringCase(WorldKey_Code6[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 11 then
+        //     call CodeMain3(6)
+        // elseif SubString(s, 0, 11) == "-scode3 " + StringCase(WorldKey_Code9[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 11 then
+        //     call SkinCodeMain()
+        // elseif SubString(s, 0, 11) == "-scode4 " + StringCase(WorldKey_Code11[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 11 then
+        //     call FloorSkinCodeMain()
+        // elseif SubString(s, 0, 11) == "-scode5 " + StringCase(WorldKey_Code12[GetPlayerId(GetTriggerPlayer())+1], false) and StringLength(s) == 11 then
+        //     call CodeMain3(7)
         elseif SubString(s, 0, 12) == "-ellinforest" and StringLength(s) == 12 then
             call EllinCode()
         elseif s == "-코드확인" then

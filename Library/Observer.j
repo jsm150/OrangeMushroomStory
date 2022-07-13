@@ -73,8 +73,7 @@ library Observer needs Stage
             call SetUnitBlendTime(OrangeMushroom[i], 0.00)
         endif
         call ShowUnit(OrangeMushroom[i], false)
-        call ShowUnit(OrangeMushroomSkin[i], false)
-        call ShowUnit(OrangeMushroomFloorSkin[i], false)
+        call Decorate_UnitShow(i - 1, false)
         call SetTextTagVisibility(NameTextTag[i], false)
         if FinalStage == true then
             if FinalStage == true and Ending3 == true then
