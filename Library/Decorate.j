@@ -152,7 +152,7 @@ library Decorate initializer Init
 
     private function InitPosList takes nothing returns nothing
         call SaveLocationHandle(posList, 0, Aura, Location(0, 0))
-        call SaveLocationHandle(posList, 0, Designation, Location(0, 20))
+        call SaveLocationHandle(posList, 0, Designation, Location(0, -150))
         call SaveLocationHandle(posList, 0, FloorAura, Location(0, 15))
     endfunction
 

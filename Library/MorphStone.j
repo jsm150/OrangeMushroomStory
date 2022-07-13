@@ -36,7 +36,7 @@ library MorphStone initializer init
         
         loop
         exitwhen CompareRect[i] == null
-            if GetTriggeringRegion() == Rects[i] and RectState[i] == false and j >= 1 and j <= PLAYER_MAXINUM and BackGroundUnits[j] != GetTriggerUnit() and Decorate_IsTriggeringUnitInDecorate(j - 1) and GetUnitTypeId(GetTriggerUnit()) != GetUnitTypeId(MorphUnit[i]) then
+            if GetTriggeringRegion() == Rects[i] and RectState[i] == false and j >= 1 and j <= PLAYER_MAXINUM and BackGroundUnits[j] != GetTriggerUnit() and not(Decorate_IsTriggeringUnitInDecorate(j - 1)) and GetUnitTypeId(GetTriggerUnit()) != GetUnitTypeId(MorphUnit[i]) then
                 set x = GetUnitX(OrangeMushroom[j])
                 set y = GetUnitY(OrangeMushroom[j])
                 
