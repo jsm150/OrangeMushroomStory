@@ -66,11 +66,11 @@ library GravityChanger initializer init
                         call SetTextTagVisibility(NameTextTag[i], true)
                         if GravityChanger_State == false then
                             call SetUnitFacing( OrangeMushroom[i], 270 )
-                            call SetUnitFacing( OrangeMushroomFloorSkin[i], 270 )
+                            call Decorate_SetUnitAngle(i - 1, 270)
                             call SetTextTagPos(NameTextTag[i], GetUnitX(OrangeMushroom[i])-50, GetUnitY(OrangeMushroom[i])-120, 0)
                         else
                             call SetUnitFacing( OrangeMushroom[i], 90 )
-                            call SetUnitFacing( OrangeMushroomFloorSkin[i], 90 )
+                            call Decorate_SetUnitAngle(i - 1, 90)
                             call SetTextTagPos(NameTextTag[i], GetUnitX(OrangeMushroom[i])+50, GetUnitY(OrangeMushroom[i])+120, 0)
                         endif
                     endif

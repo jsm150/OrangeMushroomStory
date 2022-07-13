@@ -779,32 +779,11 @@ scope Frame initializer init
         call ForGroup(SentinelMissile, function SentinelMissileMove)
     endfunction
 
-    private function MovingAura takes nothing returns nothing
-        local integer i = 1
-        local integer y = 15
-
-        if GravityChanger_State then
-            set y = y * -1
-        endif
-
-        loop
-            exitwhen i > 7
-            if OrangeMushroomSkin[i] != null then
-                call SetUnitX(OrangeMushroomSkin[i], GetUnitX(OrangeMushroom[i]))
-                call SetUnitY(OrangeMushroomSkin[i], GetUnitY(OrangeMushroom[i]))
-            endif
-            if OrangeMushroomFloorSkin[i] != null then
-                call SetUnitX(OrangeMushroomFloorSkin[i], GetUnitX(OrangeMushroom[i]))
-                call SetUnitY(OrangeMushroomFloorSkin[i], GetUnitY(OrangeMushroom[i]) + y)
-            endif
-            set i = i + 1
-        endloop
-    endfunction
     
     private function Main takes nothing returns nothing
         call PlayersGroup()
         call BossMoving()
-        call MovingAura()
+        call Decorate_Movement()
         if GravityChanger_Loading == false then
             if GravityChanger_State == false then
                 call SetCameraField(CAMERA_FIELD_ROTATION, 90.0, 0)

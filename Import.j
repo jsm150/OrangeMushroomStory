@@ -48,6 +48,8 @@
 // Library
 //! import "Library\Arrow.j"
 //! import "Library\Calculation.j"
+//! import "Library\ClickEffect.j"
+//! import "Library\Decorate.j"
 //! import "Library\GravityChanger.j"
 //! import "Library\Jumper.j"
 //! import "Library\KeySwitch.j"

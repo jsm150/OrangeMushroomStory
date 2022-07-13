@@ -1,10 +1,10 @@
-library MouseTeleport initializer Init needs MouseClick
+library MouseTeleport initializer Init
     globals
         public boolean array State[8]
         public integer Number = 0
     endglobals
 
-    private function MouseClick takes nothing returns nothing
+    public function MouseClick takes nothing returns nothing
         local player p = DzGetTriggerKeyPlayer()
         if State[GetPlayerId(p) + 1] then
             if GetLocalPlayer() == p then
@@ -26,20 +26,11 @@ library MouseTeleport initializer Init needs MouseClick
             call SetUnitPosition( OrangeMushroom[PLAYER_MAXINUM + Number], x, y )
         endif
     endfunction
-
-    private function Main takes nothing returns nothing
-        call MouseClick_AddDownAction(function MouseClick)
-        call DestroyTrigger(GetTriggeringTrigger())
-    endfunction
     
     private function Init takes nothing returns nothing
         local trigger t = CreateTrigger()
         call DzTriggerRegisterSyncData(t, "mouse", false)
         call TriggerAddAction(t, function Teleport)
-
-        set t = CreateTrigger()
-        call TriggerRegisterTimerEvent(t, 0.00, false)
-        call TriggerAddAction( t, function Main )
         
         set t = null
     endfunction

@@ -47,8 +47,6 @@ scope initialize initializer init
                     set HostNumber = i
                 endif
                 set OrangeMushroomType[i] = 'hpea'
-                set OrangeMushroomSkin[i] = CreateUnit(Player(i-1), 'h00A', GetRectMinX(StartRect)+(128*(i-1)), GetRectCenterY(StartRect), 270 )
-                set OrangeMushroomFloorSkin[i] = CreateUnit(Player(i-1), 'h00A', GetRectMinX(StartRect)+(128*(i-1)), GetRectCenterY(StartRect), 270 )
                 set OrangeMushroom[i] = CreateUnit(Player(i-1), OrangeMushroomType[i], GetRectMinX(StartRect)+(128*(i-1)), GetRectCenterY(StartRect), 270 )
                 set BackGroundUnits[i] = CreateUnit(Player(i-1), 'hfoo', GetRectMinX(StartRect)+(128*(i-1)), GetRectCenterY(StartRect), 270 )
                 if SubString("|", -1, 0) != "o" and GetUnitTypeId(BackGroundUnits[i]) != 'hspt' then
@@ -72,6 +70,16 @@ scope initialize initializer init
     
     private function Quest takes nothing returns nothing
         local string s
+        set s = "10.2\n"
+        set s = s + "- 스킨 인벤토리가 추가되었습니다.\n"
+        set s = s + "  스킨은 월드를 클리어 하면 추가됩니다.\n"
+        set s = s + "  발렌타인 데이, 해변, 코-크 월드만 지원합니다.\n"
+        set s = s + "\n"
+        set s = s + "10.3\n"
+        set s = s + "- 스킨 인벤토리에 카페, 엘린 숲 스킨을 제외하고 모두 추가되었습니다.\n"
+        set s = s + "- 스킨을 변경하는 명령어는 더이상 동작하지 않습니다.\n"
+        set s = s + "- 마우스 클릭시, 클릭 위치에 이펙트가 생성됩니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.2~10.3", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.8\n"
         set s = s + "- 깊은 산속 월드의 코스가 약간 수정되었습니다.\n"
         set s = s + "- 점멸 후 텔레포트 스톤이 작동하던 버그가 수정되었습니다.\n"
@@ -96,12 +104,8 @@ scope initialize initializer init
         set s = s + "- -시간 명령어가 삭제되었습니다. 이제 우측 상단에 플레이 타임이 표시됩니다.\n"
         set s = s + "- 아랫마을 3-8 열쇠 버그가 수정되었습니다.\n"
         set s = s + "- 아랫마을 3-6 코스가 수정되었습니다.\n"
-        set s = s + "- 호스트가 나가도 딜레이가 유지됩니다.\n"
-        set s = s + "10.2\n"
-        set s = s + "- 스킨 인벤토리가 추가되었습니다.\n"
-        set s = s + "  스킨은 월드를 클리어 하면 추가됩니다.\n"
-        set s = s + "  발렌타인 데이, 해변, 코-크 월드만 지원합니다.\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "9.8~10.2", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 호스트가 나가도 딜레이가 유지됩니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "9.8~10.1", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.4\n"
         set s = s + "- 일부 맵들의 코스가 약간 변경되었습니다.\n"
         set s = s + "- 플레이어가 게임을 나갔을 때 스테이지가 클리어 되던 버그가 수정되었습니다.\n"
@@ -408,27 +412,7 @@ scope initialize initializer init
         set s = s + "연습모드를 사용 후 F9에 뜨는 연습모드 명령어를 참고하여 주십시오.\n"
         set s = s + "\n"
         set s = s + "-코드확인\n"
-        set s = s + "흭득한 코드를 보여줍니다.\n"
-        set s = s + "\n"
-        set s = s + "-code ???(세 번째 비밀 코드 기입)\n"
-        set s = s + "세 번째 비밀 코드는 과자성 루트를 클리어하면 얻을 수 있습니다.\n"
-        set s = s + "플레이어의 외형을 변경합니다.\n"
-        set s = s + "\n"
-        set s = s + "-code2 ???(네 번째 비밀 코드 기입)\n"
-        set s = s + "네 번째 비밀 코드는 소라껍질 루트를 클리어하면 얻을 수 있습니다.\n"
-        set s = s + "플레이어의 외형을 변경합니다. 다만 위의 코드와 다른 외형이 나옵니다.\n"
-        set s = s + "\n"
-        set s = s + "-code3 ???(다섯 번째 비밀 코드 기입)\n"
-        set s = s + "다섯 번째 비밀 코드는 코-크 플레이 루트를 클리어하면 얻을 수 있습니다.\n"
-        set s = s + "플레이어의 외형을 변경합니다. 다만 위의 코드와 다른 외형이 나옵니다.\n"
-        set s = s + "\n"
-        set s = s + "-code4 ???(여섯 번째 비밀 코드 기입)\n"
-        set s = s + "여섯 번째 비밀 코드는 사막 루트를 클리어하면 얻을 수 있습니다.\n"
-        set s = s + "플레이어의 외형을 변경합니다. 다만 위의 코드와 다른 외형이 나옵니다.\n"
-        set s = s + "\n"
-        set s = s + "-code5 ???(일곱 번째 비밀 코드 기입)\n"
-        set s = s + "일곱 번째 비밀 코드는 랜덤 루트를 클리어하면 얻을 수 있습니다.\n"
-        set s = s + "플레이어의 외형을 변경합니다. 다만 위의 코드와 다른 외형이 나옵니다."
+        set s = s + "흭득한 코드를 보여줍니다."
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "명령어2", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "● C\n"
         set s = s + "- 카운트 3 을 실행합니다.\n"
