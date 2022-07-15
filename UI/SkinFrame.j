@@ -1164,6 +1164,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skin.AddMotion("Papulatus005.blp")
         call skin.AddMotion("Papulatus006.blp")
         call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0, "PinkBean Designation", 'h00B', 0.06, -0.0015, -0.046, Decorate_Designation, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("PinkBeanDesignation.blp")
+        call SkinAnimationList.add(skin)
     endfunction
 
     private function RegisterSkinOfUser takes integer id returns sList
@@ -1203,6 +1210,9 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for("set i = 32", "i <= 34")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[35]).Clone())
         endif
 
         return skinList
