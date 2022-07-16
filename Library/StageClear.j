@@ -1103,7 +1103,7 @@ library Stage initializer init
             set TimeLimitDialog = CreateTimerDialogBJ( TimeLimit, "제한 시간" )
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 이번 스테이지는 제한시간이 주어집니다." )
         elseif Status.World == 12 and Status.Level == 8 then
-            call TimerStart(TimeLimit, 120, false, null)
+            call TimerStart(TimeLimit, 180, false, null)
             set TimeLimitDialog = CreateTimerDialogBJ( TimeLimit, "제한 시간" )
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 이번 스테이지는 제한시간이 주어집니다." )
         elseif Status.World == 13 and Status.Level == 8 then

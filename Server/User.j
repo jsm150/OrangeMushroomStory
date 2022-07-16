@@ -23,7 +23,6 @@ scope User initializer Init
     private struct user
         static integer WorldCount = 10
         worldCount ClearList
-        integer PinkBeanDesignation = 0
 
         public method GetClearCountByWorldId takes integer worldId returns integer
             if worldId >= 1 and worldId <= 2 then
@@ -139,19 +138,18 @@ scope User initializer Init
         endloop
     endfunction
 
-    //! runtextmacro MakeFuncToDataLoadSync("CaptainJack", "UserList[idx].ClearList.CaptainJack", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("Subway", "UserList[idx].ClearList.Subway", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("Valentine", "UserList[idx].ClearList.Valentine", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("Beach", "UserList[idx].ClearList.Beach", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("Coke", "UserList[idx].ClearList.Coke", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("WorldChallenge", "UserList[idx].ClearList.WorldChallenge", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("Cafe", "UserList[idx].ClearList.Cafe", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("Desert", "UserList[idx].ClearList.Desert", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("Forest", "UserList[idx].ClearList.Forest", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("IceCave", "UserList[idx].ClearList.IceCave", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("DownTown", "UserList[idx].ClearList.DownTown", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
-    //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
+    //! runtextmacro SetClearListToSync("CaptainJack")
+    //! runtextmacro SetClearListToSync("Subway")
+    //! runtextmacro SetClearListToSync("Valentine")
+    //! runtextmacro SetClearListToSync("Beach")
+    //! runtextmacro SetClearListToSync("Coke")
+    //! runtextmacro SetClearListToSync("WorldChallenge")
+    //! runtextmacro SetClearListToSync("Cafe")
+    //! runtextmacro SetClearListToSync("Desert")
+    //! runtextmacro SetClearListToSync("Forest")
+    //! runtextmacro SetClearListToSync("IceCave")
+    //! runtextmacro SetClearListToSync("DownTown")
+    //! runtextmacro SetClearListToSync("Random")
 
     private function LoadUserData takes nothing returns nothing
         local integer i = 0
@@ -165,19 +163,18 @@ scope User initializer Init
                 if GetLocalPlayer() == Player(i) then
                     call JNObjectCharacterInit(mapId, name, secretKey, clearListName)
                 endif
-                call DataLoadSyncToCaptainJack(i, name, "CaptainJack")
-                call DataLoadSyncToSubway(i, name, "Subway")
-                call DataLoadSyncToValentine(i, name, "Valentine")
-                call DataLoadSyncToBeach(i, name, "Beach")
-                call DataLoadSyncToCoke(i, name, "Coke")
-                call DataLoadSyncToWorldChallenge(i, name, "WorldChallenge")
-                call DataLoadSyncToCafe(i, name, "Cafe")
-                call DataLoadSyncToDesert(i, name, "Desert")
-                call DataLoadSyncToForest(i, name, "Forest")
-                call DataLoadSyncToIceCave(i, name, "IceCave")
-                call DataLoadSyncToDownTown(i, name, "DownTown")
-                call DataLoadSyncToRandom(i, name, "Random")
-                call DataLoadSyncToPinkBeanDesignation(i, name, "PinkBean Designation")
+                call SetClearListByCaptainJackToSync(i, name, "CaptainJack")
+                call SetClearListBySubwayToSync(i, name, "Subway")
+                call SetClearListByValentineToSync(i, name, "Valentine")
+                call SetClearListByBeachToSync(i, name, "Beach")
+                call SetClearListByCokeToSync(i, name, "Coke")
+                call SetClearListByWorldChallengeToSync(i, name, "WorldChallenge")
+                call SetClearListByCafeToSync(i, name, "Cafe")
+                call SetClearListByDesertToSync(i, name, "Desert")
+                call SetClearListByForestToSync(i, name, "Forest")
+                call SetClearListByIceCaveToSync(i, name, "IceCave")
+                call SetClearListByDownTownToSync(i, name, "DownTown")
+                call SetClearListByRandomToSync(i, name, "Random")
             endif
             set i = i + 1
         endloop
@@ -191,27 +188,29 @@ scope User initializer Init
     endfunction
 endscope
 
-//! textmacro MakeFuncToDataLoadSync takes keyword, memory, converter, args, action
+//! textmacro SetClearListToSync takes world
     globals
-        private key $keyword$Key
+        private key $world$Key
     endglobals
 
-    private function DataLoadSyncTo$keyword$ takes integer idx, $args$ returns nothing
+    private function SetClearListBy$world$ToSync takes integer idx, string name, string world returns nothing
         if GetLocalPlayer() == Player(idx) then
-            call DzSyncData(I2S($keyword$Key), $action$)
+            call DzSyncData(I2S($world$Key), I2S(idx) + "," + I2S(JNObjectCharacterGetInt(name, world)))
         endif
     endfunction
 
-    private function SyncDataTo$keyword$ takes nothing returns nothing
-        local integer idx = GetPlayerId(DzGetTriggerSyncPlayer())
-        set $memory$ = $converter$(DzGetTriggerSyncData())
+    private function SetClearListBy$world$ takes nothing returns nothing
+        local string s = DzGetTriggerSyncData()
+        local integer idx = S2I(JNStringSplit(s,",",0))
+        local integer cnt = S2I(JNStringSplit(s,",",1))
+        set UserList[idx].ClearList.$world$ = cnt
     endfunction
 
-    private struct MakeFuncToDataLoadSyncInit$keyword$
+    private struct SetClearListToSyncInit$world$
         private static method onInit takes nothing returns nothing
             local trigger t = CreateTrigger()
-            call DzTriggerRegisterSyncData(t, I2S($keyword$Key), false)
-            call TriggerAddAction(t, function SyncDataTo$keyword$)
+            call DzTriggerRegisterSyncData(t, I2S($world$Key), false)
+            call TriggerAddAction(t, function SetClearListBy$world$)
             set t = null
         endmethod
     endstruct

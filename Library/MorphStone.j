@@ -36,7 +36,7 @@ library MorphStone initializer init
         
         loop
         exitwhen CompareRect[i] == null
-            if GetTriggeringRegion() == Rects[i] and RectState[i] == false and j >= 1 and j <= PLAYER_MAXINUM and BackGroundUnits[j] != GetTriggerUnit() and not(Decorate_IsTriggeringUnitInDecorate(j - 1)) and GetUnitTypeId(GetTriggerUnit()) != GetUnitTypeId(MorphUnit[i]) then
+            if GetTriggeringRegion() == Rects[i] and RectState[i] == false and j >= 1 and j <= PLAYER_MAXINUM and BackGroundUnits[j] != GetTriggerUnit() and Decorate_IsTriggeringUnitInDecorate(j - 1) and GetUnitTypeId(GetTriggerUnit()) != GetUnitTypeId(MorphUnit[i]) then
                 set x = GetUnitX(OrangeMushroom[j])
                 set y = GetUnitY(OrangeMushroom[j])
                 
@@ -219,6 +219,7 @@ library MorphStone initializer init
         call SetRect(t, 'ogru', gg_rct_MorphStone065)
         call SetRect(t, 'ogru', gg_rct_MorphStone066)
         call SetRect(t, 'ogru', gg_rct_MorphStone067)
+        call SetRect(t, 'hpea', gg_rct_MorphStone068)
 
 
         call TriggerAddAction( t, function Main )

@@ -57,6 +57,5 @@ static if not REFORGED_MODE then
     native JNServerTime takes string Format returns string
     native JNServerUnixTime takes nothing returns integer
     native JNServerPluginVersion takes nothing returns integer
-    native JNUseUserRoleItemInfo takes string MapId, string SecretKey, string UserId, string ItemName returns string
 endif
 endlibrary
