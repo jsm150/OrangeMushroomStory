@@ -3135,7 +3135,6 @@ library Key initializer Init
 
         call keyMapManager.CreateEvent(RED_KEY_ID, gg_rct_Key9_6_001)
         set posList = blockLocationLinkedList.create()
-        call posList.AddFirst(blockLocation.create(20480, -5760))
         call posList.AddFirst(blockLocation.create(19968, -5760))
         call posList.AddFirst(blockLocation.create(17408, -7040))
         call posList.AddFirst(blockLocation.create(20864, -4736))
