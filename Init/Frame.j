@@ -345,6 +345,7 @@ scope Frame initializer init
     private function CanUseRail takes nothing returns boolean
         local boolean b = Status.World == 5 or (Status.World == 8 and Status.Level == 5) or FinalStage == true
         set b = b or (Status.World == 10 and (Status.Level == 4 or Status.Level == 6 or Status.Level == 7))
+        set b = b or (Status.World == 12 and (Status.Level == 4))
         return b
     endfunction
                     

@@ -683,8 +683,8 @@ library Key initializer Init
 
         call keyMapManager.CreateEvent(RED_KEY_ID, gg_rct_Key11_4_001)
         set posList = blockLocationLinkedList.create()
-        call posList.AddFirst(blockLocation.create(18176, -21632))
-        call posList.AddFirst(blockLocation.create(18176+128, -21632))
+        call posList.AddFirst(blockLocation.create(18176, -21568))
+        call posList.AddFirst(blockLocation.create(18176+128, -21568))
         call posList.AddFirst(blockLocation.create(22144, -22016))
         call posList.AddFirst(blockLocation.create(22144+128, -22016))
         call keyMapManager.AddAction(posList, "Remove")
@@ -2754,7 +2754,7 @@ library Key initializer Init
         exitwhen j > 3
             call posList.AddFirst(blockLocation.create(-5632+(512*j), 9344))
         set j = j + 1
-        endloop
+        endloop 
         call posList.AddFirst(blockLocation.create(-3584, 10112))
         call posList.AddFirst(blockLocation.create(-4480, 10624))
         call keyMapManager.AddAction(posList, "Remove")
