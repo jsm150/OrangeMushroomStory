@@ -82,8 +82,12 @@ scope initialize initializer init
         set s = s + "\n"
         set s = s + "10.4\n"
         set s = s + "- 비석이 작동하지 않던 버그가 수정되었습니다.\n"
-        set s = s + "- 아랫마을 스킨이 누락되었던 점을 수정하였습니다."
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.2~10.4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 아랫마을 스킨이 누락되었던 점을 수정하였습니다.\n"
+        set s = s + "\n"
+        set s = s + "10.5\n"
+        set s = s + "- 스킨 인벤토리 버그를 수정했습니다.\n"
+        set s = s + "- 월드 3-1의 난이도를 하향했습니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.2~10.5", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.8\n"
         set s = s + "- 깊은 산속 월드의 코스가 약간 수정되었습니다.\n"
         set s = s + "- 점멸 후 텔레포트 스톤이 작동하던 버그가 수정되었습니다.\n"
