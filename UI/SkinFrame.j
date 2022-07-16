@@ -1134,6 +1134,43 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skin.AddMotion("IceAura107.blp")
         call skin.AddMotion("IceAura108.blp")
         call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0, "Blue Mushmom", 'n007', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("BlueMushmom001.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.1, "Blin", 'o003', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Blin001.blp")
+        call skin.AddMotion("Blin002.blp")
+        call skin.AddMotion("Blin003.blp")
+        call skin.AddMotion("Blin004.blp")
+        call skin.AddMotion("Blin005.blp")
+        call skin.AddMotion("Blin006.blp")
+        call skin.AddMotion("Blin007.blp")
+        call skin.AddMotion("Blin008.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.1, "Papulatus", 'n008', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Papulatus001.blp")
+        call skin.AddMotion("Papulatus002.blp")
+        call skin.AddMotion("Papulatus003.blp")
+        call skin.AddMotion("Papulatus004.blp")
+        call skin.AddMotion("Papulatus005.blp")
+        call skin.AddMotion("Papulatus006.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0, "PinkBean Designation", 'h00B', 0.06, -0.0015, -0.046, Decorate_Designation, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("PinkBeanDesignation.blp")
+        call SkinAnimationList.add(skin)
     endfunction
 
     private function RegisterSkinOfUser takes integer id returns sList
@@ -1168,6 +1205,14 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endif
         if User_UserList[id].GetClearCountByWorldId(12) >= 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[31]).Clone())
+        endif
+        if User_UserList[id].GetClearCountByWorldId(13) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 32", "i <= 34")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[35]).Clone())
         endif
 
         return skinList
