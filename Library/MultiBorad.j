@@ -108,6 +108,8 @@ library Multiboard// initializer init
                     call MultiboardSetItemValueBJ( Borad, 2, 2, "3-" + I2S(RandomStage_state))
                 elseif this.World == 8 then
                     call MultiboardSetItemValueBJ( Borad, 2, 2, "W-" + I2S(this.Level))
+                elseif this.World == 14 then
+                    call MultiboardSetItemValueBJ( Borad, 2, 2, "W2-" + I2S(this.Level))
                 else
                     call MultiboardSetItemValueBJ( Borad, 2, 2, "3-" + I2S(this.Level))
                 endif
