@@ -889,6 +889,11 @@ library Stage initializer init
                 call CreateObject(3, gg_rct_Propelly13_8_001, "FlyRight")
                 set BoxsCount = 3
             endif
+        elseif Status.World == 14 then
+            if Status.Level == 1 then
+                call CreateObject(1, gg_rct_Box14_1_001, "null")
+                set BoxsCount = 1
+            endif
         endif
     endfunction
     
