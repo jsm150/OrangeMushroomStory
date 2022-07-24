@@ -96,6 +96,8 @@ scope initialize initializer init
         set s = s + "  엘린숲: 3-4\n"
         set s = s + "  얼음 동굴: 3-2, 3-4, 3-8\n"
         set s = s + "  아랫마을: 3-1, 3-4, 3-8\n"
+        set s = s + "10.7\n"
+        set s = s + "- 일부 월드 스킨과 핑크빈 스킨이 수정되었습니다.\n"
         call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.2~10.6", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.8\n"
         set s = s + "- 깊은 산속 월드의 코스가 약간 수정되었습니다.\n"
