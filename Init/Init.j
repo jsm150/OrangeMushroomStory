@@ -96,7 +96,12 @@ scope initialize initializer init
         set s = s + "  엘린숲: 3-4\n"
         set s = s + "  얼음 동굴: 3-2, 3-4, 3-8\n"
         set s = s + "  아랫마을: 3-1, 3-4, 3-8\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.2~10.6", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "\n"
+        set s = s + "10.7\n"
+        set s = s + "- 아래 맵들의 난이도가 하향 조정됬습니다.\n"
+        set s = s + "  지하철: 3-3\n"
+        set s = s + "  얼음 동굴: 3-6, 3-7, 3-8\n"
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.2~10.7", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.8\n"
         set s = s + "- 깊은 산속 월드의 코스가 약간 수정되었습니다.\n"
         set s = s + "- 점멸 후 텔레포트 스톤이 작동하던 버그가 수정되었습니다.\n"
