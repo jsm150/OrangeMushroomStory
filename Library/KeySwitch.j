@@ -962,12 +962,13 @@ library Key initializer Init
 
         call keyMapManager.CreateEvent(YELLOW_KEY_ID, gg_rct_Key12_7_002)
         set posList = blockLocationLinkedList.create()
-        call posList.AddFirst(blockLocation.create(19456, 13312))
-        call posList.AddFirst(blockLocation.create(19456, 13312 + 256))
+        call posList.AddFirst(blockLocation.create(19520, 13376))
+        call posList.AddFirst(blockLocation.create(19456, 13248))
+        call posList.AddFirst(blockLocation.create(19456, 13568))
         set j = 0
         loop
             exitwhen j > 5
-            call posList.AddFirst(blockLocation.create(19328, 13440 - (128 * j)))
+            call posList.AddFirst(blockLocation.create(19264, 13440 - (128 * j)))
             set j = j + 1
         endloop
         call keyMapManager.AddAction(posList, "Remove")
