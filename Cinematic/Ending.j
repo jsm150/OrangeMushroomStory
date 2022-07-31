@@ -410,23 +410,17 @@ library Ending initializer init needs Cinematic
                     set name = StringCase(GetPlayerName(Player(i - 1)), false)
 
                     if RandomStage_isRandom == true then
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 일곱 번째 비밀 코드: " + WorldKey_Code10[i] )
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-code5 " + WorldKey_Code10[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                        call JNObjectCharacterSetInt(name, "Random", User_UserList[i - 1].ClearList.Random + 1)
+                        call User_IncWorldClearCount.evaluate(name, "Random")
                     elseif Status.World == 4 then
                         call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 두 번째 비밀 코드: " + WorldKey_Code2[i] )
-                        call JNObjectCharacterSetInt(name, "Subway", User_UserList[i - 1].ClearList.Subway + 1)
+                        call User_IncWorldClearCount.evaluate(name, "Subway")
                     elseif Status.World == 3 then
                         call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 첫 번째 비밀 코드: " + WorldKey_Code[i] )
-                        call JNObjectCharacterSetInt(name, "CaptainJack", User_UserList[i - 1].ClearList.CaptainJack + 1)
+                        call User_IncWorldClearCount.evaluate(name, "CaptainJack")
                     elseif Status.World == 9 then
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 두 번째 특수 코드: " + WorldKey_Code6[i] )
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-scode2 " + WorldKey_Code6[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다. (F9에 사용법이 명시되어 있지 않으니 주의)")
-                        call JNObjectCharacterSetInt(name, "Cafe", User_UserList[i - 1].ClearList.Cafe + 1)
+                        call User_IncWorldClearCount.evaluate(name, "Cafe")
                     elseif Status.World == 13 then
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 다섯 번째 특수 코드: " + WorldKey_Code12[i] )
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-scode5 " + WorldKey_Code12[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다. (F9에 사용법이 명시되어 있지 않으니 주의)")
-                        call JNObjectCharacterSetInt(name, "DownTown", User_UserList[i - 1].ClearList.DownTown + 1)
+                        call User_IncWorldClearCount.evaluate(name, "DownTown")
                     endif
 
                     if GetLocalPlayer() == Player(i-1) then
@@ -457,19 +451,10 @@ library Ending initializer init needs Cinematic
             loop
             exitwhen i > PLAYER_MAXINUM
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and GetLocalPlayer() == Player(i-1) then
-                    if RandomStage_isRandom == true then
-                        call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 일곱 번째 비밀 코드: " + WorldKey_Code10[i] )
-                        call BJDebugMsg("　　　　　　다음 게임부터 \"-code5 " + WorldKey_Code10[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                    elseif Status.World == 4 then
+                    if Status.World == 4 then
                         call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 두 번째 비밀 코드: " + WorldKey_Code2[i] )
                     elseif Status.World == 3 then
                         call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 첫 번째 비밀 코드: " + WorldKey_Code[i] )
-                    elseif Status.World == 9 then
-                        call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 두 번째 특수 코드: " + WorldKey_Code6[i] )
-                        call BJDebugMsg("　　　　　　다음 게임부터 \"-scode2 " + WorldKey_Code6[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다. (F9에 사용법이 명시되어 있지 않으니 주의)")
-                    elseif Status.World == 13 then
-                        call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 다섯 번째 특수 코드: " + WorldKey_Code12[i] )
-                        call BJDebugMsg("　　　　　　다음 게임부터 \"-scode5 " + WorldKey_Code12[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다. (F9에 사용법이 명시되어 있지 않으니 주의)")
                     endif
                 endif
             set i = i + 1

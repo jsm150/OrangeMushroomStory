@@ -224,21 +224,13 @@ library TrueEnding3END initializer init needs Cinematic
                     set name = StringCase(GetPlayerName(Player(i - 1)), false)
 
                     if SecretEnding == true then
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 특수 코드: " + WorldKey_Code8[i] )
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-Scode " + WorldKey_Code8[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다. (F9에 사용법이 명시되어 있지 않으니 주의)")
-                        call JNObjectCharacterSetInt(name, "WorldChallenge", User_UserList[i - 1].ClearList.WorldChallenge + 1)
+                        call User_IncWorldClearCount.evaluate(name, "WorldChallenge")
                     elseif TrueEnding3_PyramidEnding == true then
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 여섯 번째 비밀 코드: " + WorldKey_Code7[i] )
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-code4 " + WorldKey_Code7[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                        call JNObjectCharacterSetInt(name, "Desert", User_UserList[i - 1].ClearList.Desert + 1)
+                        call User_IncWorldClearCount.evaluate(name, "Desert")
                     elseif EllinEnding == true then
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 세번째 특수 코드: " + WorldKey_Code9[i] )
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-scode3 " + WorldKey_Code9[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                        call JNObjectCharacterSetInt(name, "Forest", User_UserList[i - 1].ClearList.Forest + 1)
+                        call User_IncWorldClearCount.evaluate(name, "Forest")
                     else
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 다섯 번째 비밀 코드: " + WorldKey_Code5[i] )
-                        call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-code3 " + WorldKey_Code5[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                        call JNObjectCharacterSetInt(name, "Coke", User_UserList[i - 1].ClearList.Coke + 1)
+                        call User_IncWorldClearCount.evaluate(name, "Coke")
                     endif
 
                     if GetLocalPlayer() == Player(i-1) then
@@ -265,26 +257,6 @@ library TrueEnding3END initializer init needs Cinematic
             set i = i + 1
             endloop
             
-            set i = 1
-            loop
-            exitwhen i > PLAYER_MAXINUM
-                if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and GetLocalPlayer() == Player(i-1) then
-                    if SecretEnding == true then
-                        call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 특수 코드: " + WorldKey_Code8[i] )
-                        call BJDebugMsg("　　　　　　다음 게임부터 \"-Scode " + WorldKey_Code8[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다. (F9에 사용법이 명시되어 있지 않으니 주의)")
-                    elseif TrueEnding3_PyramidEnding == true then
-                        call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 여섯 번째 비밀 코드: " + WorldKey_Code7[i] )
-                        call BJDebugMsg("　　　　　　다음 게임부터 \"-code4 " + WorldKey_Code7[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                    elseif EllinEnding == true then
-                        call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 세번째 특수 코드: " + WorldKey_Code9[i] )
-                        call BJDebugMsg("　　　　　　다음 게임부터 \"-scode3 " + WorldKey_Code9[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                    else
-                        call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 다섯 번째 비밀 코드: " + WorldKey_Code5[i] )
-                        call BJDebugMsg("　　　　　　다음 게임부터 \"-code3 " + WorldKey_Code5[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                    endif
-                endif
-            set i = i + 1
-            endloop
             return
         endif
         set tk.data = tk.data + 1

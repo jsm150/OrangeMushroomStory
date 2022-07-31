@@ -648,9 +648,7 @@ library TrueEnding2 initializer init needs Cinematic
             loop
             exitwhen i > PLAYER_MAXINUM
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                    call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 네 번째 비밀 코드: " + WorldKey_Code4[i] )
-                    call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-code2 " + WorldKey_Code4[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                    call JNObjectCharacterSetInt(StringCase(GetPlayerName(Player(i - 1)), false), "Beach", User_UserList[i - 1].ClearList.Beach + 1)
+                    call User_IncWorldClearCount.evaluate(StringCase(GetPlayerName(Player(i - 1)), false), "Beach")
 
                     if GetLocalPlayer() == Player(i-1) then
                         if JNObjectCharacterServerConnectCheck() then
@@ -676,15 +674,6 @@ library TrueEnding2 initializer init needs Cinematic
             set i = i + 1
             endloop
             
-            set i = 1
-            loop
-            exitwhen i > PLAYER_MAXINUM
-                if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and GetLocalPlayer() == Player(i-1) then
-                    call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 네 번째 비밀 코드: " + WorldKey_Code4[i] )
-                    call BJDebugMsg("　　　　　　다음 게임부터 \"-code2 " + WorldKey_Code4[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                endif
-            set i = i + 1
-            endloop
             return
         endif
         set tk.data = tk.data + 1
