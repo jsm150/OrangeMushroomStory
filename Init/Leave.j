@@ -6,6 +6,7 @@ scope PlayerLeave initializer init
         call RemoveUnit(OrangeMushroom[i])
         call RemoveUnit(BackGroundUnits[i])
         call DestroyTextTag(NameTextTag[i])
+        call Decorate_RemoveAll(i - 1)
         set Status.Leave = true
         if LevelClearState[i] == true then
             set Status.Portal = Status.Portal - 1
