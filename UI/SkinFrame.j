@@ -1188,6 +1188,48 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
         call skin.AddMotion("PinkBeanDesignation.blp")
         call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0, "Yellow Aura", 'h005', 0.044, 0, 0, Decorate_Aura, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("MushmomEye006.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0, "Blue Aura", 'h004', 0.044, 0, 0, Decorate_Aura, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("BlueAura.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0, "Red Aura", 'h009', 0.044, 0, 0, Decorate_Aura, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("RedAura.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0, "Green Aura", 'h008', 0.044, 0, 0, Decorate_Aura, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("GreenAura.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.25, "HologramMushroomRed", 'h00F', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("HologramMushroomRed001.blp")
+        call skin.AddMotion("HologramMushroomRed003.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.25, "HologramMushroomBlue", 'h00G', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("HologramMushroomBlue001.blp")
+        call skin.AddMotion("HologramMushroomBlue003.blp")
+        call SkinAnimationList.add(skin)
     endfunction
 
     private function RegisterSkinOfUser takes integer id returns sList
@@ -1230,6 +1272,16 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endif
         if User_UserList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[35]).Clone())
+        endif
+        if User_UserList[id].GetClearCountByWorldId(11) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 36", "i <= 39")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(9) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 40", "i <= 41")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
         endif
 
         return skinList
