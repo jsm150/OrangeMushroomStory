@@ -11,6 +11,24 @@ library StructList
             return this
         endmethod
 
+        method debugging takes nothing returns nothing
+            local integer i = 0
+
+            if DEBUG_MODE then
+                call JNWriteLog("-- array element --")
+                //! runtextmacro for("set i = 0", "i < this.S")
+                    call JNWriteLog("[" + I2S(i) + "]: " + I2S(this[i]))
+                //! runtextmacro for_end("set i = i + 1")
+
+                call JNWriteLog("-- index element --")
+                //! runtextmacro for("set i = 0", "i < this.S")
+                    call JNWriteLog(I2S(this[i]) + ": " + I2S(LoadInteger( F, 0, this*8192 + this[i] ) - 1))
+                //! runtextmacro for_end("set i = i + 1")
+
+                call JNWriteLog("")
+            endif
+        endmethod
+
         method sort takes boolean ascending returns nothing
             local integer i = 0
             local integer j = 0
