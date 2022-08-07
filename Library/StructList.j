@@ -28,7 +28,10 @@ library StructList
                 set temp = this[idx]
                 call SaveInteger( H, 0, this*8192 + idx, this[i] )
                 call SaveInteger( H, 0, this*8192 + i, temp )
-                call SaveInteger( F, 0, this*8192 + temp, i+1 )
+            //! runtextmacro for_end("set i = i + 1")
+
+            //! runtextmacro for("set i = 0", "i < this.S")
+                call SaveInteger( F, 0, this*8192 + this[i], i+1 )
             //! runtextmacro for_end("set i = i + 1")
         endmethod
 

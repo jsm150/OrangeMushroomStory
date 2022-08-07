@@ -151,8 +151,11 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
 
         public method ReCreate takes nothing returns nothing
+            local SkinInfo temp = this.motion
             call DzDestroyFrame(this.skinFrame)
             set this.skinFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            set this.motion = temp.Clone()
+            call temp.destroy()
         endmethod
 
         public method RunAnimation takes integer playerId, integer refFrame returns nothing
@@ -278,6 +281,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private static real offsetX = 0.051
         private static real offsetY = -0.063
         private integer page = 1
+        private boolean hasCoolDown = false
         private integer playerId
         private sList skinList
 
@@ -297,10 +301,22 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call skin.ChangeSkin(this.playerId, window)
         endmethod
 
+        private method CoolDownTime takes nothing returns nothing
+            set this.hasCoolDown = true
+            call TriggerSleepActionByTimer(0.1)
+            set this.hasCoolDown = false
+        endmethod
+
         public method ClickDown takes real posX, real posY, SkinSelectWindow window returns nothing
             local integer i = 0
+
+            if this.hasCoolDown then
+                return
+            endif
+
             //! runtextmacro for("set i = 0", "i < thistype.size")
                 if MousePosInInventory(posX, posY, i) and HasSkinInInventory(i) then
+                    call this.CoolDownTime.execute()
                     call ChangeSkin(i, window)
                     return
                 endif
@@ -519,7 +535,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local integer i = 0
             local SkinInfo temp = 0
 
-            call this.decorateSkinFrameList.sort(false)
+            call this.decorateSkinFrameList.sort(true)
 
             //! runtextmacro for("set i = 0", "i < decorateSkinFrameList.size")
                 if DecorateSkin(decorateSkinFrameList[i]).Priority > thistype.characterPriority then
@@ -530,6 +546,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for_end("set i = i + 1")
 
             call this.skinAnimation.Stop()
+
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.skinFrame, false)
             endif
