@@ -127,6 +127,10 @@ scope User initializer Init
         endif
     endfunction
 
+    public function IncWorldClearCount takes string name, string world returns nothing
+        call JNObjectCharacterSetInt(name, world, JNObjectCharacterGetInt(name, world) + 1)
+    endfunction
+
     private function CreateUserContainer takes nothing returns nothing
         local integer i = 0
 

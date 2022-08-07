@@ -121,11 +121,19 @@ library Decorate initializer Init
         endif
     endfunction
 
+    public function RemoveAll takes integer playerId returns nothing
+        local integer i = 0
+        //! runtextmacro for("set i = 0", "i < List[playerId].size")
+            call Skin(List[playerId][i]).destroy()
+        //! runtextmacro for_end("set i = i + 1")  
+        call List[playerId].clear()
+    endfunction
+
     public function UnitShow takes integer playerId, boolean show returns nothing
         local integer i = 0
         //! runtextmacro for("set i = 0", "i < List[playerId].size")
             call Skin(List[playerId][i]).Show(show)
-        //! runtextmacro for_end("set i = i + 1")        
+        //! runtextmacro for_end("set i = i + 1")
     endfunction
 
     public function SetUnitAngle takes integer playerId, real angle returns nothing

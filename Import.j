@@ -7,6 +7,7 @@
 //! import "JN\JNStopwatch.j"
 //! import "JN\JNString.j"
 //! import "JN\MemoryLib.j"
+//! import "JN\Typecast.j"
 
 // Init
 //! import "Init\CodeKey.j"
@@ -50,6 +51,7 @@
 //! import "Library\Calculation.j"
 //! import "Library\ClickEffect.j"
 //! import "Library\Decorate.j"
+//! import "Library\EndGameHook.j"
 //! import "Library\GravityChanger.j"
 //! import "Library\Jumper.j"
 //! import "Library\KeySwitch.j"

@@ -6,6 +6,7 @@ scope PlayerLeave initializer init
         call RemoveUnit(OrangeMushroom[i])
         call RemoveUnit(BackGroundUnits[i])
         call DestroyTextTag(NameTextTag[i])
+        call Decorate_RemoveAll(i - 1)
         set Status.Leave = true
         if LevelClearState[i] == true then
             set Status.Portal = Status.Portal - 1
@@ -66,15 +67,9 @@ scope PlayerLeave initializer init
 
     private function GenerateFatal takes nothing returns nothing
         // 없는 파일을 띄워서 페이탈을 발생.
-        debug if false then
+        if DEBUG_MODE == false then
             call CinematicFadeBJ( bj_CINEFADETYPE_FADEOUTIN, 2, "dvwe48asd1vaw7ea.blp", 0, 0, 0, 0 )
-        debug endif
-    endfunction
-
-    private function AddLeaveAction takes nothing returns nothing
-        call DzFrameSetScriptByCode(DzFrameFindByName("QuitButton", 0), JN_FRAMEEVENT_CONTROL_CLICK, function GenerateFatal, false)
-        call DzFrameSetScriptByCode(DzFrameFindByName("GameResultQuitButton", 0), JN_FRAMEEVENT_CONTROL_CLICK, function GenerateFatal, false)
-        call DzFrameSetScriptByCode(DzFrameFindByName("UnresponsiveDisconnectButton", 0), JN_FRAMEEVENT_CONTROL_CLICK, function GenerateFatal, false)
+        endif
     endfunction
 
     private function init takes nothing returns nothing
@@ -87,11 +82,8 @@ scope PlayerLeave initializer init
         set i = i + 1
         endloop
         call TriggerAddAction( t, function Leave )
+        call SetGameEndCallbackByCode(function GenerateFatal)
 
-        set t = CreateTrigger()
-        call TriggerRegisterTimerEvent(t, 0.00, false)
-        call TriggerAddAction( t, function AddLeaveAction )
-        
         set t = null
     endfunction
 endscope
