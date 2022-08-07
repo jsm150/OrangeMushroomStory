@@ -101,7 +101,15 @@ scope initialize initializer init
         set s = s + "- 아래 맵들의 난이도가 하향 조정됬습니다.\n"
         set s = s + "  지하철: 3-3\n"
         set s = s + "  얼음 동굴: 3-6, 3-7, 3-8\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.2~10.7", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "\n"
+        set s = s + "10.8\n"
+        set s = s + "- 엘린 숲 스킨이 인벤토리에 적용되지 않던 버그가 수정되었습니다.\n"
+        set s = s + "- 이제 엔딩에서 코드가 나오지 않습니다. (핑크 핑크, 도시 월드 는 그대로 유지)\n"
+        set s = s + "- 게임을 종료할 때, 그 어떠한 경우에서도 페이탈이 발생하도록 변경했습니다.\n"
+        set s = s + "- 연습모드 에서 랜덤 월드를 클리어 할 수 있던 버그를 수정했습니다.\n"
+        set s = s + "- 카페 월드를 클리어 했을 때 얻는 스킨을 변경했습니다.\n"
+        set s = s + "- 엘린 숲 3-4, 3-5 맵이 수정되었습니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.2~10.8", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "9.8\n"
         set s = s + "- 깊은 산속 월드의 코스가 약간 수정되었습니다.\n"
         set s = s + "- 점멸 후 텔레포트 스톤이 작동하던 버그가 수정되었습니다.\n"
