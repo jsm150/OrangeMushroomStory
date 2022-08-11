@@ -10,7 +10,8 @@ library Jumper initializer init
         local real y = GetUnitY(OrangeMushroom[i])
         local boolean con
         local integer k = 1
-        
+        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
+
         set con = IsPointInRegion(Jumper_Rects, x, y)
         if GravityChanger_State == false then
             set con = con or IsPointInRegion(Jumper_Rects, x, y-40)
@@ -40,14 +41,26 @@ library Jumper initializer init
                 if GravityChanger_State == false then
                     if Direction[i] == "Left" then
                         call SetUnitAnimation( OrangeMushroom[i], "Spell First" )
+                        if pet != 0 then
+                            call SetUnitAnimation( pet.Unit, "Spell First" )
+                        endif
                     elseif Direction[i] == "Right" then
                         call SetUnitAnimation( OrangeMushroom[i], "Spell Second" )
+                        if pet != 0 then
+                            call SetUnitAnimation( pet.Unit, "Spell Second" )
+                        endif
                     endif
                 else
                     if Direction[i] == "Left" then
                         call SetUnitAnimation( OrangeMushroom[i], "Spell Second" )
+                        if pet != 0 then
+                            call SetUnitAnimation( pet.Unit, "Spell Second" )
+                        endif
                     elseif Direction[i] == "Right" then
                         call SetUnitAnimation( OrangeMushroom[i], "Spell First" )
+                        if pet != 0 then
+                            call SetUnitAnimation( pet.Unit, "Spell First" )
+                        endif
                     endif
                 endif
             endif
