@@ -89,6 +89,7 @@
 
 // UI
 //! import "UI\SkinFrame.j"
+//! import "UI\WaitingRoom.j"
 
 // Test
 // //! import "Test\CodePrint.j"
