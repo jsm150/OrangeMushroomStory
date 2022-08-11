@@ -24,6 +24,7 @@ scope User initializer Init
         static integer WorldCount = 10
         worldCount ClearList
         integer PinkBeanDesignation = 0
+        integer BellaPet = 0
 
         public method GetClearCountByWorldId takes integer worldId returns integer
             if worldId >= 1 and worldId <= 2 then
@@ -156,6 +157,7 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("DownTown", "UserList[idx].ClearList.DownTown", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
+    //! runtextmacro MakeFuncToDataLoadSync("BellaPet", "UserList[idx].BellaPet", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
 
     private function LoadUserData takes nothing returns nothing
         local integer i = 0
@@ -182,6 +184,7 @@ scope User initializer Init
                 call DataLoadSyncToDownTown(i, name, "DownTown")
                 call DataLoadSyncToRandom(i, name, "Random")
                 call DataLoadSyncToPinkBeanDesignation(i, name, "PinkBean Designation")
+                call DataLoadSyncToBellaPet(i, name, "Bella Pet")
             endif
             set i = i + 1
         endloop
