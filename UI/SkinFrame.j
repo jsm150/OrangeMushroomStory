@@ -1230,6 +1230,16 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skin.AddMotion("HologramMushroomBlue001.blp")
         call skin.AddMotion("HologramMushroomBlue003.blp")
         call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0.18, "Bella Pet", 'h00H', 0.04, -0.035, -0.012, Decorate_Pet, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("BellaPet002.blp")
+        call skin.AddMotion("BellaPet003.blp")
+        call skin.AddMotion("BellaPet004.blp")
+        call skin.AddMotion("BellaPet005.blp")
+        call SkinAnimationList.add(skin)
     endfunction
 
     private function RegisterSkinOfUser takes integer id returns sList
@@ -1282,6 +1292,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for("set i = 40", "i <= 41")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
+        endif
+
+        if User_UserList[id].BellaPet == 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[42]).Clone())
         endif
 
         return skinList
