@@ -281,8 +281,11 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private static real offsetX = 0.051
         private static real offsetY = -0.063
         private integer page = 1
+        private integer lastPage
         private boolean hasCoolDown = false
         private integer playerId
+        private integer currentPageLetter
+        private integer maxPageLetter
         private sList skinList
 
         private method MousePosInInventory takes real posX, real posY, integer itemIdx returns boolean
@@ -340,6 +343,11 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                 endif
                 set frameIdx = frameIdx + 1
             //! runtextmacro for_end("set skinIdx = skinIdx + 1")
+
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(this.maxPageLetter, true)
+                call DzFrameShow(this.currentPageLetter, true)
+            endif
         endmethod
 
         public method Hide takes nothing returns nothing
@@ -359,15 +367,27 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                 endif
                 set frameIdx = frameIdx + 1
             //! runtextmacro for_end("set skinIdx = skinIdx + 1")
+
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(this.maxPageLetter, false)
+                call DzFrameShow(this.currentPageLetter, false)
+            endif
+        endmethod
+
+        private method CurrentPageLetterSetting takes nothing returns nothing
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetText(this.currentPageLetter, I2S(this.page) + "        ")
+            endif
         endmethod
         
         public method NextPage takes nothing returns nothing
-            if this.page >= R2I((this.skinList.size - 1) / thistype.size) + 1 then
+            if this.page >= this.lastPage then
                 return
             endif
 
             call this.Hide()
             set this.page = this.page + 1
+            call this.CurrentPageLetterSetting()
             call this.Show()
         endmethod
 
@@ -378,6 +398,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
             call this.Hide()
             set this.page = this.page - 1
+            call this.CurrentPageLetterSetting()
             call this.Show()
         endmethod
 
@@ -399,6 +420,25 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             
             set this.skinList = skinList
             set this.playerId = playerId
+            set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
+
+            set this.maxPageLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "LadderNameTextTemplate", 0)
+            set this.currentPageLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "LadderNameTextTemplate", 0)
+            
+            call DzFrameSetFont(this.maxPageLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
+            call DzFrameSetFont(this.currentPageLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
+            call DzFrameSetEnable(this.maxPageLetter, false)
+            call DzFrameSetEnable(this.currentPageLetter, false)
+            call DzFrameSetAbsolutePoint(this.maxPageLetter, JN_FRAMEPOINT_TOPLEFT, 0.365, 0.1497)
+            call DzFrameSetAbsolutePoint(this.currentPageLetter, JN_FRAMEPOINT_TOPLEFT, 0.344, 0.1497)
+            call DzFrameShow(this.maxPageLetter, false)
+            call DzFrameShow(this.currentPageLetter, false)
+
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
+                call DzFrameSetText(this.currentPageLetter, "1        ")
+            endif
+
             return this
         endmethod
     endstruct
