@@ -125,6 +125,65 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     globals
         private sList SkinAnimationList
     endglobals
+
+    private function RegisterSkinOfUser takes integer id returns sList
+        local sList skinList = sList.create()
+        local integer i = 0
+
+        // 주황 버섯
+        call skinList.add(SkinInfo(SkinAnimationList[0]).Clone())
+
+        if User_UserList[id].GetClearCountByWorldId(5) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 1", "i <= 7")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(6) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 8", "i <= 14")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(7) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 15", "i <= 21")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(8) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 22", "i <= 29")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(10) >= 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[30]).Clone())
+        endif
+        if User_UserList[id].GetClearCountByWorldId(12) >= 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[31]).Clone())
+        endif
+        if User_UserList[id].GetClearCountByWorldId(13) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 32", "i <= 34")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[35]).Clone())
+        endif
+        if User_UserList[id].GetClearCountByWorldId(11) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 36", "i <= 39")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(9) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 40", "i <= 41")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+
+        if User_UserList[id].BellaPet == 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[42]).Clone())
+        endif
+
+        return skinList
+    endfunction
     
     private struct DecorateSkin
         private real offsetX
@@ -407,6 +466,14 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call this.Show()
         endmethod
 
+        private method BringUserSkinData takes nothing returns nothing
+            if this.playerId == Events.GetEvent(User_ReconnectedEventKey) then
+                set this.skinList = RegisterSkinOfUser(this.playerId)
+                set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
+                call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
+            endif
+        endmethod
+
         public static method create takes sList skinList, integer playerId returns thistype
             local thistype this = thistype.allocate()
             local real offsetY = -0.0045
@@ -450,6 +517,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                 call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
                 call DzFrameSetText(this.currentPageLetter, "1        ")
             endif
+
+            call Events.Add(User_ReconnectedEventKey, this, this.BringUserSkinData)
 
             return this
         endmethod
@@ -1292,65 +1361,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skin.AddMotion("BellaPet004.blp")
         call skin.AddMotion("BellaPet005.blp")
         call SkinAnimationList.add(skin)
-    endfunction
-
-    private function RegisterSkinOfUser takes integer id returns sList
-        local sList skinList = sList.create()
-        local integer i = 0
-
-        // 주황 버섯
-        call skinList.add(SkinInfo(SkinAnimationList[0]).Clone())
-
-        if User_UserList[id].GetClearCountByWorldId(5) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 1", "i <= 7")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(6) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 8", "i <= 14")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(7) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 15", "i <= 21")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(8) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 22", "i <= 29")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(10) >= 1 or DEBUG_MODE then
-            call skinList.add(SkinInfo(SkinAnimationList[30]).Clone())
-        endif
-        if User_UserList[id].GetClearCountByWorldId(12) >= 1 or DEBUG_MODE then
-            call skinList.add(SkinInfo(SkinAnimationList[31]).Clone())
-        endif
-        if User_UserList[id].GetClearCountByWorldId(13) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 32", "i <= 34")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
-            call skinList.add(SkinInfo(SkinAnimationList[35]).Clone())
-        endif
-        if User_UserList[id].GetClearCountByWorldId(11) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 36", "i <= 39")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(9) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 40", "i <= 41")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-
-        if User_UserList[id].BellaPet == 1 or DEBUG_MODE then
-            call skinList.add(SkinInfo(SkinAnimationList[42]).Clone())
-        endif
-
-        return skinList
     endfunction
 
     public function ShowSkinInventoryButton takes boolean isVisible returns nothing

@@ -114,6 +114,7 @@ scope User initializer Init
     
     globals
         public userContainer UserList
+        public key ReconnectedEventKey 
     endglobals
 
     public function PrintCode takes integer i returns nothing
@@ -206,42 +207,68 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("BellaPet", "UserList[idx].BellaPet", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
 
-    private function LoadUserData takes nothing returns nothing
-        local integer i = 0
-        local integer temp = 0
-        local string name
-
-        loop
-            exitwhen i >= PLAYER_MAXINUM
-            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                set name = StringCase(GetPlayerName(Player(i)), false)
-                if GetLocalPlayer() == Player(i) then
-                    call JNObjectCharacterInit(mapId, name, secretKey, clearListName)
-                endif
-                call DataLoadSyncToCaptainJack(i, name, "CaptainJack")
-                call DataLoadSyncToSubway(i, name, "Subway")
-                call DataLoadSyncToValentine(i, name, "Valentine")
-                call DataLoadSyncToBeach(i, name, "Beach")
-                call DataLoadSyncToCoke(i, name, "Coke")
-                call DataLoadSyncToWorldChallenge(i, name, "WorldChallenge")
-                call DataLoadSyncToCafe(i, name, "Cafe")
-                call DataLoadSyncToDesert(i, name, "Desert")
-                call DataLoadSyncToForest(i, name, "Forest")
-                call DataLoadSyncToIceCave(i, name, "IceCave")
-                call DataLoadSyncToDownTown(i, name, "DownTown")
-                call DataLoadSyncToRandom(i, name, "Random")
-                call DataLoadSyncToPinkBeanDesignation(i, name, "PinkBean Designation")
-                call DataLoadSyncToBellaPet(i, name, "Bella Pet")
+    public function LoadUserData takes integer playerId returns nothing
+        local string name = ""
+        
+        if GetPlayerSlotState(Player(playerId)) == PLAYER_SLOT_STATE_PLAYING then
+            set name = StringCase(GetPlayerName(Player(playerId)), false)
+            if GetLocalPlayer() == Player(playerId) then
+                call JNObjectCharacterInit(mapId, name, secretKey, clearListName)
             endif
-            set i = i + 1
-        endloop
+            call DataLoadSyncToCaptainJack(playerId, name, "CaptainJack")
+            call DataLoadSyncToSubway(playerId, name, "Subway")
+            call DataLoadSyncToValentine(playerId, name, "Valentine")
+            call DataLoadSyncToBeach(playerId, name, "Beach")
+            call DataLoadSyncToCoke(playerId, name, "Coke")
+            call DataLoadSyncToWorldChallenge(playerId, name, "WorldChallenge")
+            call DataLoadSyncToCafe(playerId, name, "Cafe")
+            call DataLoadSyncToDesert(playerId, name, "Desert")
+            call DataLoadSyncToForest(playerId, name, "Forest")
+            call DataLoadSyncToIceCave(playerId, name, "IceCave")
+            call DataLoadSyncToDownTown(playerId, name, "DownTown")
+            call DataLoadSyncToRandom(playerId, name, "Random")
+            call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
+            call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")
+        endif
+    endfunction
+
+    private function LoadAllUserData takes nothing returns nothing
+        local integer i = 0
+        //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+            call LoadUserData(i)
+        //! runtextmacro for_end("set i = i + 1")
+    endfunction
+
+    private function ReconnectingSync takes integer playerId returns nothing
+        call LoadUserData(playerId)
+        call TriggerSleepActionByTimer(1.5)
+        if GetLocalPlayer() == Player(playerId) then
+            if JNObjectCharacterServerConnectCheck() == false then
+                call BJDebugMsg("|cffFFFC00※ 서버와의 연결에 실패했습니다.|r")
+            else
+                call BJDebugMsg("|cffFFFC00※ 서버와 연결했습니다!|r")
+            endif
+        endif
+        call Events.Raise(ReconnectedEventKey, 0)
     endfunction
     
+    //! runtextmacro MakeSyncAction("SyncReconnectingKey", "call ReconnectingSync(playerId)")
+
+    public function Reconnecting takes integer playerId returns nothing
+        if GetLocalPlayer() == Player(playerId) then
+            if JNObjectCharacterServerConnectCheck() == false then
+                call BJDebugMsg("|cffFFFC00※ 서버와의 연결을 시도합니다.|r")
+                call DzSyncData(I2S(SyncReconnectingKey), "")
+            else
+                call BJDebugMsg("|cffFFFC00※ 이미 서버와 연결중입니다.|r")
+            endif
+        endif
+    endfunction
 
     private function Init takes nothing returns nothing
         call JNUse()
         call CreateUserContainer()
-        call LoadUserData()
+        call LoadAllUserData()
     endfunction
 endscope
 

@@ -416,6 +416,8 @@ scope Command initializer init
             call RandomStage_ReSelect()
         elseif s == "-연습모드" then
             call PracticeCommand_Execute.execute(i)
+        elseif s == "-재연결" or s == "-rec" then
+            call User_Reconnecting.evaluate(i - 1)
         elseif SubString(s, 0, 2) == "-p" and (GetPlayerName(GetTriggerPlayer()) == "2p4p" or StringCase(GetPlayerName(GetTriggerPlayer()), false) == "junghun") then
             call RandomStage_PrintRandomStage(GetTriggerPlayer())
         endif
