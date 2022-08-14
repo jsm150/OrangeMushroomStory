@@ -62,6 +62,10 @@ scope User initializer Init
             return this
         endmethod
 
+        public static method CreateArgsString takes string money returns thistype
+            return thistype.create(S2I(money))
+        endmethod
+
         static if DEBUG_MODE then
         public static method onInit takes nothing returns nothing
             local thistype this = thistype.create(10)
@@ -216,6 +220,7 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("BellaPet", "UserList[idx].BellaPet", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
+    //! runtextmacro MakeFuncToDataLoadSync("GoldLeaf", "UserList[idx].GoldLeaf", "Money.CreateArgsString", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
 
     public function LoadUserData takes integer playerId returns nothing
         local string name = ""
@@ -239,6 +244,7 @@ scope User initializer Init
             call DataLoadSyncToRandom(playerId, name, "Random")
             call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
             call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")
+            call DataLoadSyncToGoldLeaf(playerId, name, "GoldLeaf")
         endif
     endfunction
 
