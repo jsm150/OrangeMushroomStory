@@ -390,7 +390,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local integer skinIdx
             local integer frameIdx
             local integer max = thistype.size * this.page
-            local integer money = User_UserList[this.playerId].money.ToInt()
+            local string money = User_UserList[this.playerId].GoldLeaf.ToString()
 
             if max > this.skinList.size then
                 set max = this.skinList.size
@@ -408,7 +408,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.maxPageLetter, true)
                 call DzFrameShow(this.currentPageLetter, true)
-                call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + I2S(money) + "        ")
+                call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + money + "        ")
                 call DzFrameShow(this.goldLeafLetter, true)
             endif
         endmethod

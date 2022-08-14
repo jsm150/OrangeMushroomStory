@@ -46,6 +46,16 @@ scope User initializer Init
             return this.money
         endmethod
 
+        public method ToString takes nothing returns string
+            local string s = JNStringReverse(I2S(this.ToInt()))
+            local integer i = 0
+            
+            //! runtextmacro for("set i = 3", "i < JNStringLength(s)")
+                set s = JNStringInsert(s, i, ",")
+            //! runtextmacro for_end("set i = i + 4")
+            return JNStringReverse(s)
+        endmethod
+
         public static method create takes integer money returns thistype
             local thistype this = thistype.allocate(money)
             set this.money = money
@@ -71,7 +81,7 @@ scope User initializer Init
         worldCount ClearList
         integer PinkBeanDesignation = 0
         integer BellaPet = 0
-        Money money
+        Money GoldLeaf
 
         public method GetClearCountByWorldId takes integer worldId returns integer
             if worldId >= 1 and worldId <= 2 then
