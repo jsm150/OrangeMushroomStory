@@ -272,7 +272,7 @@ scope User initializer Init
     endfunction
 endscope
 
-//! textmacro MakeFuncToDataLoadSync takes keyword, memory, converter, args, action
+//! textmacro MakeFuncToDataLoadSync takes keyword, variable, converter, args, action
     globals
         private key $keyword$Key
     endglobals
@@ -285,7 +285,7 @@ endscope
 
     private function SyncDataTo$keyword$ takes nothing returns nothing
         local integer idx = GetPlayerId(DzGetTriggerSyncPlayer())
-        set $memory$ = $converter$(DzGetTriggerSyncData())
+        set $variable$ = $converter$(DzGetTriggerSyncData())
     endfunction
 
     private struct MakeFuncToDataLoadSyncInit$keyword$
