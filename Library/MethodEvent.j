@@ -93,6 +93,7 @@ library MethodEvent needs StructList
     struct Events
         private static constant integer DUMMY_DESTRUCTABLE_TYPE_ID = 'OTis'
         private static hashtable H = InitHashtable()
+        private static hashtable HS = InitHashtable()
         private static trigger T = null
 
         public static method GetEvent takes integer eventKey returns integer
@@ -113,15 +114,18 @@ library MethodEvent needs StructList
 
         public static method Add takes integer eventKey, integer object, methodPtr action returns trigger
             local destructable d = LoadDestructableHandle( H,0,eventKey )
-            set T = CreateTrigger()
+            set T = LoadTriggerHandle(HS, 0, eventKey)
 
             if d == null then
                 set d = CreateDestructable(DUMMY_DESTRUCTABLE_TYPE_ID,0,0,0,0,0)
                 call KillDestructable( d )
                 call SaveDestructableHandle( H,0,eventKey,d )
+                
+                set T = CreateTrigger()
+                call SaveTriggerHandle(HS, 0, eventKey, T)
+                call TriggerRegisterDeathEvent( T, d )
             endif
 
-            call TriggerRegisterDeathEvent( T, d )
             call EventMethod.AddByEvaluate(T, object, action)
             set d = null
 
