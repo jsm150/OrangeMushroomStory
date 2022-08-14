@@ -286,6 +286,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private integer playerId
         private integer currentPageLetter
         private integer maxPageLetter
+        private integer goldLeafLetter
         private sList skinList
 
         private method MousePosInInventory takes real posX, real posY, integer itemIdx returns boolean
@@ -330,6 +331,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local integer skinIdx
             local integer frameIdx
             local integer max = thistype.size * this.page
+            local integer money = User_UserList[this.playerId].money.ToInt()
 
             if max > this.skinList.size then
                 set max = this.skinList.size
@@ -347,6 +349,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.maxPageLetter, true)
                 call DzFrameShow(this.currentPageLetter, true)
+                call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + I2S(money) + "        ")
+                call DzFrameShow(this.goldLeafLetter, true)
             endif
         endmethod
 
@@ -371,6 +375,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.maxPageLetter, false)
                 call DzFrameShow(this.currentPageLetter, false)
+                call DzFrameShow(this.goldLeafLetter, false)
             endif
         endmethod
 
@@ -423,16 +428,23 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
 
             set this.maxPageLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "LadderNameTextTemplate", 0)
-            set this.currentPageLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "LadderNameTextTemplate", 0)
             
             call DzFrameSetFont(this.maxPageLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
-            call DzFrameSetFont(this.currentPageLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
             call DzFrameSetEnable(this.maxPageLetter, false)
-            call DzFrameSetEnable(this.currentPageLetter, false)
             call DzFrameSetAbsolutePoint(this.maxPageLetter, JN_FRAMEPOINT_TOPLEFT, 0.365, 0.1497)
-            call DzFrameSetAbsolutePoint(this.currentPageLetter, JN_FRAMEPOINT_TOPLEFT, 0.344, 0.1497)
             call DzFrameShow(this.maxPageLetter, false)
+            
+            set this.currentPageLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "LadderNameTextTemplate", 0)
+            call DzFrameSetFont(this.currentPageLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
+            call DzFrameSetEnable(this.currentPageLetter, false)
+            call DzFrameSetAbsolutePoint(this.currentPageLetter, JN_FRAMEPOINT_TOPLEFT, 0.344, 0.1497)
             call DzFrameShow(this.currentPageLetter, false)
+
+            set this.goldLeafLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "", 0)
+            call DzFrameSetFont(this.goldLeafLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
+            call DzFrameSetEnable(this.goldLeafLetter, false)
+            call DzFrameSetAbsolutePoint(this.goldLeafLetter, JN_FRAMEPOINT_TOPLEFT, 0.514, 0.5319)
+            call DzFrameShow(this.goldLeafLetter, false)
 
             if GetLocalPlayer() == Player(playerId) then
                 call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
