@@ -20,11 +20,58 @@ scope User initializer Init
         integer Random = 0
     endstruct
 
+    public struct Money extends Verification
+        private integer money
+
+        public method operator Data takes nothing returns integer
+            return this.money
+        endmethod
+
+        public method operator Data= takes integer val returns nothing
+            set this.money = val
+        endmethod
+
+        public method Plus takes integer money returns thistype
+            call this.Restore()
+            return thistype.create(this.money + money)
+        endmethod
+
+        public method Minus takes integer money returns thistype
+            call this.Restore()
+            return thistype.create(this.money - money)
+        endmethod
+
+        public method ToInt takes nothing returns integer
+            call this.Restore()
+            return this.money
+        endmethod
+
+        public static method create takes integer money returns thistype
+            local thistype this = thistype.allocate(money)
+            set this.money = money
+            return this
+        endmethod
+
+        static if DEBUG_MODE then
+        public static method onInit takes nothing returns nothing
+            local thistype this = thistype.create(10)
+            call JNWriteLog("  money: " + I2S(this.money))
+            set this = this.Plus(20)
+            call JNWriteLog("  money: " + I2S(this.money))
+            set this.money = 60
+            call JNWriteLog("  money: " + I2S(this.money))
+            set this = this.Minus(25)
+            call JNWriteLog("  money: " + I2S(this.money))
+        endmethod
+        endif
+    endstruct
+
     private struct user
         static integer WorldCount = 10
         worldCount ClearList
         integer PinkBeanDesignation = 0
         integer BellaPet = 0
+        Money money
 
         public method GetClearCountByWorldId takes integer worldId returns integer
             if worldId >= 1 and worldId <= 2 then
