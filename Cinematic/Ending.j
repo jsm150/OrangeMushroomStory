@@ -411,17 +411,24 @@ library Ending initializer init needs Cinematic
 
                     if RandomStage_isRandom == true then
                         call User_IncWorldClearCount.evaluate(name, "Random")
+                        call User_UserList[i - 1].Deposit(GetRandomInt(100, 500))
                     elseif Status.World == 4 then
                         call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 두 번째 비밀 코드: " + WorldKey_Code2[i] )
                         call User_IncWorldClearCount.evaluate(name, "Subway")
+                        call User_UserList[i - 1].Deposit(200)
                     elseif Status.World == 3 then
                         call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 첫 번째 비밀 코드: " + WorldKey_Code[i] )
                         call User_IncWorldClearCount.evaluate(name, "CaptainJack")
+                        call User_UserList[i - 1].Deposit(150)
                     elseif Status.World == 9 then
                         call User_IncWorldClearCount.evaluate(name, "Cafe")
+                        call User_UserList[i - 1].Deposit(450)
                     elseif Status.World == 13 then
                         call User_IncWorldClearCount.evaluate(name, "DownTown")
+                        call User_UserList[i - 1].Deposit(800)
                     endif
+
+                    call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[i - 1].GoldLeaf.ToInt())
 
                     if GetLocalPlayer() == Player(i-1) then
                         if JNObjectCharacterServerConnectCheck() then

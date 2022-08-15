@@ -225,13 +225,19 @@ library TrueEnding3END initializer init needs Cinematic
 
                     if SecretEnding == true then
                         call User_IncWorldClearCount.evaluate(name, "WorldChallenge")
+                        call User_UserList[i - 1].Deposit(450)
                     elseif TrueEnding3_PyramidEnding == true then
                         call User_IncWorldClearCount.evaluate(name, "Desert")
+                        call User_UserList[i - 1].Deposit(450)
                     elseif EllinEnding == true then
                         call User_IncWorldClearCount.evaluate(name, "Forest")
+                        call User_UserList[i - 1].Deposit(450)
                     else
                         call User_IncWorldClearCount.evaluate(name, "Coke")
+                        call User_UserList[i - 1].Deposit(200)
                     endif
+
+                    call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[i - 1].GoldLeaf.ToInt())
 
                     if GetLocalPlayer() == Player(i-1) then
                         if JNObjectCharacterServerConnectCheck() then

@@ -275,6 +275,8 @@ library TrueEnding4ENDPart2 initializer init needs Cinematic
                     set name = StringCase(GetPlayerName(Player(i - 1)), false)
                     if TrueEnding3_CaveEnding == true then
                         call User_IncWorldClearCount.evaluate(name, "IceCave")
+                        call User_UserList[i - 1].Deposit(700)
+                        call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[i - 1].GoldLeaf.ToInt())
                     endif
 
                     if GetLocalPlayer() == Player(i-1) then

@@ -428,6 +428,7 @@ library TrueEnding2 initializer init needs Cinematic
         local integer i = 1
         local real px = 13376
         local real py = -19200
+        local string name
         
         call tk.start(4.0, false, function CMTTick2)
         if tk.data == 0 then
@@ -648,11 +649,14 @@ library TrueEnding2 initializer init needs Cinematic
             loop
             exitwhen i > PLAYER_MAXINUM
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                    call User_IncWorldClearCount.evaluate(StringCase(GetPlayerName(Player(i - 1)), false), "Beach")
+                    set name = StringCase(GetPlayerName(Player(i - 1)), false)
+                    call User_IncWorldClearCount.evaluate(name, "Beach")
+                    call User_UserList[i - 1].Deposit(300)
+                    call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[i - 1].GoldLeaf.ToInt())
 
                     if GetLocalPlayer() == Player(i-1) then
                         if JNObjectCharacterServerConnectCheck() then
-                            call JNObjectCharacterSave(mapId, StringCase(GetPlayerName(Player(i - 1)), false), secretKey, clearListName)
+                            call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
                             call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
                         else
                             call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
