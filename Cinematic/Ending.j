@@ -410,27 +410,17 @@ library Ending initializer init needs Cinematic
                     set name = StringCase(GetPlayerName(Player(i - 1)), false)
 
                     if RandomStage_isRandom == true then
-                        call User_IncWorldClearCount.evaluate(name, "Random")
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "Random")
                     elseif Status.World == 4 then
                         call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 두 번째 비밀 코드: " + WorldKey_Code2[i] )
-                        call User_IncWorldClearCount.evaluate(name, "Subway")
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "Subway")
                     elseif Status.World == 3 then
                         call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 첫 번째 비밀 코드: " + WorldKey_Code[i] )
-                        call User_IncWorldClearCount.evaluate(name, "CaptainJack")
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "CaptainJack")
                     elseif Status.World == 9 then
-                        call User_IncWorldClearCount.evaluate(name, "Cafe")
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "Cafe")
                     elseif Status.World == 13 then
-                        call User_IncWorldClearCount.evaluate(name, "DownTown")
-                    endif
-
-                    if GetLocalPlayer() == Player(i-1) then
-                        if JNObjectCharacterServerConnectCheck() then
-                            call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
-                            call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
-                        else
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 현재 버전이 최신버전인지 확인해 주십시오.|r")
-                        endif
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "DownTown")
                     endif
                 endif
             set i = i + 1

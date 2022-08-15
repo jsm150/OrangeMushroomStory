@@ -63,6 +63,7 @@
 //! import "Library\Observer.j"
 //! import "Library\RandomStage.j"
 //! import "Library\RectList.j"
+//! import "Library\Security.j"
 //! import "Library\ShortTeleport.j"
 //! import "Library\StageClear.j"
 //! import "Library\StoneStatue.j"

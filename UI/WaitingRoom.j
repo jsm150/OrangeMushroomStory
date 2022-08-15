@@ -32,6 +32,10 @@ scope WaitingRoom
         local integer buttonCase
         local integer ControllerLink
         local integer buttonText
+
+        if DEBUG_MODE then
+            return
+        endif
         
         if AniScreenCount >= AniScreenMaxCount and DzFrameGetAlpha(DzFrameFindByName("CancelButton", 0)) == 255 then
             set buttonBackdrop = DzCreateFrameByTagName("BACKDROP", "", DzFrameFindByName("MapInfoPane", 0), "StandardMenuButtonBaseBackdrop", 0)

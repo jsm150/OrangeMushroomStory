@@ -3,6 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
+        constant string mapVersion = "v11.0"
     endglobals
 
     private struct worldCount
@@ -20,11 +21,72 @@ scope User initializer Init
         integer Random = 0
     endstruct
 
+    public struct Money extends Verification
+        private integer money
+
+        public method operator Data takes nothing returns integer
+            return this.money
+        endmethod
+
+        public method operator Data= takes integer val returns nothing
+            set this.money = val
+        endmethod
+
+        public method Plus takes integer money returns thistype
+            call this.Restore()
+            return thistype.create(this.money + money)
+        endmethod
+
+        public method Minus takes integer money returns thistype
+            call this.Restore()
+            return thistype.create(this.money - money)
+        endmethod
+
+        public method ToInt takes nothing returns integer
+            call this.Restore()
+            return this.money
+        endmethod
+
+        public method ToString takes nothing returns string
+            local string s = JNStringReverse(I2S(this.ToInt()))
+            local integer i = 0
+            
+            //! runtextmacro for("set i = 3", "i < JNStringLength(s)")
+                set s = JNStringInsert(s, i, ",")
+            //! runtextmacro for_end("set i = i + 4")
+            return JNStringReverse(s)
+        endmethod
+
+        public static method create takes integer money returns thistype
+            local thistype this = thistype.allocate(money)
+            set this.money = money
+            return this
+        endmethod
+
+        public static method CreateArgsString takes string money returns thistype
+            return thistype.create(S2I(money))
+        endmethod
+
+        static if DEBUG_MODE then
+        public static method onInit takes nothing returns nothing
+            local thistype this = thistype.create(10)
+            call JNWriteLog("  money: " + I2S(this.money))
+            set this = this.Plus(20)
+            call JNWriteLog("  money: " + I2S(this.money))
+            set this.money = 60
+            call JNWriteLog("  money: " + I2S(this.money))
+            set this = this.Minus(25)
+            call JNWriteLog("  money: " + I2S(this.money))
+        endmethod
+        endif
+    endstruct
+
     private struct user
         static integer WorldCount = 10
         worldCount ClearList
         integer PinkBeanDesignation = 0
         integer BellaPet = 0
+        Money GoldLeaf
 
         public method GetClearCountByWorldId takes integer worldId returns integer
             if worldId >= 1 and worldId <= 2 then
@@ -56,6 +118,12 @@ scope User initializer Init
             endif
         endmethod
 
+        public method Deposit takes integer amount returns nothing
+            local Money temp = this.GoldLeaf
+            set this.GoldLeaf = temp.Plus(amount)
+            call temp.destroy()
+        endmethod
+
         static method create takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.ClearList = worldCount.create()
@@ -67,6 +135,7 @@ scope User initializer Init
     
     globals
         public userContainer UserList
+        public key ReconnectedEventKey 
     endglobals
 
     public function PrintCode takes integer i returns nothing
@@ -132,6 +201,53 @@ scope User initializer Init
         call JNObjectCharacterSetInt(name, world, JNObjectCharacterGetInt(name, world) + 1)
     endfunction
 
+    public function GameClearDataUpload takes integer playerId, string name, string world returns nothing
+        local Money amount
+
+        if world == "CaptainJack" then
+            set amount = Money.create(150)
+        elseif world == "Subway" then
+            set amount = Money.create(200)
+        elseif world == "Valentine" then
+            set amount = Money.create(200)
+        elseif world == "Beach" then
+            set amount = Money.create(300)
+        elseif world == "Coke" then
+            set amount = Money.create(200)
+        elseif world == "WorldChallenge" then
+            set amount = Money.create(450)
+        elseif world == "Cafe" then
+            set amount = Money.create(450)
+        elseif world == "Desert" then
+            set amount = Money.create(450)
+        elseif world == "Forest" then
+            set amount = Money.create(450)
+        elseif world == "IceCave" then
+            set amount = Money.create(700)
+        elseif world == "DownTown" then
+            set amount = Money.create(800)
+        elseif world == "Random" then
+            set amount = Money.create(GetRandomInt(100, 500))
+        endif
+
+        call User_UserList[playerId].Deposit(amount.ToInt())
+        call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[playerId].GoldLeaf.ToInt())
+        call IncWorldClearCount(name, world)
+
+        if GetLocalPlayer() == Player(playerId) then
+            if JNObjectCharacterServerConnectCheck() then
+                call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
+                call JNPublicMapServerLog(mapId, secretKey, mapVersion, name + "님이 " + world + " 월드를 클리어 했습니다.")
+                call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
+            else
+                call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
+                call BJDebugMsg("　　　　　　|cffFF0202※ 현재 버전이 최신버전인지 확인해 주십시오.|r")
+            endif
+        endif
+
+        call amount.destroy()
+    endfunction
+
     private function CreateUserContainer takes nothing returns nothing
         local integer i = 0
 
@@ -158,47 +274,75 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("BellaPet", "UserList[idx].BellaPet", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
+    //! runtextmacro MakeFuncToDataLoadSync("GoldLeaf", "UserList[idx].GoldLeaf", "Money.CreateArgsString", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
 
-    private function LoadUserData takes nothing returns nothing
-        local integer i = 0
-        local integer temp = 0
-        local string name
-
-        loop
-            exitwhen i >= PLAYER_MAXINUM
-            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                set name = StringCase(GetPlayerName(Player(i)), false)
-                if GetLocalPlayer() == Player(i) then
-                    call JNObjectCharacterInit(mapId, name, secretKey, clearListName)
-                endif
-                call DataLoadSyncToCaptainJack(i, name, "CaptainJack")
-                call DataLoadSyncToSubway(i, name, "Subway")
-                call DataLoadSyncToValentine(i, name, "Valentine")
-                call DataLoadSyncToBeach(i, name, "Beach")
-                call DataLoadSyncToCoke(i, name, "Coke")
-                call DataLoadSyncToWorldChallenge(i, name, "WorldChallenge")
-                call DataLoadSyncToCafe(i, name, "Cafe")
-                call DataLoadSyncToDesert(i, name, "Desert")
-                call DataLoadSyncToForest(i, name, "Forest")
-                call DataLoadSyncToIceCave(i, name, "IceCave")
-                call DataLoadSyncToDownTown(i, name, "DownTown")
-                call DataLoadSyncToRandom(i, name, "Random")
-                call DataLoadSyncToPinkBeanDesignation(i, name, "PinkBean Designation")
-                call DataLoadSyncToBellaPet(i, name, "Bella Pet")
+    public function LoadUserData takes integer playerId returns nothing
+        local string name = ""
+        
+        if GetPlayerSlotState(Player(playerId)) == PLAYER_SLOT_STATE_PLAYING then
+            set name = StringCase(GetPlayerName(Player(playerId)), false)
+            if GetLocalPlayer() == Player(playerId) then
+                call JNObjectCharacterInit(mapId, name, secretKey, clearListName)
             endif
-            set i = i + 1
-        endloop
+            call DataLoadSyncToCaptainJack(playerId, name, "CaptainJack")
+            call DataLoadSyncToSubway(playerId, name, "Subway")
+            call DataLoadSyncToValentine(playerId, name, "Valentine")
+            call DataLoadSyncToBeach(playerId, name, "Beach")
+            call DataLoadSyncToCoke(playerId, name, "Coke")
+            call DataLoadSyncToWorldChallenge(playerId, name, "WorldChallenge")
+            call DataLoadSyncToCafe(playerId, name, "Cafe")
+            call DataLoadSyncToDesert(playerId, name, "Desert")
+            call DataLoadSyncToForest(playerId, name, "Forest")
+            call DataLoadSyncToIceCave(playerId, name, "IceCave")
+            call DataLoadSyncToDownTown(playerId, name, "DownTown")
+            call DataLoadSyncToRandom(playerId, name, "Random")
+            call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
+            call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")
+            call DataLoadSyncToGoldLeaf(playerId, name, "GoldLeaf")
+        endif
+    endfunction
+
+    private function LoadAllUserData takes nothing returns nothing
+        local integer i = 0
+        //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+            call LoadUserData(i)
+        //! runtextmacro for_end("set i = i + 1")
+    endfunction
+
+    private function ReconnectingSync takes integer playerId returns nothing
+        call LoadUserData(playerId)
+        call TriggerSleepActionByTimer(1.5)
+        if GetLocalPlayer() == Player(playerId) then
+            if JNObjectCharacterServerConnectCheck() == false then
+                call BJDebugMsg("|cffFFFC00※ 서버와의 연결에 실패했습니다.|r")
+            else
+                call BJDebugMsg("|cffFFFC00※ 서버와 연결했습니다!|r")
+            endif
+        endif
+        call Events.Raise(ReconnectedEventKey, 0)
     endfunction
     
+    //! runtextmacro MakeSyncAction("SyncReconnectingKey", "call ReconnectingSync(playerId)")
+
+    public function Reconnecting takes integer playerId returns nothing
+        if GetLocalPlayer() == Player(playerId) then
+            if JNObjectCharacterServerConnectCheck() == false then
+                call BJDebugMsg("|cffFFFC00※ 서버와의 연결을 시도합니다.|r")
+                call DzSyncData(I2S(SyncReconnectingKey), "")
+            else
+                call BJDebugMsg("|cffFFFC00※ 이미 서버와 연결중입니다.|r")
+            endif
+        endif
+    endfunction
 
     private function Init takes nothing returns nothing
         call JNUse()
         call CreateUserContainer()
-        call LoadUserData()
+        call LoadAllUserData()
     endfunction
 endscope
 
-//! textmacro MakeFuncToDataLoadSync takes keyword, memory, converter, args, action
+//! textmacro MakeFuncToDataLoadSync takes keyword, variable, converter, args, action
     globals
         private key $keyword$Key
     endglobals
@@ -211,7 +355,7 @@ endscope
 
     private function SyncDataTo$keyword$ takes nothing returns nothing
         local integer idx = GetPlayerId(DzGetTriggerSyncPlayer())
-        set $memory$ = $converter$(DzGetTriggerSyncData())
+        set $variable$ = $converter$(DzGetTriggerSyncData())
     endfunction
 
     private struct MakeFuncToDataLoadSyncInit$keyword$

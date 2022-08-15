@@ -430,6 +430,7 @@ library TrueEnding initializer init needs Cinematic
         local integer i = 1
         local real px = 13376
         local real py = -19200
+        local string name
         
         call tk.start(4.0, false, function CMTTick2)
         if tk.data == 0 then
@@ -654,17 +655,8 @@ library TrueEnding initializer init needs Cinematic
             loop
             exitwhen i > PLAYER_MAXINUM
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                    call User_IncWorldClearCount.evaluate(StringCase(GetPlayerName(Player(i - 1)), false), "Valentine")
-
-                    if GetLocalPlayer() == Player(i-1) then
-                        if JNObjectCharacterServerConnectCheck() then
-                            call JNObjectCharacterSave(mapId, StringCase(GetPlayerName(Player(i - 1)), false), secretKey, clearListName)
-                            call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
-                        else
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 현재 버전이 최신버전인지 확인해 주십시오.|r")
-                        endif
-                    endif
+                    set name = StringCase(GetPlayerName(Player(i - 1)), false)
+                    call User_GameClearDataUpload.evaluate(i - 1, name, "Valentine")
                 endif
             set i = i + 1
             endloop

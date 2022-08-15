@@ -125,6 +125,65 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     globals
         private sList SkinAnimationList
     endglobals
+
+    private function RegisterSkinOfUser takes integer id returns sList
+        local sList skinList = sList.create()
+        local integer i = 0
+
+        // 주황 버섯
+        call skinList.add(SkinInfo(SkinAnimationList[0]).Clone())
+
+        if User_UserList[id].GetClearCountByWorldId(5) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 1", "i <= 7")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(6) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 8", "i <= 14")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(7) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 15", "i <= 21")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(8) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 22", "i <= 29")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(10) >= 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[30]).Clone())
+        endif
+        if User_UserList[id].GetClearCountByWorldId(12) >= 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[31]).Clone())
+        endif
+        if User_UserList[id].GetClearCountByWorldId(13) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 32", "i <= 34")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[35]).Clone())
+        endif
+        if User_UserList[id].GetClearCountByWorldId(11) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 36", "i <= 39")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+        if User_UserList[id].GetClearCountByWorldId(9) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 40", "i <= 41")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+
+        if User_UserList[id].BellaPet == 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[42]).Clone())
+        endif
+
+        return skinList
+    endfunction
     
     private struct DecorateSkin
         private real offsetX
@@ -281,8 +340,12 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private static real offsetX = 0.051
         private static real offsetY = -0.063
         private integer page = 1
+        private integer lastPage
         private boolean hasCoolDown = false
         private integer playerId
+        private integer currentPageLetter
+        private integer maxPageLetter
+        private integer goldLeafLetter
         private sList skinList
 
         private method MousePosInInventory takes real posX, real posY, integer itemIdx returns boolean
@@ -327,6 +390,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local integer skinIdx
             local integer frameIdx
             local integer max = thistype.size * this.page
+            local string money = User_UserList[this.playerId].GoldLeaf.ToString()
 
             if max > this.skinList.size then
                 set max = this.skinList.size
@@ -340,6 +404,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                 endif
                 set frameIdx = frameIdx + 1
             //! runtextmacro for_end("set skinIdx = skinIdx + 1")
+
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(this.maxPageLetter, true)
+                call DzFrameShow(this.currentPageLetter, true)
+                call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + money + "        ")
+                call DzFrameShow(this.goldLeafLetter, true)
+            endif
         endmethod
 
         public method Hide takes nothing returns nothing
@@ -359,15 +430,28 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                 endif
                 set frameIdx = frameIdx + 1
             //! runtextmacro for_end("set skinIdx = skinIdx + 1")
+
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(this.maxPageLetter, false)
+                call DzFrameShow(this.currentPageLetter, false)
+                call DzFrameShow(this.goldLeafLetter, false)
+            endif
+        endmethod
+
+        private method CurrentPageLetterSetting takes nothing returns nothing
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetText(this.currentPageLetter, I2S(this.page) + "        ")
+            endif
         endmethod
         
         public method NextPage takes nothing returns nothing
-            if this.page >= R2I((this.skinList.size - 1) / thistype.size) + 1 then
+            if this.page >= this.lastPage then
                 return
             endif
 
             call this.Hide()
             set this.page = this.page + 1
+            call this.CurrentPageLetterSetting()
             call this.Show()
         endmethod
 
@@ -378,7 +462,16 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
             call this.Hide()
             set this.page = this.page - 1
+            call this.CurrentPageLetterSetting()
             call this.Show()
+        endmethod
+
+        private method BringUserSkinData takes nothing returns nothing
+            if this.playerId == Events.GetEvent(User_ReconnectedEventKey) then
+                set this.skinList = RegisterSkinOfUser(this.playerId)
+                set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
+                call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
+            endif
         endmethod
 
         public static method create takes sList skinList, integer playerId returns thistype
@@ -399,6 +492,34 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             
             set this.skinList = skinList
             set this.playerId = playerId
+            set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
+
+            set this.maxPageLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "LadderNameTextTemplate", 0)
+            
+            call DzFrameSetFont(this.maxPageLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
+            call DzFrameSetEnable(this.maxPageLetter, false)
+            call DzFrameSetAbsolutePoint(this.maxPageLetter, JN_FRAMEPOINT_TOPLEFT, 0.365, 0.1497)
+            call DzFrameShow(this.maxPageLetter, false)
+            
+            set this.currentPageLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "LadderNameTextTemplate", 0)
+            call DzFrameSetFont(this.currentPageLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
+            call DzFrameSetEnable(this.currentPageLetter, false)
+            call DzFrameSetAbsolutePoint(this.currentPageLetter, JN_FRAMEPOINT_TOPLEFT, 0.344, 0.1497)
+            call DzFrameShow(this.currentPageLetter, false)
+
+            set this.goldLeafLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "", 0)
+            call DzFrameSetFont(this.goldLeafLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
+            call DzFrameSetEnable(this.goldLeafLetter, false)
+            call DzFrameSetAbsolutePoint(this.goldLeafLetter, JN_FRAMEPOINT_TOPLEFT, 0.514, 0.5319)
+            call DzFrameShow(this.goldLeafLetter, false)
+
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
+                call DzFrameSetText(this.currentPageLetter, "1        ")
+            endif
+
+            call Events.Add(User_ReconnectedEventKey, this, this.BringUserSkinData)
+
             return this
         endmethod
     endstruct
@@ -1240,65 +1361,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skin.AddMotion("BellaPet004.blp")
         call skin.AddMotion("BellaPet005.blp")
         call SkinAnimationList.add(skin)
-    endfunction
-
-    private function RegisterSkinOfUser takes integer id returns sList
-        local sList skinList = sList.create()
-        local integer i = 0
-
-        // 주황 버섯
-        call skinList.add(SkinInfo(SkinAnimationList[0]).Clone())
-
-        if User_UserList[id].GetClearCountByWorldId(5) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 1", "i <= 7")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(6) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 8", "i <= 14")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(7) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 15", "i <= 21")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(8) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 22", "i <= 29")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(10) >= 1 or DEBUG_MODE then
-            call skinList.add(SkinInfo(SkinAnimationList[30]).Clone())
-        endif
-        if User_UserList[id].GetClearCountByWorldId(12) >= 1 or DEBUG_MODE then
-            call skinList.add(SkinInfo(SkinAnimationList[31]).Clone())
-        endif
-        if User_UserList[id].GetClearCountByWorldId(13) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 32", "i <= 34")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
-            call skinList.add(SkinInfo(SkinAnimationList[35]).Clone())
-        endif
-        if User_UserList[id].GetClearCountByWorldId(11) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 36", "i <= 39")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-        if User_UserList[id].GetClearCountByWorldId(9) >= 1 or DEBUG_MODE then
-            //! runtextmacro for("set i = 40", "i <= 41")
-                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
-            //! runtextmacro for_end("set i = i + 1")
-        endif
-
-        if User_UserList[id].BellaPet == 1 or DEBUG_MODE then
-            call skinList.add(SkinInfo(SkinAnimationList[42]).Clone())
-        endif
-
-        return skinList
     endfunction
 
     public function ShowSkinInventoryButton takes boolean isVisible returns nothing
