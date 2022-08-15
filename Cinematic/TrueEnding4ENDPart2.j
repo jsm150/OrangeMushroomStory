@@ -274,19 +274,7 @@ library TrueEnding4ENDPart2 initializer init needs Cinematic
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
                     set name = StringCase(GetPlayerName(Player(i - 1)), false)
                     if TrueEnding3_CaveEnding == true then
-                        call User_IncWorldClearCount.evaluate(name, "IceCave")
-                        call User_UserList[i - 1].Deposit(700)
-                        call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[i - 1].GoldLeaf.ToInt())
-                    endif
-
-                    if GetLocalPlayer() == Player(i-1) then
-                        if JNObjectCharacterServerConnectCheck() then
-                            call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
-                            call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
-                        else
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 현재 버전이 최신버전인지 확인해 주십시오.|r")
-                        endif
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "IceCave")
                     endif
                 endif
                 set i = i + 1

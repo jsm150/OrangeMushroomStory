@@ -224,29 +224,13 @@ library TrueEnding3END initializer init needs Cinematic
                     set name = StringCase(GetPlayerName(Player(i - 1)), false)
 
                     if SecretEnding == true then
-                        call User_IncWorldClearCount.evaluate(name, "WorldChallenge")
-                        call User_UserList[i - 1].Deposit(450)
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "WorldChallenge")
                     elseif TrueEnding3_PyramidEnding == true then
-                        call User_IncWorldClearCount.evaluate(name, "Desert")
-                        call User_UserList[i - 1].Deposit(450)
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "Desert")
                     elseif EllinEnding == true then
-                        call User_IncWorldClearCount.evaluate(name, "Forest")
-                        call User_UserList[i - 1].Deposit(450)
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "Forest")
                     else
-                        call User_IncWorldClearCount.evaluate(name, "Coke")
-                        call User_UserList[i - 1].Deposit(200)
-                    endif
-
-                    call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[i - 1].GoldLeaf.ToInt())
-
-                    if GetLocalPlayer() == Player(i-1) then
-                        if JNObjectCharacterServerConnectCheck() then
-                            call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
-                            call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
-                        else
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 현재 버전이 최신버전인지 확인해 주십시오.|r")
-                        endif
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "Coke")
                     endif
                 endif
             set i = i + 1

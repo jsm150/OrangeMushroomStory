@@ -12,6 +12,7 @@ static if not REFORGED_MODE then
     native JNSetLogUseType takes string MapId, string UserId, string SecretKey, string Character, string Version, string Loging, string LogType returns string
     native JNMapServerLog takes string MapId, string SecretKey, string Version, string Loging returns string
     native JNMapServerLogUseType takes string MapId, string SecretKey, string Version, string Loging, string LogType returns string
+    native JNPublicMapServerLog takes string MapId, string SecretKey, string Version, string Loging returns string
     native JNReplayReg takes string MapId, string SecretKey, string UserId, string Character, string Loging returns nothing
     native JNScreenShotReg takes string MapId, string SecretKey, string UserId, string Character, string Loging returns boolean
     native JNPublicScreenShotReg takes string MapId, string SecretKey, string UserId, string Character, string Tag, string Loging returns boolean

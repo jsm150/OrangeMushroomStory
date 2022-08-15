@@ -656,19 +656,7 @@ library TrueEnding initializer init needs Cinematic
             exitwhen i > PLAYER_MAXINUM
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
                     set name = StringCase(GetPlayerName(Player(i - 1)), false)
-                    call User_IncWorldClearCount.evaluate(name, "Valentine")
-                    call User_UserList[i - 1].Deposit(200)
-                    call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[i - 1].GoldLeaf.ToInt())
-
-                    if GetLocalPlayer() == Player(i-1) then
-                        if JNObjectCharacterServerConnectCheck() then
-                            call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
-                            call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
-                        else
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 현재 버전이 최신버전인지 확인해 주십시오.|r")
-                        endif
-                    endif
+                    call User_GameClearDataUpload.evaluate(i - 1, name, "Valentine")
                 endif
             set i = i + 1
             endloop

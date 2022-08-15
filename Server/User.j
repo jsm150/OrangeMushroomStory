@@ -3,6 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
+        constant string mapVersion = "v11.0"
     endglobals
 
     private struct worldCount
@@ -198,6 +199,53 @@ scope User initializer Init
 
     public function IncWorldClearCount takes string name, string world returns nothing
         call JNObjectCharacterSetInt(name, world, JNObjectCharacterGetInt(name, world) + 1)
+    endfunction
+
+    public function GameClearDataUpload takes integer playerId, string name, string world returns nothing
+        local Money amount
+
+        if world == "CaptainJack" then
+            set amount = Money.create(150)
+        elseif world == "Subway" then
+            set amount = Money.create(200)
+        elseif world == "Valentine" then
+            set amount = Money.create(200)
+        elseif world == "Beach" then
+            set amount = Money.create(300)
+        elseif world == "Coke" then
+            set amount = Money.create(200)
+        elseif world == "WorldChallenge" then
+            set amount = Money.create(450)
+        elseif world == "Cafe" then
+            set amount = Money.create(450)
+        elseif world == "Desert" then
+            set amount = Money.create(450)
+        elseif world == "Forest" then
+            set amount = Money.create(450)
+        elseif world == "IceCave" then
+            set amount = Money.create(700)
+        elseif world == "DownTown" then
+            set amount = Money.create(800)
+        elseif world == "Random" then
+            set amount = Money.create(GetRandomInt(100, 500))
+        endif
+
+        call User_UserList[playerId].Deposit(amount.ToInt())
+        call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[playerId].GoldLeaf.ToInt())
+        call IncWorldClearCount(name, world)
+
+        if GetLocalPlayer() == Player(playerId) then
+            if JNObjectCharacterServerConnectCheck() then
+                call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
+                call JNPublicMapServerLog(mapId, secretKey, mapVersion, name + "님이 " + world + " 월드를 클리어 했습니다.")
+                call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
+            else
+                call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
+                call BJDebugMsg("　　　　　　|cffFF0202※ 현재 버전이 최신버전인지 확인해 주십시오.|r")
+            endif
+        endif
+
+        call amount.destroy()
     endfunction
 
     private function CreateUserContainer takes nothing returns nothing
