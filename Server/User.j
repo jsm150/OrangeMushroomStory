@@ -3,7 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        constant string mapVersion = "v11.0"
+        string mapVersion = "v11.0"
     endglobals
 
     private struct worldCount
@@ -336,6 +336,9 @@ scope User initializer Init
     endfunction
 
     private function Init takes nothing returns nothing
+        static if DEBUG_MODE then
+            set mapVersion = "TEST"
+        endif
         call JNUse()
         call CreateUserContainer()
         call LoadAllUserData()
