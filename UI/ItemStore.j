@@ -73,6 +73,44 @@ library ItemStore initializer Init
         private static integer menuFrame = 0
         private static integer bodyTopFrame = 0
         private static integer bodyFrame = 0
+        private integer playerId
+        private ItemUIList itemList
+
+        public method Show takes nothing returns nothing
+            local string money = User_UserList[this.playerId].GoldLeaf.ToString()
+
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(thistype.topLeftFrame, true)
+                call DzFrameShow(thistype.leftFrame, true)
+                call DzFrameShow(thistype.topFrame, true)
+                call DzFrameShow(thistype.topRightFrame, true)
+                call DzFrameShow(thistype.menuFrame, true)
+                call DzFrameShow(thistype.bodyTopFrame, true)
+                call DzFrameShow(thistype.bodyFrame, true)
+            endif
+            call this.itemList.Show(this.playerId, thistype.menuFrame)
+        endmethod
+
+        public method Hide takes nothing returns nothing
+            if GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(thistype.topLeftFrame, false)
+                call DzFrameShow(thistype.leftFrame, false)
+                call DzFrameShow(thistype.topFrame, false)
+                call DzFrameShow(thistype.topRightFrame, false)
+                call DzFrameShow(thistype.menuFrame, false)
+                call DzFrameShow(thistype.bodyTopFrame, false)
+                call DzFrameShow(thistype.bodyFrame, false)
+            endif
+            call this.itemList.Hide(this.playerId)
+        endmethod
+
+        public static method create takes integer playerId, ItemUIList itemList returns thistype
+            local thistype this = thistype.allocate()
+            set this.playerId = playerId
+            set this.itemList = itemList
+
+            return this
+        endmethod
 
         private static method onInit takes nothing returns nothing
             local real topLeftFrameSizeX = 0.087
@@ -86,8 +124,6 @@ library ItemStore initializer Init
             set thistype.bodyTopFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
             set thistype.bodyFrame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
 
-
-
             call DzFrameSetSize(thistype.topLeftFrame, topLeftFrameSizeX, topLeftFrameSizeX * 1.13)
             call DzFrameSetSize(thistype.leftFrame, topLeftFrameSizeX, topLeftFrameSizeX * 3.48)
             call DzFrameSetSize(thistype.topFrame, topFrameSizeY * 10.395 * 0.6, topFrameSizeY)
@@ -95,9 +131,6 @@ library ItemStore initializer Init
             call DzFrameSetSize(thistype.menuFrame, topFrameSizeY * 2.2, topFrameSizeY * 0.9)
             call DzFrameSetSize(thistype.bodyTopFrame, topFrameSizeY * 6.623, topFrameSizeY * 0.9)
             call DzFrameSetSize(thistype.bodyFrame, topFrameSizeY * 8.828, topFrameSizeY * 6.45)
-
-
-
 
             call DzFrameSetTexture(thistype.topLeftFrame, "ItemStoreTopLeft.blp", 0)
             call DzFrameSetTexture(thistype.leftFrame, "ItemStoreLeft.blp", 0)
@@ -107,7 +140,6 @@ library ItemStore initializer Init
             call DzFrameSetTexture(thistype.bodyTopFrame, "ItemStoreBodyTop.blp", 0)
             call DzFrameSetTexture(thistype.bodyFrame, "ItemStoreBody.blp", 0)
 
-
             call DzFrameSetAbsolutePoint(thistype.topLeftFrame, JN_FRAMEPOINT_TOPLEFT, thistype.posX, thistype.posY)
             call DzFrameSetPoint(thistype.leftFrame, JN_FRAMEPOINT_TOPLEFT, thistype.topLeftFrame, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
             call DzFrameSetPoint(thistype.topFrame, JN_FRAMEPOINT_TOPLEFT, thistype.topLeftFrame, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
@@ -116,16 +148,13 @@ library ItemStore initializer Init
             call DzFrameSetPoint(thistype.bodyTopFrame, JN_FRAMEPOINT_TOPLEFT, thistype.menuFrame, JN_FRAMEPOINT_TOPRIGHT, 0, 0)
             call DzFrameSetPoint(thistype.bodyFrame, JN_FRAMEPOINT_TOPLEFT, thistype.menuFrame, JN_FRAMEPOINT_BOTTOMLEFT, 0, 0)
 
-
-            call DzFrameShow(thistype.topLeftFrame, true)
-            call DzFrameShow(thistype.leftFrame, true)
-            call DzFrameShow(thistype.topFrame, true)
-            call DzFrameShow(thistype.topRightFrame, true)
-            call DzFrameShow(thistype.menuFrame, true)
-            call DzFrameShow(thistype.bodyTopFrame, true)
-            call DzFrameShow(thistype.bodyFrame, true)
-
-
+            call DzFrameShow(thistype.topLeftFrame, false)
+            call DzFrameShow(thistype.leftFrame, false)
+            call DzFrameShow(thistype.topFrame, false)
+            call DzFrameShow(thistype.topRightFrame, false)
+            call DzFrameShow(thistype.menuFrame, false)
+            call DzFrameShow(thistype.bodyTopFrame, false)
+            call DzFrameShow(thistype.bodyFrame, false)
         endmethod
     endstruct
 
