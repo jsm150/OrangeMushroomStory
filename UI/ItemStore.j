@@ -97,10 +97,21 @@ library ItemStore initializer Init
         private integer goldLeafLetter
         private integer playerId
         private ItemUIList itemList
+        private boolean isOpen = false
+
+        private method MousePosInCloseButton takes real posX, real posY returns boolean
+            // 워크 화면상의 절대좌표
+            local real minX = 0.548
+            local real maxX = 0.570
+            local real minY = 0.511
+            local real maxY = 0.534
+            return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
+        endmethod
 
         public method Show takes nothing returns nothing
             local string money = User_UserList[this.playerId].GoldLeaf.ToString()
 
+            set this.isOpen = true
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(thistype.topLeftFrame, true)
                 call DzFrameShow(thistype.leftFrame, true)
@@ -116,6 +127,7 @@ library ItemStore initializer Init
         endmethod
 
         public method Hide takes nothing returns nothing
+            set this.isOpen = false
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(thistype.topLeftFrame, false)
                 call DzFrameShow(thistype.leftFrame, false)
@@ -127,6 +139,16 @@ library ItemStore initializer Init
                 call DzFrameShow(this.goldLeafLetter, false)
             endif
             call this.itemList.Hide(this.playerId)
+        endmethod
+
+        public method ClickDown takes real posX, real posY returns nothing
+            if this.isOpen == false then
+                return
+            endif
+
+            if MousePosInCloseButton(posX, posY) then
+                call this.Hide()
+            endif
         endmethod
 
         public static method create takes integer playerId, ItemUIList itemList returns thistype
@@ -204,6 +226,10 @@ library ItemStore initializer Init
     globals
         public ItemStoreUI array ItemStoreUIList[PLAYER_MAXINUM]
     endglobals
+
+    public function ClickDownAction takes integer i, real x, real y returns nothing
+        call ItemStoreUIList[i].ClickDown(x, y)
+    endfunction
 
     private function CreateItemUIList takes nothing returns ItemUIList
         local ItemUIList uiList = ItemUIList.create()

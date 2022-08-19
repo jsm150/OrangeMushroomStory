@@ -12,6 +12,7 @@ scope MouseClick initializer Init
         debug call JNWriteLog("  screen x: " + R2S(x))
         debug call JNWriteLog("  screen y: " + R2S(y))
         call SkinFrame_ClickDownAction(i, x, y)
+        call ItemStore_ClickDownAction(i, x, y)
     //! runtextmacro Make_ButtonMouseEvent_Bottom("ScreenClickDown")
 
     //! runtextmacro Make_ButtonMouseEvent_Top("ScreenClickUp")
