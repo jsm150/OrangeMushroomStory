@@ -12,9 +12,12 @@ library ItemStore initializer Init
         public method Show takes integer playerId, integer idx, integer refFrame returns nothing
             local real offsetX = 0.015
             local real offsetY = -0.01
+            local real offsetIdxX = 0.08
+            local real offsetIdxY = -0.11
 
             if GetLocalPlayer() == Player(playerId) then
-                call DzFrameSetPoint(this.frame, JN_FRAMEPOINT_TOPLEFT, refFrame, JN_FRAMEPOINT_BOTTOMLEFT, offsetX, offsetY)
+                call DzFrameSetPoint(this.frame, JN_FRAMEPOINT_TOPLEFT, refFrame, JN_FRAMEPOINT_BOTTOMLEFT,/*
+                    */ offsetX + offsetIdxX * ModuloInteger(idx, 5), offsetY + offsetIdxY * R2I(idx / 5))
                 call DzFrameShow(this.frame, true)
             endif
         endmethod
