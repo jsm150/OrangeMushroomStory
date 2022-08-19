@@ -3,6 +3,66 @@ library ItemStore initializer Init
         private key continueAddItemBoughtEvent
     endglobals
 
+    private struct ItemUI
+        private static constant real sizeX = 0.233
+        private static constant real sizeY = 0.315
+        private static constant real ratio = 0.3
+        private integer frame
+
+        public method Show takes integer playerId, integer idx, integer refFrame returns nothing
+            local real offsetX = 0.015
+            local real offsetY = -0.01
+
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetPoint(this.frame, JN_FRAMEPOINT_TOPLEFT, refFrame, JN_FRAMEPOINT_BOTTOMLEFT, offsetX, offsetY)
+                call DzFrameShow(this.frame, true)
+            endif
+        endmethod
+
+        public method Hide takes integer playerId returns nothing
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameShow(this.frame, false)
+            endif
+        endmethod
+
+        public static method create takes string blp returns thistype
+            local thistype this = thistype.allocate()
+            set this.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
+            call DzFrameSetSize(this.frame, thistype.sizeX * thistype.ratio, thistype.sizeY * thistype.ratio)
+            call DzFrameSetTexture(this.frame, blp, 0)
+            call DzFrameShow(this.frame, false)
+            return this
+        endmethod
+    endstruct
+
+    private struct ItemUIList
+        private sList list
+
+        public method Show takes integer playerId, integer refFrame returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < this.list.size")
+                call ItemUI(this.list[i]).Show(playerId, i, refFrame)
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
+
+        public method Hide takes integer playerId returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < this.list.size")
+                call ItemUI(this.list[i]).Hide(playerId)
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
+
+        public method Add takes ItemUI itemUI returns nothing
+            call list.add(itemUI)
+        endmethod
+
+        public static method create takes nothing returns thistype
+            local thistype this = thistype.allocate()
+            set this.list = sList.create()
+            return this
+        endmethod
+    endstruct
+
     private struct ItemStoreUI
         private static constant real posX = 0.07
         private static constant real posY = 0.545
