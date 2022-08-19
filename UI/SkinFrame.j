@@ -458,7 +458,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
 
         private method BringUserSkinData takes nothing returns nothing
-            if this.playerId == Events.GetEvent(User_ReconnectedEventKey) then
+            if this.playerId == Events.GetEventArgs(User_ReconnectedEventKey) then
                 set this.skinList = RegisterSkinOfUser(this.playerId)
                 set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
                 call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
@@ -939,7 +939,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     private struct DecorateSkinChange
         public method Apply takes nothing returns nothing
-            local InventoryClickedEvent ev = Events.GetEvent(decorateSkinChangeKey)
+            local InventoryClickedEvent ev = Events.GetEventArgs(decorateSkinChangeKey)
             local integer id = ev.Id
             local DecorateSkinInfo skin = ev.Skin
             local SkinSelectWindow window = ev.Window
@@ -963,7 +963,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     private struct CharacterSkinChange
         public method Apply takes nothing returns nothing
-            local InventoryClickedEvent ev = Events.GetEvent(characterSkinChangeKey)
+            local InventoryClickedEvent ev = Events.GetEventArgs(characterSkinChangeKey)
             local integer id = ev.Id + 1
             local SkinInfo skin = ev.Skin
             local SkinSelectWindow window = ev.Window

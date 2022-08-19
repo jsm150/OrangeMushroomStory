@@ -215,6 +215,16 @@ library ItemStore initializer Init
             call this.itemList.Click(this.playerId, posX, posY)
         endmethod
 
+        public method Redisplay takes nothing returns nothing
+            local string money = User_UserList[this.playerId].GoldLeaf.ToString()
+
+            if this.playerId == Events.GetEventArgs(User_GoldLeafChangedEvent) and GetLocalPlayer() == Player(this.playerId) then
+                call DzFrameShow(this.goldLeafLetter, false)
+                call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + money + "        ")
+                call DzFrameShow(this.goldLeafLetter, true)
+            endif
+        endmethod
+
         public static method create takes integer playerId, ItemUIList itemList returns thistype
             local thistype this = thistype.allocate()
             set this.playerId = playerId
@@ -225,6 +235,7 @@ library ItemStore initializer Init
             call DzFrameSetEnable(this.goldLeafLetter, false)
             call DzFrameSetAbsolutePoint(this.goldLeafLetter, JN_FRAMEPOINT_TOPLEFT, 0.4853, 0.528)
             call DzFrameShow(this.goldLeafLetter, false)
+            call Events.Add(User_GoldLeafChangedEvent, this, this.Redisplay)
             return this
         endmethod
 
@@ -276,7 +287,7 @@ library ItemStore initializer Init
 
     private struct ItemPurchase
         public method Apply takes nothing returns nothing
-            local ItemBuyRequestEventArgs args = Events.GetEvent(ItemBuyRequestEvent)
+            local ItemBuyRequestEventArgs args = Events.GetEventArgs(ItemBuyRequestEvent)
             local integer playerId = args.playerId
             local integer quantity = args.quantity
             local Money price = args.price
@@ -294,7 +305,7 @@ library ItemStore initializer Init
                 return
             endif
 
-            call User_UserList[playerId].Withdraw(price.ToInt())
+            call User_UserList[playerId].Withdraw(playerId, price.ToInt())
             call Events.Raise(ContinueAddItemBoughtEvent, playerId)
 
             call args.destroy()
@@ -309,8 +320,9 @@ library ItemStore initializer Init
 
     private struct ContinueAddItem
         public method Apply takes nothing returns nothing
-            local integer playerId = Events.GetEvent(ContinueAddItemBoughtEvent)
+            local integer playerId = Events.GetEventArgs(ContinueAddItemBoughtEvent)
             call Status.SetContinues(Status.Continues + 2)
+            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[playerId + 1] + GetPlayerName(Player(playerId)) + "|r 님이 컨티뉴 2개를 구매했습니다." )
         endmethod
 
         private static method onInit takes nothing returns nothing

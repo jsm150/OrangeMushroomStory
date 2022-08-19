@@ -96,7 +96,7 @@ library MethodEvent needs StructList
         private static hashtable HS = InitHashtable()
         private static trigger T = null
 
-        public static method GetEvent takes integer eventKey returns integer
+        public static method GetEventArgs takes integer eventKey returns integer
             return LoadInteger(H, eventKey, 0)
         endmethod
 

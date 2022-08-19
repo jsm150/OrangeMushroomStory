@@ -4,6 +4,7 @@ scope User initializer Init
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
         string mapVersion = "v11.0"
+        public key GoldLeafChangedEvent
     endglobals
 
     private struct worldCount
@@ -122,16 +123,18 @@ scope User initializer Init
             return this.GoldLeaf.ToInt()
         endmethod
 
-        public method Withdraw takes integer amount returns nothing
+        public method Withdraw takes integer playerId, integer amount returns nothing
             local Money temp = this.GoldLeaf
             set this.GoldLeaf = temp.Minus(amount)
             call temp.destroy()
+            call Events.Raise(GoldLeafChangedEvent, playerId)
         endmethod
 
-        public method Deposit takes integer amount returns nothing
+        public method Deposit takes integer playerId, integer amount returns nothing
             local Money temp = this.GoldLeaf
             set this.GoldLeaf = temp.Plus(amount)
             call temp.destroy()
+            call Events.Raise(GoldLeafChangedEvent, playerId)
         endmethod
 
         static method create takes nothing returns thistype
@@ -240,7 +243,7 @@ scope User initializer Init
             set amount = Money.create(GetRandomInt(100, 500))
         endif
 
-        call User_UserList[playerId].Deposit(amount.ToInt())
+        call User_UserList[playerId].Deposit(playerId, amount.ToInt())
         call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[playerId].GoldLeaf.ToInt())
         call IncWorldClearCount(name, world)
 
