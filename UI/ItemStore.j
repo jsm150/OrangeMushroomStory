@@ -180,7 +180,24 @@ library ItemStore initializer Init
         endmethod
     endstruct
 
+    globals
+        public ItemStoreUI array ItemStoreUIList[PLAYER_MAXINUM]
+    endglobals
+
+    private function CreateItemUIList takes nothing returns ItemUIList
+        local ItemUIList uiList = ItemUIList.create()
+        call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp"))
+        return uiList
+    endfunction
+
     private function Init takes nothing returns nothing
-        
+        local ItemUIList uiList = CreateItemUIList()
+        local integer i = 0
+
+        //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                set ItemStoreUIList[i] = ItemStoreUI.create(i, uiList)
+            endif
+        //! runtextmacro for_end("set i = i + 1")
     endfunction
 endlibrary
