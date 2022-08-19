@@ -306,6 +306,9 @@ library ItemStore initializer Init
             endif
 
             call User_UserList[playerId].Withdraw(playerId, price.ToInt())
+            call User_UserList[playerId].GoldLeafUpload(playerId)
+            call PrivateLogging.evaluate(playerId, GetPlayerName(Player(playerId)) + "님이 골드리프 " + price.ToString() + "을 사용했습니다. 잔액은 " /*
+                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafUseLog")
             call Events.Raise(ContinueAddItemBoughtEvent, playerId)
 
             call args.destroy()

@@ -3,7 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        string mapVersion = "v11.0"
+        string mapVersion = "v11.1"
         public key GoldLeafChangedEvent
     endglobals
 
@@ -116,6 +116,14 @@ scope User initializer Init
                 return this.ClearList.DownTown
             else
                 return 0
+            endif
+        endmethod
+
+        public method GoldLeafUpload takes integer playerId returns nothing
+            local string name = StringCase(GetPlayerName(Player(playerId)), false)
+            call JNObjectCharacterSetInt(name, "GoldLeaf", this.GoldLeaf.ToInt())
+            if GetLocalPlayer() == Player(playerId) then
+                call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
             endif
         endmethod
 
@@ -349,6 +357,12 @@ scope User initializer Init
             else
                 call BJDebugMsg("|cffFFFC00※ 이미 서버와 연결중입니다.|r")
             endif
+        endif
+    endfunction
+
+    function PrivateLogging takes integer playerId, string log, string logType returns nothing
+        if GetLocalPlayer() == Player(playerId) then
+            call JNMapServerLogUseType(mapId, secretKey, mapVersion, log, logType)
         endif
     endfunction
 
