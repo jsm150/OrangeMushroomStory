@@ -73,6 +73,7 @@ library ItemStore initializer Init
         private static integer menuFrame = 0
         private static integer bodyTopFrame = 0
         private static integer bodyFrame = 0
+        private integer goldLeafLetter
         private integer playerId
         private ItemUIList itemList
 
@@ -87,6 +88,8 @@ library ItemStore initializer Init
                 call DzFrameShow(thistype.menuFrame, true)
                 call DzFrameShow(thistype.bodyTopFrame, true)
                 call DzFrameShow(thistype.bodyFrame, true)
+                call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + money + "        ")
+                call DzFrameShow(this.goldLeafLetter, true)
             endif
             call this.itemList.Show(this.playerId, thistype.menuFrame)
         endmethod
@@ -100,6 +103,7 @@ library ItemStore initializer Init
                 call DzFrameShow(thistype.menuFrame, false)
                 call DzFrameShow(thistype.bodyTopFrame, false)
                 call DzFrameShow(thistype.bodyFrame, false)
+                call DzFrameShow(this.goldLeafLetter, false)
             endif
             call this.itemList.Hide(this.playerId)
         endmethod
@@ -109,6 +113,11 @@ library ItemStore initializer Init
             set this.playerId = playerId
             set this.itemList = itemList
 
+            set this.goldLeafLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "", 0)
+            call DzFrameSetFont(this.goldLeafLetter, "Fonts\\DFHeiMd.ttf", 0.014, 0)
+            call DzFrameSetEnable(this.goldLeafLetter, false)
+            call DzFrameSetAbsolutePoint(this.goldLeafLetter, JN_FRAMEPOINT_TOPLEFT, 0.4853, 0.528)
+            call DzFrameShow(this.goldLeafLetter, false)
             return this
         endmethod
 
