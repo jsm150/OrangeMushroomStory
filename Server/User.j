@@ -21,7 +21,7 @@ scope User initializer Init
         integer Random = 0
     endstruct
 
-    public struct Money extends Verification
+    struct Money extends Verification
         private integer money
 
         public method operator Data takes nothing returns integer

@@ -8,32 +8,50 @@ library ItemStore initializer Init
         private static constant real sizeY = 0.315
         private static constant real ratio = 0.3
         private integer frame
+        private Money price
+        private integer quantity
+        private integer priceLetter
 
         public method Show takes integer playerId, integer idx, integer refFrame returns nothing
             local real offsetX = 0.015
             local real offsetY = -0.01
             local real offsetIdxX = 0.08
             local real offsetIdxY = -0.11
+            local real x = offsetX + offsetIdxX * ModuloInteger(idx, 5)
+            local real y = offsetY + offsetIdxY * R2I(idx / 5)
+            local string price = this.price.ToString()
 
             if GetLocalPlayer() == Player(playerId) then
-                call DzFrameSetPoint(this.frame, JN_FRAMEPOINT_TOPLEFT, refFrame, JN_FRAMEPOINT_BOTTOMLEFT,/*
-                    */ offsetX + offsetIdxX * ModuloInteger(idx, 5), offsetY + offsetIdxY * R2I(idx / 5))
+                call DzFrameSetPoint(this.frame, JN_FRAMEPOINT_TOPLEFT, refFrame, JN_FRAMEPOINT_BOTTOMLEFT, x, y)
+                call DzFrameSetPoint(this.priceLetter, JN_FRAMEPOINT_BOTTOMLEFT, this.frame, JN_FRAMEPOINT_BOTTOMLEFT, 0.035, 0.005)
+                call DzFrameSetText(this.priceLetter, "|cff5a5656" + price + "        ")
+
                 call DzFrameShow(this.frame, true)
+                call DzFrameShow(this.priceLetter, true)
             endif
         endmethod
 
         public method Hide takes integer playerId returns nothing
             if GetLocalPlayer() == Player(playerId) then
                 call DzFrameShow(this.frame, false)
+                call DzFrameShow(this.priceLetter, false)
             endif
         endmethod
 
-        public static method create takes string blp returns thistype
+        public static method create takes string blp, Money price, integer quantity returns thistype
             local thistype this = thistype.allocate()
             set this.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
             call DzFrameSetSize(this.frame, thistype.sizeX * thistype.ratio, thistype.sizeY * thistype.ratio)
             call DzFrameSetTexture(this.frame, blp, 0)
             call DzFrameShow(this.frame, false)
+
+            set this.priceLetter = DzCreateFrameByTagName("TEXT", "", DzGetGameUI(), "", 0)
+            call DzFrameSetFont(this.priceLetter, "Fonts\\DFHeiMd.ttf", 0.0112, 0)
+            call DzFrameSetEnable(this.priceLetter, false)
+            call DzFrameShow(this.priceLetter, false)
+
+            set this.price = price
+            set this.quantity = quantity
             return this
         endmethod
     endstruct
@@ -189,17 +207,16 @@ library ItemStore initializer Init
 
     private function CreateItemUIList takes nothing returns ItemUIList
         local ItemUIList uiList = ItemUIList.create()
-        call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp"))
+        call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", Money.create(300), 1))
         return uiList
     endfunction
 
     private function Init takes nothing returns nothing
-        local ItemUIList uiList = CreateItemUIList()
         local integer i = 0
 
         //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
             if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                set ItemStoreUIList[i] = ItemStoreUI.create(i, uiList)
+                set ItemStoreUIList[i] = ItemStoreUI.create(i, CreateItemUIList())
             endif
         //! runtextmacro for_end("set i = i + 1")
     endfunction
