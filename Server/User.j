@@ -311,7 +311,11 @@ scope User initializer Init
             call DataLoadSyncToRandom(playerId, name, "Random")
             call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
             call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")
-            call DataLoadSyncToGoldLeaf(playerId, name, "GoldLeaf")
+            static if DEBUG_MODE then
+                set UserList[playerId].GoldLeaf = Money.create(99999)
+            else
+                call DataLoadSyncToGoldLeaf(playerId, name, "GoldLeaf")
+            endif
         endif
     endfunction
 
