@@ -201,3 +201,10 @@ library ItemStore initializer Init
         //! runtextmacro for_end("set i = i + 1")
     endfunction
 endlibrary
+
+/*
+* 화면에 띄우려는 blp의 크기가 123 * 456 일때,
+* DzFrameSetSize의 사이즈를 x: 123, y: 456 으로 입력하면, 크기는 정사각형이 된다.
+* blp의 비율을 맞춰서 화면에 띄우려면
+* x: 123, y: 456 * (456 / 123) 으로 사이즈를 줘야한다.
+*/
