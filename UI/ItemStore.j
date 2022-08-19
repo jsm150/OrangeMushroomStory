@@ -1,7 +1,24 @@
 library ItemStore initializer Init
     globals
-        private key continueAddItemBoughtEvent
+        private key ContinueAddItemBoughtEvent
+        private key ItemBuyRequestEvent
     endglobals
+
+    private struct ItemBuyRequestEventArgs
+        integer sender
+        integer playerId
+        integer quantity
+        Money price
+
+        public static method create takes integer sender, integer playerId, integer quantity, Money price returns thistype
+            local thistype this = thistype.allocate()
+            set this.sender = sender
+            set this.playerId = playerId
+            set this.quantity = quantity
+            set this.price = price
+            return this
+        endmethod
+    endstruct
 
     private struct ItemUI
         private static constant real sizeX = 0.233
@@ -11,6 +28,26 @@ library ItemStore initializer Init
         private Money price
         private integer quantity
         private integer priceLetter
+
+        public method ClickInPurchaseButton takes integer idx, real posX, real posY returns boolean
+            local real minX = 0.174
+            local real maxX = 0.241
+            local real minY = 0.352
+            local real maxY = 0.370
+            local real offsetX = 0.081
+            local real offsetY = -0.109
+            local integer offsetCountX = ModuloInteger(idx, 5)
+            local integer offsetCountY = R2I(idx / 5)
+            return posX >= minX + offsetX * offsetCountX /*
+                */ and posX <= maxX + offsetX * offsetCountX /*
+                */ and posY >= minY + offsetY * offsetCountY /*
+                */ and posY <= maxY + offsetY * offsetCountY
+        endmethod
+
+        public method Purchase takes integer playerId returns nothing
+            set this.quantity = this.quantity - 1
+            call Events.Raise(ItemBuyRequestEvent, ItemBuyRequestEventArgs.create(this, playerId, this.quantity + 1, this.price))
+        endmethod
 
         public method Show takes integer playerId, integer idx, integer refFrame returns nothing
             local real offsetX = 0.015
@@ -38,6 +75,10 @@ library ItemStore initializer Init
             endif
         endmethod
 
+        public method RollBack takes nothing returns nothing
+            set this.quantity = this.quantity + 1
+        endmethod
+
         public static method create takes string blp, Money price, integer quantity returns thistype
             local thistype this = thistype.allocate()
             set this.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
@@ -58,6 +99,28 @@ library ItemStore initializer Init
 
     private struct ItemUIList
         private sList list
+
+        private method ClickInItemArea takes real posX, real posY returns boolean
+            local real minX = 0.159
+            local real maxX = 0.577
+            local real minY = 0.149
+            local real maxY = 0.454
+            return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
+        endmethod
+
+        public method Click takes integer playerId, real posX, real posY returns nothing
+            local integer i = 0
+            if ClickInItemArea(posX, posY) == false then
+                return
+            endif
+
+            //! runtextmacro for("set i = 0", "i < this.list.size")
+                if ItemUI(this.list[i]).ClickInPurchaseButton(i, posX, posY) then
+                    call ItemUI(this.list[i]).Purchase(playerId)
+                    return
+                endif
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
 
         public method Show takes integer playerId, integer refFrame returns nothing
             local integer i = 0
@@ -99,7 +162,7 @@ library ItemStore initializer Init
         private ItemUIList itemList
         private boolean isOpen = false
 
-        private method MousePosInCloseButton takes real posX, real posY returns boolean
+        private method ClickInCloseButton takes real posX, real posY returns boolean
             // 워크 화면상의 절대좌표
             local real minX = 0.548
             local real maxX = 0.570
@@ -146,9 +209,10 @@ library ItemStore initializer Init
                 return
             endif
 
-            if MousePosInCloseButton(posX, posY) then
+            if ClickInCloseButton(posX, posY) then
                 call this.Hide()
             endif
+            call this.itemList.Click(this.playerId, posX, posY)
         endmethod
 
         public static method create takes integer playerId, ItemUIList itemList returns thistype
@@ -210,16 +274,48 @@ library ItemStore initializer Init
         endmethod
     endstruct
 
+    private struct ItemPurchase
+        public method Apply takes nothing returns nothing
+            local ItemBuyRequestEventArgs args = Events.GetEvent(ItemBuyRequestEvent)
+            local integer playerId = args.playerId
+            local integer quantity = args.quantity
+            local Money price = args.price
+            
+            if quantity == 0 then
+                debug call JNWriteLog("매진되었습니다.")
+                call ItemUI(args.sender).RollBack()
+                call args.destroy()
+                return
+            endif
+            if User_UserList[playerId].Balance() < price.ToInt() then
+                debug call JNWriteLog("잔액부족 입니다.")
+                call ItemUI(args.sender).RollBack()
+                call args.destroy()
+                return
+            endif
+
+            call User_UserList[playerId].Withdraw(price.ToInt())
+            call Events.Raise(ContinueAddItemBoughtEvent, playerId)
+
+            call args.destroy()
+        endmethod
+        
+        private static method onInit takes nothing returns nothing
+            local thistype this = thistype.create()
+            call Events.Add(ItemBuyRequestEvent, this, this.Apply)
+        endmethod
+    endstruct
+
 
     private struct ContinueAddItem
         public method Apply takes nothing returns nothing
-            local integer playerId = Events.GetEvent(continueAddItemBoughtEvent)
+            local integer playerId = Events.GetEvent(ContinueAddItemBoughtEvent)
             call Status.SetContinues(Status.Continues + 2)
         endmethod
 
         private static method onInit takes nothing returns nothing
             local thistype this = thistype.create()
-            call Events.Add(continueAddItemBoughtEvent, this, this.Apply)
+            call Events.Add(ContinueAddItemBoughtEvent, this, this.Apply)
         endmethod
     endstruct
 

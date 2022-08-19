@@ -118,6 +118,16 @@ scope User initializer Init
             endif
         endmethod
 
+        public method Balance takes nothing returns integer
+            return this.GoldLeaf.ToInt()
+        endmethod
+
+        public method Withdraw takes integer amount returns nothing
+            local Money temp = this.GoldLeaf
+            set this.GoldLeaf = temp.Minus(amount)
+            call temp.destroy()
+        endmethod
+
         public method Deposit takes integer amount returns nothing
             local Money temp = this.GoldLeaf
             set this.GoldLeaf = temp.Plus(amount)
