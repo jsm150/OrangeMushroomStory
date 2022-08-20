@@ -3,7 +3,8 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        constant string mapVersion = "v11.0"
+        string mapVersion = "v11.1"
+        public key GoldLeafChangedEvent
     endglobals
 
     private struct worldCount
@@ -21,7 +22,7 @@ scope User initializer Init
         integer Random = 0
     endstruct
 
-    public struct Money extends Verification
+    struct Money extends Verification
         private integer money
 
         public method operator Data takes nothing returns integer
@@ -118,10 +119,30 @@ scope User initializer Init
             endif
         endmethod
 
-        public method Deposit takes integer amount returns nothing
+        public method GoldLeafUpload takes integer playerId returns nothing
+            local string name = StringCase(GetPlayerName(Player(playerId)), false)
+            call JNObjectCharacterSetInt(name, "GoldLeaf", this.GoldLeaf.ToInt())
+            if GetLocalPlayer() == Player(playerId) then
+                call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
+            endif
+        endmethod
+
+        public method Balance takes nothing returns integer
+            return this.GoldLeaf.ToInt()
+        endmethod
+
+        public method Withdraw takes integer playerId, integer amount returns nothing
+            local Money temp = this.GoldLeaf
+            set this.GoldLeaf = temp.Minus(amount)
+            call temp.destroy()
+            call Events.Raise(GoldLeafChangedEvent, playerId)
+        endmethod
+
+        public method Deposit takes integer playerId, integer amount returns nothing
             local Money temp = this.GoldLeaf
             set this.GoldLeaf = temp.Plus(amount)
             call temp.destroy()
+            call Events.Raise(GoldLeafChangedEvent, playerId)
         endmethod
 
         static method create takes nothing returns thistype
@@ -230,7 +251,7 @@ scope User initializer Init
             set amount = Money.create(GetRandomInt(100, 500))
         endif
 
-        call User_UserList[playerId].Deposit(amount.ToInt())
+        call User_UserList[playerId].Deposit(playerId, amount.ToInt())
         call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[playerId].GoldLeaf.ToInt())
         call IncWorldClearCount(name, world)
 
@@ -298,7 +319,11 @@ scope User initializer Init
             call DataLoadSyncToRandom(playerId, name, "Random")
             call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
             call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")
-            call DataLoadSyncToGoldLeaf(playerId, name, "GoldLeaf")
+            static if DEBUG_MODE then
+                set UserList[playerId].GoldLeaf = Money.create(99999)
+            else
+                call DataLoadSyncToGoldLeaf(playerId, name, "GoldLeaf")
+            endif
         endif
     endfunction
 
@@ -335,7 +360,16 @@ scope User initializer Init
         endif
     endfunction
 
+    function PrivateLogging takes integer playerId, string log, string logType returns nothing
+        if GetLocalPlayer() == Player(playerId) then
+            call JNMapServerLogUseType(mapId, secretKey, mapVersion, log, logType)
+        endif
+    endfunction
+
     private function Init takes nothing returns nothing
+        static if DEBUG_MODE then
+            set mapVersion = "TEST"
+        endif
         call JNUse()
         call CreateUserContainer()
         call LoadAllUserData()

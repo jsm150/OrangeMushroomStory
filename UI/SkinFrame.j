@@ -4,15 +4,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private key decorateSkinChangeKey
     endglobals
 
-    private function GetMouseFrameX takes integer posX returns real
-        return posX / (DzGetWindowWidth() / 0.8)
-    endfunction
-
-    private function GetMouseFrameY takes integer posY returns real
-        local integer height = DzGetWindowHeight()
-        return (height - posY) / (height / 0.6)
-    endfunction
-
     private struct SkinInfo
         private integer id
         private string name
@@ -467,7 +458,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
 
         private method BringUserSkinData takes nothing returns nothing
-            if this.playerId == Events.GetEvent(User_ReconnectedEventKey) then
+            if this.playerId == Events.GetEventArgs(User_ReconnectedEventKey) then
                 set this.skinList = RegisterSkinOfUser(this.playerId)
                 set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
                 call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
@@ -840,7 +831,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
         private static method MouseOverEvent takes nothing returns nothing
             local thistype this = GetPlayerId(GetLocalPlayer()) + 1
-            call this.MouseOver(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
+            call this.MouseOver(GetMouseFrameX.evaluate(DzGetMouseXRelative()), GetMouseFrameY.evaluate(DzGetMouseYRelative()))
         endmethod
 
         public static method create takes integer playerId returns thistype
@@ -948,7 +939,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     private struct DecorateSkinChange
         public method Apply takes nothing returns nothing
-            local InventoryClickedEvent ev = Events.GetEvent(decorateSkinChangeKey)
+            local InventoryClickedEvent ev = Events.GetEventArgs(decorateSkinChangeKey)
             local integer id = ev.Id
             local DecorateSkinInfo skin = ev.Skin
             local SkinSelectWindow window = ev.Window
@@ -972,7 +963,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     private struct CharacterSkinChange
         public method Apply takes nothing returns nothing
-            local InventoryClickedEvent ev = Events.GetEvent(characterSkinChangeKey)
+            local InventoryClickedEvent ev = Events.GetEventArgs(characterSkinChangeKey)
             local integer id = ev.Id + 1
             local SkinInfo skin = ev.Skin
             local SkinSelectWindow window = ev.Window
@@ -1023,16 +1014,14 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     globals
         private PlayerSkinSelect array PlayerSkinUI[PLAYER_MAXINUM]
     endglobals
-    
 
-    //! runtextmacro Make_ButtonMouseEvent_Top("MouseClickDown")
+    public function ClickDownAction takes integer i, real x, real y returns nothing
         call PlayerSkinUI[i].ClickDown(x, y)
-    //! runtextmacro Make_ButtonMouseEvent_Bottom("MouseClickDown")
+    endfunction
 
-    //! runtextmacro Make_ButtonMouseEvent_Top("MouseClickUp")
+    public function ClickUpAction takes integer i, real x, real y returns nothing
         call PlayerSkinUI[i].ClickUp(x, y)
-    //! runtextmacro Make_ButtonMouseEvent_Bottom("MouseClickUp")
-
+    endfunction
 
     /* =======================
      * 순서 바꾸면 안됩니다.   /
@@ -1396,32 +1385,3 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call InitSkinAnimationList()
     endfunction
 endlibrary
-
-//! textmacro Make_ButtonMouseEvent_Top takes funcName
-    globals
-        private key $funcName$Key
-    endglobals
-
-    public function $funcName$ takes nothing returns nothing
-        call DzSyncData(I2S($funcName$Key), R2S(GetMouseFrameX(DzGetMouseXRelative()))+", "+R2S(GetMouseFrameY(DzGetMouseYRelative())))
-    endfunction
-
-    private function $funcName$Sync takes nothing returns nothing
-        local integer i = GetPlayerId(DzGetTriggerSyncPlayer())
-        local string s = DzGetTriggerSyncData()
-        local real x = S2R(JNStringSplit(s,", ",0))
-        local real y = S2R(JNStringSplit(s,", ",1))
-//! endtextmacro
-
-//! textmacro Make_ButtonMouseEvent_Bottom takes funcName
-    endfunction
-
-    private struct $funcName$Struct
-        private static method onInit takes nothing returns nothing
-            local trigger t = CreateTrigger()
-            call DzTriggerRegisterSyncData(t, I2S($funcName$Key), false)
-            call TriggerAddAction(t, function $funcName$Sync)
-            set t = null
-        endmethod
-    endstruct
-//! endtextmacro

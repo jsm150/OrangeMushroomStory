@@ -89,6 +89,7 @@
 //! import "Textmacro\Syntax.j"
 
 // UI
+//! import "UI\ItemStore.j"
 //! import "UI\SkinFrame.j"
 //! import "UI\WaitingRoom.j"
 
