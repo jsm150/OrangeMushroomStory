@@ -4,7 +4,6 @@ scope ArrowKey initializer init
     endglobals
 
     private function KeyAnimation takes unit u, string s1, string s2 returns nothing
-        local integer i = GetPlayerId(GetOwningPlayer(u))+1
         local string temp
         
         if s2 == "First" then
@@ -40,27 +39,47 @@ scope ArrowKey initializer init
     endfunction
     
     private function LeftMain takes integer i, real x, real y returns nothing
+        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
         if GetUnitTypeId(OrangeMushroom[i]) != 'ogru' and GetUnitTypeId(OrangeMushroom[i]) != 'otau' and GetUnitTypeId(OrangeMushroom[i]) != 'o000' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
             set LeftArrow[i] = true
             set Direction[i] = "Left"
+            if pet != 0 then
+                call pet.GoLeft()
+            endif
             if (gravity[i] < 0 and MushroomMoving_RectCondition(i, x, y, 40, "DownWidth") == false) then
                 call KeyAnimation( OrangeMushroom[i], "Walk", "First" )
+                if pet != 0 then
+                    call KeyAnimation( pet.Unit, "Walk", "First" )
+                endif
             else
                 call KeyAnimation( OrangeMushroom[i], "Spell", "First" )
+                if pet != 0 then
+                    call KeyAnimation( pet.Unit, "Spell", "First" )
+                endif
             endif
             call SpecialDownStateEnd(i)
         endif
     endfunction
     
     private function RightMain takes integer i, real x, real y returns nothing
+        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
         if GetUnitTypeId(OrangeMushroom[i]) != 'ogru' and GetUnitTypeId(OrangeMushroom[i]) != 'otau' and GetUnitTypeId(OrangeMushroom[i]) != 'o000' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
             set RightArrow[i] = true
+            if pet != 0 then
+                call pet.GoRight()
+            endif
             if LeftArrow[i] == false then
                 set Direction[i] = "Right"
                 if (gravity[i] < 0 and MushroomMoving_RectCondition(i, x, y, 40, "DownWidth") == false) then
                     call KeyAnimation( OrangeMushroom[i], "Walk", "Second" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Walk", "Second" )
+                    endif
                 else
                     call KeyAnimation( OrangeMushroom[i], "Spell", "Second" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Spell", "Second" )
+                    endif
                 endif
             endif
             call SpecialDownStateEnd(i)
@@ -108,6 +127,7 @@ scope ArrowKey initializer init
         local integer i = GetPlayerId(GetTriggerPlayer())+1
         local real x = GetUnitX(OrangeMushroom[i])
         local real y = GetUnitY(OrangeMushroom[i])
+        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
         
         set UpArrow[i] = true
         if GetUnitTypeId(OrangeMushroom[i]) != 'orai' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
@@ -127,8 +147,14 @@ scope ArrowKey initializer init
                     set gravity[i] = 27.00
                     if Direction[i] == "Left" then
                         call KeyAnimation( OrangeMushroom[i], "Spell", "First" )
+                        if pet != 0 then
+                            call KeyAnimation( pet.Unit, "Spell", "First" )
+                        endif
                     elseif Direction[i] == "Right" then
                         call KeyAnimation( OrangeMushroom[i], "Spell", "Second" )
+                        if pet != 0 then
+                            call KeyAnimation( pet.Unit, "Spell", "Second" )
+                        endif
                     endif
                 endif
             endif
@@ -141,7 +167,8 @@ scope ArrowKey initializer init
         local integer i = GetPlayerId(GetTriggerPlayer())+1
         local real x = GetUnitX(OrangeMushroom[i])
         local real y = GetUnitY(OrangeMushroom[i])
-        
+        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
+
         set DownArrow[i] = true
         if Stage_Loading == false and Observer_State[i] == false and GravityChanger_Loading == false then
             if MushroomMoving_RectCondition(i, x, y, 40,"DownWidth") == false then
@@ -186,9 +213,15 @@ scope ArrowKey initializer init
                         elseif LeftArrow[i] == false and RightArrow[i] == false then
                             if Direction[i] == "Left" then
                                 call KeyAnimation( OrangeMushroom[i], "Stand Ready", "First" )
+                                if pet != 0 then
+                                    call KeyAnimation( pet.Unit, "Stand Ready", "First" )
+                                endif
                                 call MushmomEyeEffect(i)
                             elseif Direction[i] == "Right" then
                                 call KeyAnimation( OrangeMushroom[i], "Stand Ready", "Second" )
+                                if pet != 0 then
+                                    call KeyAnimation( pet.Unit, "Stand Ready", "Second" )
+                                endif
                                 call MushmomEyeEffect(i)
                             endif
                         endif
@@ -222,9 +255,15 @@ scope ArrowKey initializer init
                         elseif LeftArrow[i] == false and RightArrow[i] == false then
                             if Direction[i] == "Left" then
                                 call KeyAnimation( OrangeMushroom[i], "Stand Ready", "First" )
+                                if pet != 0 then
+                                    call KeyAnimation( pet.Unit, "Stand Ready", "First" )
+                                endif
                                 call MushmomEyeEffect(i)
                             elseif Direction[i] == "Right" then
                                 call KeyAnimation( OrangeMushroom[i], "Stand Ready", "Second" )
+                                if pet != 0 then
+                                    call KeyAnimation( pet.Unit, "Stand Ready", "Second" )
+                                endif
                                 call MushmomEyeEffect(i)
                             endif
                         endif
@@ -240,8 +279,14 @@ scope ArrowKey initializer init
                     if LeftArrow[i] == false and RightArrow[i] == false and GravityChanger_Loading == false then
                         if Direction[i] == "Left" then
                             call KeyAnimation( OrangeMushroom[i], "Stand Ready", "First" )
+                            if pet != 0 then
+                                call KeyAnimation( pet.Unit, "Stand Ready", "First" )
+                            endif
                         elseif Direction[i] == "Right" then
                             call KeyAnimation( OrangeMushroom[i], "Stand Ready", "Second" )
+                            if pet != 0 then
+                                call KeyAnimation( pet.Unit, "Stand Ready", "Second" )
+                            endif
                         endif
                         call SpecialDownStateStart(i)
                         call HiddenWord_Main(i)
@@ -261,23 +306,37 @@ scope ArrowKey initializer init
     endfunction
     
     private function ReleaseLeftMain takes integer i, real x, real y returns nothing
+        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
+
         if GetUnitTypeId(OrangeMushroom[i]) != 'ogru' and GetUnitTypeId(OrangeMushroom[i]) != 'otau' and GetUnitTypeId(OrangeMushroom[i]) != 'o000' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
             set LeftArrow[i] = false
             call SpecialDownStateEnd(i)
             if RightArrow[i] == true then
                 if gravity[i] < 0 and MushroomMoving_RectCondition(i, x, y, 40, "DownWidth") == false then
                     call KeyAnimation( OrangeMushroom[i], "Walk", "Second" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Walk", "Second" )
+                    endif
                 else
                     call KeyAnimation( OrangeMushroom[i], "Spell", "Second" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Spell", "Second" )
+                    endif
                 endif
                 set Direction[i] = "Right"
             else
                 if gravity[i] < 0 and MushroomMoving_RectCondition(i, x, y, 40, "DownWidth") == false and Landing[i] == true then
                     set Landing[i] = false
                     call KeyAnimation( OrangeMushroom[i], "Stand", "First" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Stand", "First" )
+                    endif
                 else
                     set Landing[i] = true
                     call KeyAnimation( OrangeMushroom[i], "Spell", "First" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Spell", "First" )
+                    endif
                 endif
                 set Direction[i] = "Left"
             endif
@@ -285,23 +344,37 @@ scope ArrowKey initializer init
     endfunction
     
     private function ReleaseRightMain takes integer i, real x, real y returns nothing
+        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
+
         if GetUnitTypeId(OrangeMushroom[i]) != 'ogru' and GetUnitTypeId(OrangeMushroom[i]) != 'otau' and GetUnitTypeId(OrangeMushroom[i]) != 'o000' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
             set RightArrow[i] = false
                         call SpecialDownStateEnd(i)
             if LeftArrow[i] == true then
                 if gravity[i] < 0 and MushroomMoving_RectCondition(i, x, y, 40, "DownWidth") == false then
                     call KeyAnimation( OrangeMushroom[i], "Walk", "First" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Walk", "First" )
+                    endif
                 else
                     call KeyAnimation( OrangeMushroom[i], "Spell", "First" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Spell", "First" )
+                    endif
                 endif
                 set Direction[i] = "Left"
             else
                 if gravity[i] < 0 and MushroomMoving_RectCondition(i, x, y, 40, "DownWidth") == false and Landing[i] == true then
                     set Landing[i] = false
                     call KeyAnimation( OrangeMushroom[i], "Stand", "Second" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Stand", "Second" )
+                    endif
                 else
                     set Landing[i] = true
                     call KeyAnimation( OrangeMushroom[i], "Spell", "Second" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Spell", "Second" )
+                    endif
                 endif
                 set Direction[i] = "Right"
             endif
@@ -353,6 +426,7 @@ scope ArrowKey initializer init
         local integer i = GetPlayerId(GetTriggerPlayer())+1
         local real x = GetUnitX(OrangeMushroom[i])
         local real y = GetUnitY(OrangeMushroom[i])
+        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
         
         set DownArrow[i] = false
         if GetUnitTypeId(OrangeMushroom[i]) == 'orai' then
@@ -365,8 +439,14 @@ scope ArrowKey initializer init
             if LeftArrow[i] == false and RightArrow[i] == false and Stage_Loading == false and Observer_State[i] == false and MushroomMoving_RectCondition(i, x, y, 40,"DownWidth") == false and GravityChanger_Loading == false then
                 if Direction[i] == "Left" then
                     call KeyAnimation( OrangeMushroom[i], "Stand", "First" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Stand", "First" )
+                    endif
                 elseif Direction[i] == "Right" then
                     call KeyAnimation( OrangeMushroom[i], "Stand", "Second" )
+                    if pet != 0 then
+                        call KeyAnimation( pet.Unit, "Stand", "Second" )
+                    endif
                 endif
             endif
             call SpecialDownStateEnd(i)

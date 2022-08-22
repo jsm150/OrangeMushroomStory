@@ -3,13 +3,14 @@ library Decorate initializer Init
         public key Aura
         public key Designation
         public key FloorAura
+        public key Pet
 
         private hashtable posList = InitHashtable()
     endglobals
 
     private struct Skin
-        private real offsetX
-        private real offsetY
+        public real offsetX
+        public real offsetY
         private integer skinType
         private unit dummyUnit
 
@@ -33,7 +34,7 @@ library Decorate initializer Init
             call ShowUnit(this.dummyUnit, show)
         endmethod
 
-        public method Move takes real refX, real refY returns nothing
+        public stub method Move takes real refX, real refY returns nothing
             if GravityChanger_State then
                 call SetUnitX(this.dummyUnit, refX - this.offsetX)
                 call SetUnitY(this.dummyUnit, refY - this.offsetY)
@@ -59,6 +60,34 @@ library Decorate initializer Init
         public method destroy takes nothing returns nothing
             call RemoveUnit(this.dummyUnit)
             call thistype.deallocate(this)
+        endmethod
+    endstruct
+
+    public struct PetSkin extends Skin
+        public method GoLeft takes nothing returns nothing
+            if this.offsetX < 0 then
+                set this.offsetX = this.offsetX * -1
+            endif
+        endmethod
+
+        public method GoRight takes nothing returns nothing
+            if this.offsetX > 0 then
+                set this.offsetX = this.offsetX * -1
+            endif
+        endmethod
+
+        public method Move takes real refX, real refY returns nothing
+            if GravityChanger_State then
+                call SetUnitX(this.Unit, refX + this.offsetX)
+                call SetUnitY(this.Unit, refY - this.offsetY)
+            else
+                call SetUnitX(this.Unit, refX + this.offsetX)
+                call SetUnitY(this.Unit, refY + this.offsetY)
+            endif
+        endmethod
+        
+        public static method create takes real offsetX, real offsetY, integer playerId, integer unitId, integer skinType returns thistype
+            return thistype.allocate(offsetX, offsetY, playerId, unitId, skinType)
         endmethod
     endstruct
 
@@ -110,7 +139,12 @@ library Decorate initializer Init
             endif
         //! runtextmacro for_end("set i = i + 1")
 
-        set temp = Skin.create(offsetX, offsetY, playerId, unitId, skinType)
+        if skinType == Pet then
+            set temp = PetSkin.create(offsetX, offsetY, playerId, unitId, skinType)
+        else
+            set temp = Skin.create(offsetX, offsetY, playerId, unitId, skinType)
+        endif
+
         call List[playerId].add(temp)
 
         if LevelClearState[playerId + 1] == false then
@@ -121,11 +155,19 @@ library Decorate initializer Init
         endif
     endfunction
 
+    public function RemoveAll takes integer playerId returns nothing
+        local integer i = 0
+        //! runtextmacro for("set i = 0", "i < List[playerId].size")
+            call Skin(List[playerId][i]).destroy()
+        //! runtextmacro for_end("set i = i + 1")  
+        call List[playerId].clear()
+    endfunction
+
     public function UnitShow takes integer playerId, boolean show returns nothing
         local integer i = 0
         //! runtextmacro for("set i = 0", "i < List[playerId].size")
             call Skin(List[playerId][i]).Show(show)
-        //! runtextmacro for_end("set i = i + 1")        
+        //! runtextmacro for_end("set i = i + 1")
     endfunction
 
     public function SetUnitAngle takes integer playerId, real angle returns nothing
@@ -150,10 +192,21 @@ library Decorate initializer Init
         //! runtextmacro for_end("set i = i + 1")
     endfunction
 
+    public function GetPetSkin takes integer playerId returns PetSkin
+        local integer i = 0
+        //! runtextmacro for("set i = 0", "i < List[playerId].size")
+            if Skin(List[playerId][i]).Type == Pet then
+                return List[playerId][i]
+            endif
+        //! runtextmacro for_end("set i = i + 1")
+        return 0
+    endfunction
+
     private function InitPosList takes nothing returns nothing
         call SaveLocationHandle(posList, 0, Aura, Location(0, 0))
         call SaveLocationHandle(posList, 0, Designation, Location(0, -150))
         call SaveLocationHandle(posList, 0, FloorAura, Location(0, 15))
+        call SaveLocationHandle(posList, 0, Pet, Location(-110, -39))
     endfunction
 
     private function Init takes nothing returns nothing

@@ -717,6 +717,7 @@ library Key initializer Init
         set posList = blockLocationLinkedList.create()
         call posList.AddFirst(blockLocation.create(22272, -22656))
         call posList.AddFirst(blockLocation.create(22272, -22656 - 128))
+        call posList.AddFirst(blockLocation.create(22272, -22656 - 256))
         call keyMapManager.AddAction(posList, "Create")
         call keyMapManager.SaveEvent()
 

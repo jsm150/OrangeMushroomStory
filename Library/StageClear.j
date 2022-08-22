@@ -993,7 +993,7 @@ library Stage initializer init
                 call Status.SetLevel(9, 9)
             elseif HiddenPortalState() == 8 then
                 call Status.SetLevel(10, 9)
-            elseif HiddenPortalState() == 9 then
+            elseif HiddenPortalState() == 9 and PracticeMode == false then
                 set RandomStage_isRandom = true
                 call Status.SetLevel(RandomStage_randomWorld[RandomStage_state], RandomStage_randomStage[RandomStage_state])
             elseif HiddenPortalState() == 10 then

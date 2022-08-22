@@ -7,6 +7,7 @@
 //! import "JN\JNStopwatch.j"
 //! import "JN\JNString.j"
 //! import "JN\MemoryLib.j"
+//! import "JN\Typecast.j"
 
 // Init
 //! import "Init\CodeKey.j"
@@ -50,6 +51,7 @@
 //! import "Library\Calculation.j"
 //! import "Library\ClickEffect.j"
 //! import "Library\Decorate.j"
+//! import "Library\EndGameHook.j"
 //! import "Library\GravityChanger.j"
 //! import "Library\Jumper.j"
 //! import "Library\KeySwitch.j"
@@ -61,6 +63,7 @@
 //! import "Library\Observer.j"
 //! import "Library\RandomStage.j"
 //! import "Library\RectList.j"
+//! import "Library\Security.j"
 //! import "Library\ShortTeleport.j"
 //! import "Library\StageClear.j"
 //! import "Library\StoneStatue.j"
@@ -86,7 +89,9 @@
 //! import "Textmacro\Syntax.j"
 
 // UI
+//! import "UI\ItemStore.j"
 //! import "UI\SkinFrame.j"
+//! import "UI\WaitingRoom.j"
 
 // Test
 // //! import "Test\CodePrint.j"

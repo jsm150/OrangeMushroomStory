@@ -50,3 +50,24 @@ else
 endif
 endfunction
 endlibrary
+
+//! textmacro MakeSyncAction takes SyncKeyName, Action
+    globals
+        private key $SyncKeyName$
+    endglobals
+
+    private function $SyncKeyName$Action takes nothing returns nothing
+        local integer playerId = GetPlayerId(DzGetTriggerSyncPlayer())
+        local string syncData = DzGetTriggerSyncData()
+        $Action$
+    endfunction
+
+    private struct $SyncKeyName$Struct
+        private static method onInit takes nothing returns nothing
+            local trigger t = CreateTrigger()
+            call DzTriggerRegisterSyncData(t, I2S($SyncKeyName$), false)
+            call TriggerAddAction(t, function $SyncKeyName$Action)
+            set t = null
+        endmethod
+    endstruct
+//! endtextmacro

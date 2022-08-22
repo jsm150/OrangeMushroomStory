@@ -20,6 +20,7 @@ static if not REFORGED_MODE then
     native JNMemorySetReal takes integer offset, real value returns nothing
     native JNMemoryGetString takes integer offset, integer length returns string
     native JNMemorySetString takes integer offset, string value returns nothing
+    // UTF8 is force convert ANSI
     native JNProcCall takes integer callConv, integer address, hashtable params returns boolean
 endif
 endlibrary

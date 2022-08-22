@@ -428,6 +428,7 @@ library TrueEnding2 initializer init needs Cinematic
         local integer i = 1
         local real px = 13376
         local real py = -19200
+        local string name
         
         call tk.start(4.0, false, function CMTTick2)
         if tk.data == 0 then
@@ -648,19 +649,8 @@ library TrueEnding2 initializer init needs Cinematic
             loop
             exitwhen i > PLAYER_MAXINUM
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                    call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 네 번째 비밀 코드: " + WorldKey_Code4[i] )
-                    call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　다음 게임부터 \"-code2 " + WorldKey_Code4[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                    call JNObjectCharacterSetInt(StringCase(GetPlayerName(Player(i - 1)), false), "Beach", User_UserList[i - 1].ClearList.Beach + 1)
-
-                    if GetLocalPlayer() == Player(i-1) then
-                        if JNObjectCharacterServerConnectCheck() then
-                            call JNObjectCharacterSave(mapId, StringCase(GetPlayerName(Player(i - 1)), false), secretKey, clearListName)
-                            call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
-                        else
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
-                            call BJDebugMsg("　　　　　　|cffFF0202※ 현재 버전이 최신버전인지 확인해 주십시오.|r")
-                        endif
-                    endif
+                    set name = StringCase(GetPlayerName(Player(i - 1)), false)
+                    call User_GameClearDataUpload.evaluate(i - 1, name, "Beach")
                 endif
             set i = i + 1
             endloop
@@ -676,15 +666,6 @@ library TrueEnding2 initializer init needs Cinematic
             set i = i + 1
             endloop
             
-            set i = 1
-            loop
-            exitwhen i > PLAYER_MAXINUM
-                if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and GetLocalPlayer() == Player(i-1) then
-                    call BJDebugMsg("　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 네 번째 비밀 코드: " + WorldKey_Code4[i] )
-                    call BJDebugMsg("　　　　　　다음 게임부터 \"-code2 " + WorldKey_Code4[i] + "\"를 입력하시면 캐릭터 외형을 바꿀 수 있습니다.")
-                endif
-            set i = i + 1
-            endloop
             return
         endif
         set tk.data = tk.data + 1

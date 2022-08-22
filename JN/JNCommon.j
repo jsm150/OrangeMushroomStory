@@ -7,6 +7,8 @@ else
     native BitOr takes integer x, integer y returns integer
     native BitAnd takes integer x, integer y returns integer
     native BitXor takes integer x, integer y returns integer
+    native BitShiftL takes integer x, integer y returns integer
+    native BitShiftR takes integer x, integer y returns integer
     native JNI2R takes integer i returns real
     native JNR2I takes real r returns integer
         

@@ -2,11 +2,11 @@ library JAPIEventDamageData
 globals
     constant integer EVENT_DAMAGE_DATA_VAILD       = 0
     constant integer EVENT_DAMAGE_DATA_IS_PHYSICAL = 1
-    //constant integer EVENT_DAMAGE_DATA_IS_ATTACK   = 2
+    constant integer EVENT_DAMAGE_DATA_IS_ATTACK   = 2
     constant integer EVENT_DAMAGE_DATA_IS_RANGED   = 3
-    //constant integer EVENT_DAMAGE_DATA_DAMAGE_TYPE = 4
-    //constant integer EVENT_DAMAGE_DATA_WEAPON_TYPE = 5
-    //constant integer EVENT_DAMAGE_DATA_ATTACK_TYPE = 6
+    constant integer EVENT_DAMAGE_DATA_DAMAGE_TYPE = 4
+    constant integer EVENT_DAMAGE_DATA_WEAPON_TYPE = 5
+    constant integer EVENT_DAMAGE_DATA_ATTACK_TYPE = 6
 endglobals
 
 static if REFORGED_MODE then
@@ -20,7 +20,6 @@ else
     native EXGetEventDamageData takes integer edd_type returns integer
 endif
 
-//가할 피해량 설정
 function JNSetEventDamage takes real amount returns nothing
 static if REFORGED_MODE then
     call BlzSetEventDamage(amount)
@@ -29,39 +28,35 @@ else
 endif
 endfunction
 
-//피해를 가한 공격 유형
 function JNGetEventAttackType takes nothing returns attacktype
 static if REFORGED_MODE then
     return BlzGetEventAttackType()
 else
-    return ConvertAttackType(EXGetEventDamageData(6))
+    return ConvertAttackType(EXGetEventDamageData(EVENT_DAMAGE_DATA_ATTACK_TYPE))
 endif
 endfunction
 
-//피해를 가한 피해 유형
 function JNGetEventDamageType takes nothing returns damagetype
 static if REFORGED_MODE then
     return BlzGetEventDamageType()
 else
-    return ConvertDamageType(EXGetEventDamageData(4))
+    return ConvertDamageType(EXGetEventDamageData(EVENT_DAMAGE_DATA_DAMAGE_TYPE))
 endif
 endfunction
 
-//피해를 가한 무기 유형
 function JNGetEventWeaponType takes nothing returns weapontype
 static if REFORGED_MODE then
     return BlzGetEventWeaponType()
 else
-    return ConvertWeaponType(EXGetEventDamageData(5))
+    return ConvertWeaponType(EXGetEventDamageData(EVENT_DAMAGE_DATA_WEAPON_TYPE))
 endif
 endfunction
 
-//가한 피해는 일반 공격임
 function JNGetEventIsAttack takes nothing returns boolean
 static if REFORGED_MODE then
     return BlzGetEventIsAttack()
 else
-    return 0 != EXGetEventDamageData(2)
+    return 0 != EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_PHYSICAL)
 endif
 endfunction
 endlibrary
