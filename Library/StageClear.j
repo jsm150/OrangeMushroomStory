@@ -889,11 +889,6 @@ library Stage initializer init
                 call CreateObject(3, gg_rct_Propelly13_8_001, "FlyRight")
                 set BoxsCount = 3
             endif
-        elseif Status.World == 14 then
-            if Status.Level == 1 then
-                call CreateObject(1, gg_rct_Box14_1_001, "null")
-                set BoxsCount = 1
-            endif
         endif
     endfunction
     
@@ -1508,8 +1503,6 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 13, 6, gg_rct_StartRect102)
         call SaveRectHandle(StartRectList, 13, 7, gg_rct_StartRect103)
         call SaveRectHandle(StartRectList, 13, 8, gg_rct_StartRect104)
-
-        call SaveRectHandle(StartRectList, 14, 1, gg_rct_StartRect105)
         
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -13, -1, gg_rct_StartRectSub13_Minus1)
