@@ -3065,7 +3065,7 @@ library Key initializer Init
         set j = 0
         loop
             exitwhen j > 6
-                call posList.AddFirst(blockLocation.create(26877+(128*j), 1148))
+                call posList.AddFirst(blockLocation.create(26877+(128*j), 1152))
             set j = j + 1
         endloop
         call keyMapManager.AddAction(posList, "Remove")
