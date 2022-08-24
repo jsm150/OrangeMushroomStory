@@ -74,6 +74,8 @@ scope Command initializer init
             call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\StaffOfPurification\\PurificationCaster.mdl", GetRectCenterX(gg_rct_Ellinforest), GetRectCenterY(gg_rct_Ellinforest) ))
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 엘린 숲 입구가 열렸습니다!|r" )
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 단 엘린 숲 입구로 들어간 인원이 다른 포탈에 들어간 인원보다 적으면 기존 스테이지로 이동합니다.|r" )
+            call CreateUnit(Player(11), 'n009', 7908, 846 - 32, 270 )
+            call SetDoodadAnimation(6144, -448, 128.00, 'YOf3', false, "stand", false)
         endif
     endfunction
 
