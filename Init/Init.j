@@ -70,6 +70,18 @@ scope initialize initializer init
     
     private function Quest takes nothing returns nothing
         local string s
+        set s = "11.2\n"
+        set s = s + "-카페 3-3 파란벽이 보이는 것 보다 낮은 점 수정되었습니다.\n"
+        set s = s + "-로딩창이 변경되었습니다.\n"
+        set s = s + "-엘린숲 스테이지 입구가 변경되었습니다.\n"
+        set s = s + "-카페 스킨이 수정되었습니다.\n"
+        set s = s + "-히든스킨 이벤트가 추가되었습니다. 자세한건 F9를 참고해 주십시오."
+        set s = s + "\n"
+        set s = s + "11.3\n"
+        set s = s + "-히든스킨 이벤트가 종료되었습니다.\n"
+        set s = s + "-얼음동굴 3-7 버그가 수정되었습니다.\n"
+        set s = s + "-얼음동굴입구가 보이지 않던 버그가 수정되었습니다.\n"
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.2~11.3", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "10.7\n"
         set s = s + "- 아래 맵들의 난이도가 하향 조정됬습니다.\n"
         set s = s + "  지하철: 3-3\n"
@@ -96,7 +108,7 @@ scope initialize initializer init
         set s = s + "11.1\n"
         set s = s + "- 상점이 추가되었습니다.\n"
         set s = s + "- -상점 / -shop 명령어가 추가되었습니다.\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.7~11.1", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.7~11.2", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "10.2\n"
         set s = s + "- 스킨 인벤토리가 추가되었습니다.\n"
         set s = s + "  스킨은 월드를 클리어 하면 추가됩니다.\n"
@@ -574,6 +586,7 @@ scope initialize initializer init
         set s = s + "아랫마을 : 800\n"
         set s = s + "랜덤 : 100~500\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "골드리프?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
+//        call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "이벤트?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = TeamColor[7] + "쉬움|r : 1.62%, " + TeamColor[5] + "보통|r : 1.21%, " + TeamColor[6] + "어려움|r : 0.81%," + TeamColor[1] + " 매우어려움|r : 0.4%\n\n"
         set s = s + "--- 핑크핑크 ---:\n"
         set s = s + "  3-1 : " + TeamColor[7] + "쉬움|r( 1.62% )\n"
