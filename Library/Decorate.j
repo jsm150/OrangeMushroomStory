@@ -4,6 +4,7 @@ library Decorate initializer Init
         public key Designation
         public key FloorAura
         public key Pet
+        public key Soul
 
         private hashtable posList = InitHashtable()
     endglobals
@@ -207,6 +208,7 @@ library Decorate initializer Init
         call SaveLocationHandle(posList, 0, Designation, Location(0, -150))
         call SaveLocationHandle(posList, 0, FloorAura, Location(0, 15))
         call SaveLocationHandle(posList, 0, Pet, Location(-110, -39))
+        call SaveLocationHandle(posList, 0, Soul, Location(0, 180))
     endfunction
 
     private function Init takes nothing returns nothing

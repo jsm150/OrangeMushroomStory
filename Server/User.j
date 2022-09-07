@@ -3,7 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        string mapVersion = "v11.1"
+        string mapVersion = "v11.3"
         public key GoldLeafChangedEvent
     endglobals
 
@@ -87,6 +87,7 @@ scope User initializer Init
         worldCount ClearList
         integer PinkBeanDesignation = 0
         integer BellaPet = 0
+        integer LucidSoul = 0
         Money GoldLeaf
 
         public method GetClearCountByWorldId takes integer worldId returns integer
@@ -295,6 +296,7 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("BellaPet", "UserList[idx].BellaPet", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
+    //! runtextmacro MakeFuncToDataLoadSync("LucidSoul", "UserList[idx].LucidSoul", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("GoldLeaf", "UserList[idx].GoldLeaf", "Money.CreateArgsString", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
 
     public function LoadUserData takes integer playerId returns nothing
@@ -319,6 +321,7 @@ scope User initializer Init
             call DataLoadSyncToRandom(playerId, name, "Random")
             call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
             call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")
+            call DataLoadSyncToLucidSoul(playerId, name, "Lucid Soul")
             static if DEBUG_MODE then
                 set UserList[playerId].GoldLeaf = Money.create(99999)
             else

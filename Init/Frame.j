@@ -24,7 +24,7 @@ scope Frame initializer init
     
     private function ConLeft takes integer i, real x, real y, real widthDist, real distance returns boolean
         local boolean b = false
-        if FinalStage then
+        if FinalStage or (Status.World == 9 and Status.Level == 6) then
             set b = IsPointInRegion(Rect_Unlimited, x-widthDist+Acceleration[i], y) and IsPointInRegion(Rect_Unlimited, x-widthDist+Acceleration[i], y-distance) and IsPointInRegion(Rect_Unlimited, x-widthDist+Acceleration[i], y+distance)
         endif
         return b or (GetTerrainType(x-widthDist+Acceleration[i], y) == BACKGROUND_TILE and IsPointInRegion(Rect_NoEntry, x-widthDist+Acceleration[i], y) == false and (GetTerrainType(x-widthDist+Acceleration[i], y-distance) == BACKGROUND_TILE or GetTerrainType(x-widthDist+Acceleration[i], y+distance) == BACKGROUND_TILE))
@@ -32,7 +32,7 @@ scope Frame initializer init
     
     private function ConRight takes integer i, real x, real y, real widthDist, real distance returns boolean
         local boolean b = false
-        if FinalStage then
+        if FinalStage or (Status.World == 9 and Status.Level == 6) then
             set b = IsPointInRegion(Rect_Unlimited, x+widthDist+Acceleration[i], y) and IsPointInRegion(Rect_Unlimited, x+widthDist+Acceleration[i], y-distance) and IsPointInRegion(Rect_Unlimited, x+widthDist+Acceleration[i], y+distance)
         endif
         return b or (GetTerrainType(x+widthDist+Acceleration[i], y) == BACKGROUND_TILE and IsPointInRegion(Rect_NoEntry, x+widthDist+Acceleration[i], y) == false and (GetTerrainType(x+widthDist+Acceleration[i], y-distance) == BACKGROUND_TILE or GetTerrainType(x+widthDist+Acceleration[i], y+distance) == BACKGROUND_TILE))
