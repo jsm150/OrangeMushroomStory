@@ -206,6 +206,10 @@ scope ArrowKey initializer init
                             set Stage_HiddenPortalCount[11] = Stage_HiddenPortalCount[11] + 1
                             call CreateUnit(Player(i-1), 'hrif', x, y-60, 90 )
                             call Observer_Start(i)
+                        elseif HiddenCode[10] == true then
+                            set Stage_HiddenPortalCount[12] = Stage_HiddenPortalCount[12] + 1
+                            call CreateUnit(Player(i-1), 'hrif', x, y-60, 90 )
+                            call Observer_Start(i)
                         elseif LeftArrow[i] == false and RightArrow[i] == false then
                             if Direction[i] == "Left" then
                                 call KeyAnimation( OrangeMushroom[i], "Stand Ready", "First" )

@@ -173,6 +173,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call skinList.add(SkinInfo(SkinAnimationList[42]).Clone())
         endif
 
+        if User_UserList[id].LucidSoul == 1 or DEBUG_MODE then
+            call skinList.add(SkinInfo(SkinAnimationList[43]).Clone())
+        endif
+
         return skinList
     endfunction
     
@@ -1350,6 +1354,20 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skin.AddMotion("BellaPet004.blp")
         call skin.AddMotion("BellaPet005.blp")
         call SkinAnimationList.add(skin)
+
+         //====================================================
+
+         set skin = DecorateSkinInfo.create(0.18, "Lucid Soul", 'h00I', 0.044, 0, 0.07, Decorate_Soul, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("LucidSoul001.blp")
+        call skin.AddMotion("LucidSoul002.blp")
+        call skin.AddMotion("LucidSoul003.blp")
+        call skin.AddMotion("LucidSoul004.blp")
+        call skin.AddMotion("LucidSoul005.blp")
+        call skin.AddMotion("LucidSoul006.blp")
+        call skin.AddMotion("LucidSoul007.blp")
+        call SkinAnimationList.add(skin)
+
     endfunction
 
     public function ShowSkinInventoryButton takes boolean isVisible returns nothing

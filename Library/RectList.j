@@ -15,7 +15,7 @@ library Rect initializer init
         public region MissileZone
         public region Unlimited
     endglobals
-    
+
     private function Main takes nothing returns nothing
         call DestroyTrigger( GetTriggeringTrigger() )
         set Portal = CreateRegion()
@@ -35,6 +35,7 @@ library Rect initializer init
         set Unlimited = CreateRegion()
         call RegionAddRect(Unlimited, gg_rct_Unlimited001)
         call RegionAddRect(Unlimited, gg_rct_Unlimited002)
+        call RegionAddRect(Unlimited, gg_rct_Unlimited003)
         
         call RegionAddRect( Subway, gg_rct_Subway )
         call RegionAddRect( WitchTower, gg_rct_WitchTower )
@@ -180,11 +181,10 @@ library Rect initializer init
         
         call TriggerRegisterTimerEvent(t, 0.00, false)
         call TriggerAddAction( t, function Main )
-        
-        
 
         set t = null
     endfunction
+
 endlibrary
 
 

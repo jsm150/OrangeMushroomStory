@@ -420,6 +420,8 @@ library TeleportStone initializer init needs Water
         call SetRect(gg_rct_TeleportStone315, 315, 314, "Red")
         call SetRect(gg_rct_TeleportStone316, 316, 317, "Yellow")
         call SetRect(gg_rct_TeleportStone317, 317, 316, "Yellow")
+        call SetRect(gg_rct_HiddenSkinTeleport001_in, 318, 319, "Red")
+        call SetRect(gg_rct_HiddenSkinTeleport001_out, 319, 318, "Red")
 
     endfunction
 endlibrary

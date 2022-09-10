@@ -53,7 +53,7 @@ library Multiboard// initializer init
             set BackgroundMusic = gg_snd_CokeTown001
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('ebal')
-        elseif world == 9 then
+        elseif world == 9 or (world == 14 and stage == 1) then
             set BackgroundMusic = gg_snd_skylight_harbor
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('hgyr')
@@ -108,6 +108,8 @@ library Multiboard// initializer init
                     call MultiboardSetItemValueBJ( Borad, 2, 2, "3-" + I2S(RandomStage_state))
                 elseif this.World == 8 then
                     call MultiboardSetItemValueBJ( Borad, 2, 2, "W-" + I2S(this.Level))
+                elseif this.World == 14 then
+                    call MultiboardSetItemValueBJ( Borad, 2, 2, "W2-" + I2S(this.Level))
                 else
                     call MultiboardSetItemValueBJ( Borad, 2, 2, "3-" + I2S(this.Level))
                 endif

@@ -23,7 +23,7 @@ library Stage initializer init
         local integer i = 1
         local integer j = 1
         local integer sum = 0
-        local integer worldCount = 11
+        local integer worldCount = 12
         
         loop
             exitwhen i > worldCount
@@ -995,6 +995,8 @@ library Stage initializer init
                 call Status.SetLevel(11, 9)
             elseif HiddenPortalState() == 11 then
                 call Status.SetLevel(12, 9)
+            elseif HiddenPortalState() == 12 then
+                call Status.SetLevel(13, 9)
             else
                 if Stage_WorldSkip then
                     call Status.SetLevel(2, 8)
@@ -1217,6 +1219,8 @@ library Stage initializer init
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Random World: ???" )
             elseif HiddenPortalState() == 11 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 깊은 산속" )
+            elseif HiddenPortalState() == 12 then
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지 II" )
             else
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World: 핑크 핑크" )
             endif
@@ -1499,7 +1503,7 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 13, 6, gg_rct_StartRect102)
         call SaveRectHandle(StartRectList, 13, 7, gg_rct_StartRect103)
         call SaveRectHandle(StartRectList, 13, 8, gg_rct_StartRect104)
-
+        
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -13, -1, gg_rct_StartRectSub13_Minus1)
         call SaveRectHandle(StartRectList, -13, 1, gg_rct_StartRectSub097)
