@@ -76,6 +76,9 @@ scope Command initializer init
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 단 엘린 숲 입구로 들어간 인원이 다른 포탈에 들어간 인원보다 적으면 기존 스테이지로 이동합니다.|r" )
             call CreateUnit(Player(11), 'n009', 7908, 846 - 32, 270 )
             call SetDoodadAnimation(6144, -448, 128.00, 'YOf3', false, "stand", false)
+            if SecretWorldCount3 == 0 then
+                set SecretWorldCount3 = SecretWorldCount3 + 1
+            endif
         endif
     endfunction
 
@@ -90,9 +93,6 @@ scope Command initializer init
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 단 지하철 입구로 들어간 인원이 다른 포탈에 들어간 인원보다 적으면 기존 스테이지로 이동합니다.|r" )
                 if SecretWorldCount == 1 then
                     set SecretWorldCount = SecretWorldCount + 1
-                endif
-                if SecretWorldCount3 == 2 then
-                    set SecretWorldCount3 = SecretWorldCount3 + 1
                 endif
                 if SecretWorldCount2 == 3 then
                     call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 100, 100, 100, 100 )
@@ -122,13 +122,8 @@ scope Command initializer init
                 if SecretWorldCount2 == 2 then
                     set SecretWorldCount2 = SecretWorldCount2 + 1
                 endif
-                if SecretWorldCount3 == 3 then
-                    call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 100, 100, 100, 100 )
-                    set HiddenCode[10] = true
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[2] + "※ 비밀 신호를 주자 파란 풍선이 나타났습니다.|r" )
-                    call CreateUnit(Player(11), 'nano', 6144, -128, 270 )
-                    call PingMinimapEx(6144, -128, 5, 255, 255, 255, false)
-                    call SetDoodadAnimation(6144, -448, 128.00, 'YOf3', false, "stand", false)
+                if SecretWorldCount3 == 2 then
+                    set SecretWorldCount3 = SecretWorldCount3 + 1
                 endif
             else
                 call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "※ 방장(재시작 권한을 가진 사람)만 코드를 입력할 수 있습니다.")
@@ -140,9 +135,6 @@ scope Command initializer init
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 소라껍질 입구가 열렸습니다!|r" )
                 if SecretWorldCount2 == 0 then
                     set SecretWorldCount2 = SecretWorldCount2 + 1
-                endif
-                if SecretWorldCount3 == 1 then
-                    set SecretWorldCount3 = SecretWorldCount3 + 1
                 endif
                 if SecretWorldCount == 3 then
                     call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 100, 100, 100, 100 )
@@ -169,8 +161,13 @@ scope Command initializer init
                 if SecretWorldCount2 == 1 then
                     set SecretWorldCount2 = SecretWorldCount2 + 1
                 endif
-                if SecretWorldCount3 == 0 then
-                    set SecretWorldCount3 = SecretWorldCount3 + 1
+                if SecretWorldCount3 == 3 then
+                    call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 100, 100, 100, 100 )
+                    set HiddenCode[10] = true
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[2] + "※ 비밀 신호를 주자 파란 풍선이 나타났습니다.|r" )
+                    call CreateUnit(Player(11), 'n00A', 6144, -128, 270 )
+                    call PingMinimapEx(6144, -128, 5, 255, 255, 255, false)
+                    call SetDoodadAnimation(6144, -448, 128.00, 'YOf3', false, "stand", false)
                 endif
             else
                 call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "※ 방장(재시작 권한을 가진 사람)만 코드를 입력할 수 있습니다.")
@@ -190,6 +187,9 @@ scope Command initializer init
                 call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\StaffOfPurification\\PurificationCaster.mdl", GetRectCenterX(gg_rct_Pyramid), GetRectCenterY(gg_rct_Pyramid) ))
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 사막 입구가 열렸습니다!|r" )
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 단 사막 입구로 들어간 인원이 다른 포탈에 들어간 인원보다 적으면 기존 스테이지로 이동합니다.|r" )
+                if SecretWorldCount3 == 1 then
+                    set SecretWorldCount3 = SecretWorldCount3 + 1
+                endif
             else
                 call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "※ 방장(재시작 권한을 가진 사람)만 코드를 입력할 수 있습니다.")
             endif
