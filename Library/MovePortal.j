@@ -260,5 +260,7 @@ library MovePortal initializer Init needs MushroomMoving, Water
         call ObjectCreate(gg_rct_MovePortal13_8_001, gg_rct_MovePortal13_8_002)
         call ObjectCreate(gg_rct_MovePortal13_8_003, gg_rct_MovePortal13_8_004)
         call ObjectCreate(gg_rct_MovePortal13_8_005, gg_rct_MovePortal13_8_006)
+        call SetLevel(14, 1)
+        call ObjectCreate(gg_rct_MovePortal14_1_001, gg_rct_MovePortal14_1_002)
     endfunction
 endlibrary

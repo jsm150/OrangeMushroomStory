@@ -53,11 +53,11 @@ library Multiboard// initializer init
             set BackgroundMusic = gg_snd_CokeTown001
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('ebal')
-        elseif world == 9 or (world == 14 and stage == 1) then
+        elseif world == 9 then
             set BackgroundMusic = gg_snd_skylight_harbor
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('hgyr')
-        elseif world == 10 then
+        elseif world == 10 or (world == 14 and stage == 1) then
             set BackgroundMusic = gg_snd_Ariant
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h000')

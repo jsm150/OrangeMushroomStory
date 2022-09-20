@@ -889,6 +889,16 @@ library Stage initializer init
                 call CreateObject(3, gg_rct_Propelly13_8_001, "FlyRight")
                 set BoxsCount = 3
             endif
+        elseif Status.World == 14 then
+            if Status.Level == 1  then
+                call CreateObject(1, gg_rct_Box14_1_001, "null")
+                call CreateObject(2, gg_rct_Box14_1_002, "null")
+                call CreateObject(3, gg_rct_Box14_1_003, "null")
+                call CreateObject(4, gg_rct_Box14_1_004, "null")
+                call CreateObject(5, gg_rct_Box14_1_005, "null")
+                call CreateObject(6, gg_rct_CokeMushroom14_1_001, "CokeMushroomRight")
+                set BoxsCount = 6
+            endif
         endif
     endfunction
     
@@ -1256,8 +1266,8 @@ library Stage initializer init
                     if Status.World == 1 and Status.Level == 0 then
                         call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
                         if TESTMODE == true then
-                            call Status.SetLevel(12, 8)
-                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 깊은 산속" )
+                            call Status.SetLevel(13, 8)
+                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지 2" )
                             call tk.start(3.0, false, function WorldTimer)
                         else
                             call tk.start(1.0, false, function WorldTimer)
@@ -1503,6 +1513,8 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 13, 6, gg_rct_StartRect102)
         call SaveRectHandle(StartRectList, 13, 7, gg_rct_StartRect103)
         call SaveRectHandle(StartRectList, 13, 8, gg_rct_StartRect104)
+
+        call SaveRectHandle(StartRectList, 14, 1, gg_rct_StartRect105)
         
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -13, -1, gg_rct_StartRectSub13_Minus1)

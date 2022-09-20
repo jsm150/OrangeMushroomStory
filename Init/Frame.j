@@ -24,7 +24,7 @@ scope Frame initializer init
     
     private function ConLeft takes integer i, real x, real y, real widthDist, real distance returns boolean
         local boolean b = false
-        if FinalStage or (Status.World == 9 and Status.Level == 6) then
+        if FinalStage then
             set b = IsPointInRegion(Rect_Unlimited, x-widthDist+Acceleration[i], y) and IsPointInRegion(Rect_Unlimited, x-widthDist+Acceleration[i], y-distance) and IsPointInRegion(Rect_Unlimited, x-widthDist+Acceleration[i], y+distance)
         endif
         return b or (GetTerrainType(x-widthDist+Acceleration[i], y) == BACKGROUND_TILE and IsPointInRegion(Rect_NoEntry, x-widthDist+Acceleration[i], y) == false and (GetTerrainType(x-widthDist+Acceleration[i], y-distance) == BACKGROUND_TILE or GetTerrainType(x-widthDist+Acceleration[i], y+distance) == BACKGROUND_TILE))
@@ -32,7 +32,7 @@ scope Frame initializer init
     
     private function ConRight takes integer i, real x, real y, real widthDist, real distance returns boolean
         local boolean b = false
-        if FinalStage or (Status.World == 9 and Status.Level == 6) then
+        if FinalStage then
             set b = IsPointInRegion(Rect_Unlimited, x+widthDist+Acceleration[i], y) and IsPointInRegion(Rect_Unlimited, x+widthDist+Acceleration[i], y-distance) and IsPointInRegion(Rect_Unlimited, x+widthDist+Acceleration[i], y+distance)
         endif
         return b or (GetTerrainType(x+widthDist+Acceleration[i], y) == BACKGROUND_TILE and IsPointInRegion(Rect_NoEntry, x+widthDist+Acceleration[i], y) == false and (GetTerrainType(x+widthDist+Acceleration[i], y-distance) == BACKGROUND_TILE or GetTerrainType(x+widthDist+Acceleration[i], y+distance) == BACKGROUND_TILE))
@@ -346,6 +346,7 @@ scope Frame initializer init
         local boolean b = Status.World == 5 or (Status.World == 8 and Status.Level == 5) or FinalStage == true
         set b = b or (Status.World == 10 and (Status.Level == 4 or Status.Level == 6 or Status.Level == 7))
         set b = b or (Status.World == 13 and (Status.Level == 4))
+        set b = b or (Status.World == 14 and (Status.Level == 1))
         return b
     endfunction
                     
