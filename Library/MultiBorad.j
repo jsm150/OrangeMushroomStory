@@ -61,7 +61,7 @@ library Multiboard// initializer init
             set BackgroundMusic = gg_snd_Ariant
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h000')
-        elseif world == 11 then
+        elseif world == 11 or (world == 14 and stage == 2) then
             set BackgroundMusic = gg_snd_EllinforestBGM
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h001')
@@ -98,7 +98,7 @@ library Multiboard// initializer init
                 if FinalStage == false then
                     call SetBackgroundAndMusic(this.World, this.Level)
                 endif
-            elseif this.World == 8 or RandomStage_isRandom or PracticeMode then
+            elseif this.World == 8 or RandomStage_isRandom or PracticeMode or this.World == 14 then
                 call SetBackgroundAndMusic(this.World, this.Level)
             endif
             if this.World >= 3 then
