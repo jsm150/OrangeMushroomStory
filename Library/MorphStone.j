@@ -220,6 +220,8 @@ library MorphStone initializer init
         call SetRect(t, 'ogru', gg_rct_MorphStone066)
         call SetRect(t, 'ogru', gg_rct_MorphStone067)
         call SetRect(t, 'hpea', gg_rct_MorphStone068)
+        call SetRect(t, 'ogru', gg_rct_MorphStone069)
+        call SetRect(t, 'ogru', gg_rct_MorphStone070)
 
 
         call TriggerAddAction( t, function Main )

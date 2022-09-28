@@ -339,6 +339,9 @@ library Arrow initializer init needs Calculation
         call SetInputRect(t, gg_rct_Arrow233, 0)
         call SetInputRect(t, gg_rct_Arrow234, 90)
         call SetInputRect(t, gg_rct_Arrow235, 0)
+        call SetInputRect(t, gg_rct_Arrow236, 330)
+        call SetInputRect(t, gg_rct_Arrow237, 90)
+        call SetInputRect(t, gg_rct_Arrow238, 77)
 
         call TriggerAddAction( t, function Main )
         

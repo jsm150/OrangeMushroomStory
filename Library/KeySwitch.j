@@ -1385,6 +1385,69 @@ library Key initializer Init
 
         call keyMapManager.Register()
 
+//---------------------------------------------------------------
+        call keyMapManager.Setting(14, 2)
+
+        call keyMapManager.CreateEvent(RED_KEY_ID, gg_rct_Key14_2_001)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(4096, 26112))
+        call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.SaveEvent()
+
+        call keyMapManager.CreateEvent(YELLOW_KEY_ID, gg_rct_Key14_2_002)
+        set posList = blockLocationLinkedList.create()
+        set posList2 = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(6016, 26496))
+        call posList.AddFirst(blockLocation.create(6016 - 128, 26496 - 128))
+        call posList2.AddFirst(blockLocation.create(768, 27264))
+        call posList2.AddFirst(blockLocation.create(768 + 128, 27264))
+        call posList2.AddFirst(blockLocation.create(768 + 128 * 4, 27264))
+        call posList2.AddFirst(blockLocation.create(1920, 27264))
+        call posList2.AddFirst(blockLocation.create(1920 + 128, 27264))
+        call posList2.AddFirst(blockLocation.create(1920 + 128 * 4, 27264))
+        call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.AddAction(posList2, "Create")
+        call keyMapManager.SaveEvent()       
+
+        call keyMapManager.CreateEvent(BLUE_KEY_ID, gg_rct_Key14_2_003)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(768 + 128 * 7, 26240 - 128))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 0, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 1, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 2, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 3, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 4, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 5, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 6, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 8, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 9, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 10, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 11, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 12, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 13, 26240))
+        call posList.AddFirst(blockLocation.create(768 + 128 * 14, 26240))
+
+        call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.SaveEvent()
+
+        call keyMapManager.CreateEvent(WHITE_KEY_ID, gg_rct_Key14_2_004)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 0))
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 1))
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 2))
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 3))
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 4))
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 5))
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 6))
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 7))
+        call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 8))
+        call posList.AddFirst(blockLocation.create(5248, 25600))
+        call posList.AddFirst(blockLocation.create(5248, 25600 - 128))
+        call keyMapManager.AddAction(posList, "Create")
+        call keyMapManager.SaveEvent()
+ 
+        call keyMapManager.Register()
+
     endfunction
 
     // 연산 초과

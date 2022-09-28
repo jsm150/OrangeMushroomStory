@@ -898,6 +898,11 @@ library Stage initializer init
                 call CreateObject(5, gg_rct_Box14_1_005, "null")
                 call CreateObject(6, gg_rct_CokeMushroom14_1_001, "CokeMushroomRight")
                 set BoxsCount = 6
+            elseif Status.Level == 2 then
+                call CreateObject(1, gg_rct_Box14_2_001, "null")
+                call CreateObject(2, gg_rct_Bloctopus14_2_001, "Right")
+                call CreateObject(3, gg_rct_CokeMushroom14_2_001, "CokeMushroomRight")
+                set BoxsCount = 3
             endif
         endif
     endfunction
@@ -1515,6 +1520,7 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 13, 8, gg_rct_StartRect104)
 
         call SaveRectHandle(StartRectList, 14, 1, gg_rct_StartRect105)
+        call SaveRectHandle(StartRectList, 14, 2, gg_rct_StartRect106)
         
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -13, -1, gg_rct_StartRectSub13_Minus1)

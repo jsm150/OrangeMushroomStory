@@ -338,6 +338,12 @@ library Jumper initializer init
         call RegionAddRect( Rects, gg_rct_Jumper266 )
         call RegionAddRect( Rects, gg_rct_Jumper267 )
         call RegionAddRect( Rects, gg_rct_Jumper268 )
+        call RegionAddRect( Rects, gg_rct_Jumper269 )
+        call RegionAddRect( Rects, gg_rct_Jumper270 )
+        call RegionAddRect( Rects, gg_rct_Jumper271 )
+        call RegionAddRect( Rects, gg_rct_Jumper272 )
+        call RegionAddRect( Rects, gg_rct_Jumper273 )
+        call RegionAddRect( Rects, gg_rct_Jumper274 )
 
     endfunction
 endlibrary
