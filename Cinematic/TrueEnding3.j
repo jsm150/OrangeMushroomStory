@@ -1,6 +1,7 @@
 library TrueEnding3 initializer init needs Cinematic
     globals
         boolean SecretEnding = false
+        boolean SecretEnding2 = false
         public boolean PyramidEnding = false
         public boolean CaveEnding = false
         boolean Ending3 = false
