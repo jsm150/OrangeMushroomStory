@@ -153,6 +153,7 @@ library Rect initializer init
         call RegionAddRect( Portal, gg_rct_Portal109 )
         call RegionAddRect( Portal, gg_rct_Portal110 )
         call RegionAddRect( Portal, gg_rct_Portal111 )
+        call RegionAddRect( Portal, gg_rct_Portal112 )
 
         call RegionAddRect( Portal, gg_rct_PortalSub097 )
         call RegionAddRect( Portal, gg_rct_PortalSub098 )

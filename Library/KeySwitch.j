@@ -1034,39 +1034,6 @@ library Key initializer Init
         call keyMapManager.Register()
 
         //---------------------------------------------------------------
-        call keyMapManager.Setting(13, -1)
-
-        call keyMapManager.CreateEvent(RED_KEY_ID, gg_rct_Key13_Minus1_001)
-        set posList = blockLocationLinkedList.create()
-        call posList.AddFirst(blockLocation.create(-7296, 23168))
-        call keyMapManager.AddAction(posList, "Remove")
-        call keyMapManager.SaveEvent()
- 
-        call keyMapManager.CreateEvent(YELLOW_KEY_ID, gg_rct_Key13_Minus1_002)
-        set posList = blockLocationLinkedList.create()
-        call posList.AddFirst(blockLocation.create(-4480, 21888))
-        call posList.AddFirst(blockLocation.create(-4480 + 384, 21888))
-        call keyMapManager.AddAction(posList, "Remove")
-        call keyMapManager.SaveEvent()
- 
-        call keyMapManager.CreateEvent(BLUE_KEY_ID, gg_rct_Key13_Minus1_003)
-        set posList = blockLocationLinkedList.create()
-        call posList.AddFirst(blockLocation.create(-2944, 22656))
-        call posList.AddFirst(blockLocation.create(-2944 + 128, 22656))
-        call posList.AddFirst(blockLocation.create(-2944 + 640, 22656))
-        call posList.AddFirst(blockLocation.create(-2944 + 768, 22656))
-        call keyMapManager.AddAction(posList, "Create")
-        call keyMapManager.SaveEvent()
- 
-        call keyMapManager.CreateEvent(WHITE_KEY_ID, gg_rct_Key13_Minus1_004)
-        set posList = blockLocationLinkedList.create()
-        call posList.AddFirst(blockLocation.create(-2560, 22784))
-        call keyMapManager.AddAction(posList, "Create")
-        call keyMapManager.SaveEvent()
- 
-        call keyMapManager.Register()
-
-        //---------------------------------------------------------------
         call keyMapManager.Setting(13, 1)
 
         call keyMapManager.CreateEvent(RED_KEY_ID, gg_rct_Key13_1_001)
@@ -1448,6 +1415,69 @@ library Key initializer Init
  
         call keyMapManager.Register()
 
+        //---------------------------------------------------------------
+        call keyMapManager.Setting(14, 3)
+
+        call keyMapManager.CreateEvent(RED_KEY_ID, gg_rct_Key14_3_001)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(13824, 28416))
+        call posList.AddFirst(blockLocation.create(13824 + 128, 28416 - 128))
+        call posList.AddFirst(blockLocation.create(14080, 28160))
+        call posList.AddFirst(blockLocation.create(10752, 27776))
+        call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.SaveEvent()
+
+        call keyMapManager.CreateEvent(YELLOW_KEY_ID, gg_rct_Key14_3_002)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(11264, 28800))
+        call posList.AddFirst(blockLocation.create(11264, 28800 - 128))
+        call posList.AddFirst(blockLocation.create(11264 - 128, 28800 - 256))
+        call posList.AddFirst(blockLocation.create(14080 + 128, 28160))
+        call posList.AddFirst(blockLocation.create(10752 + 128, 27776))
+        call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.SaveEvent()       
+
+        call keyMapManager.CreateEvent(BLUE_KEY_ID, gg_rct_Key14_3_003)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(14080 + 256, 28160))
+        call posList.AddFirst(blockLocation.create(10752 + 256, 27776))
+        call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.SaveEvent()
+ 
+        call keyMapManager.Register()
+
+        //---------------------------------------------------------------
+        call keyMapManager.Setting(14, 5)
+
+        call keyMapManager.CreateEvent(RED_KEY_ID, gg_rct_Key13_Minus1_001)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(-7296, 23168))
+        call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.SaveEvent()
+ 
+        call keyMapManager.CreateEvent(YELLOW_KEY_ID, gg_rct_Key13_Minus1_002)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(-4480, 21888))
+        call posList.AddFirst(blockLocation.create(-4480 + 384, 21888))
+        call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.SaveEvent()
+ 
+        call keyMapManager.CreateEvent(BLUE_KEY_ID, gg_rct_Key13_Minus1_003)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(-2944, 22656))
+        call posList.AddFirst(blockLocation.create(-2944 + 128, 22656))
+        call posList.AddFirst(blockLocation.create(-2944 + 640, 22656))
+        call posList.AddFirst(blockLocation.create(-2944 + 768, 22656))
+        call keyMapManager.AddAction(posList, "Create")
+        call keyMapManager.SaveEvent()
+ 
+        call keyMapManager.CreateEvent(WHITE_KEY_ID, gg_rct_Key13_Minus1_004)
+        set posList = blockLocationLinkedList.create()
+        call posList.AddFirst(blockLocation.create(-2560, 22784))
+        call keyMapManager.AddAction(posList, "Create")
+        call keyMapManager.SaveEvent()
+ 
+        call keyMapManager.Register()
     endfunction
 
     // 연산 초과

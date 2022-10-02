@@ -843,14 +843,7 @@ library Stage initializer init
                 set BoxsCount = 2
             endif
         elseif Status.World == 13 then
-            if Status.Level == -1 then
-                call CreateObject(1, gg_rct_Blin13_Minus1_001, "BlinRight")
-                call CreateObject(2, gg_rct_Blin13_Minus1_002, "BlinLeft")
-                call CreateObject(3, gg_rct_Blin13_Minus1_003, "BlinLeft")
-                call CreateObject(4, gg_rct_Propelly13_Minus1_001, "FlyLeft")
-                call CreateObject(5, gg_rct_Propelly13_Minus1_002, "FlyLeft")
-                set BoxsCount = 5
-            elseif Status.Level == 1 then
+            if Status.Level == 1 then
                 call CreateObject(1, gg_rct_Box13_1_001, "null")
                 call CreateObject(2, gg_rct_KingBloctopus13_1_001, "AutoRight")
                 set BoxsCount = 2
@@ -903,6 +896,19 @@ library Stage initializer init
                 call CreateObject(2, gg_rct_Bloctopus14_2_001, "Right")
                 call CreateObject(3, gg_rct_CokeMushroom14_2_001, "CokeMushroomRight")
                 set BoxsCount = 3
+            elseif Status.Level == 3 then
+                call CreateObject(1, gg_rct_Box14_3_001, "null")
+                call CreateObject(2, gg_rct_CokeMushroom14_3_001, "CokeMushroomRight")
+                call CreateObject(3, gg_rct_CokeMushroom14_3_002, "CokeMushroomRight")
+                call CreateObject(4, gg_rct_CokeMushroom14_3_003, "CokeMushroomRight")
+                set BoxsCount = 4
+            elseif Status.Level == 5 then
+                call CreateObject(1, gg_rct_Blin13_Minus1_001, "BlinRight")
+                call CreateObject(2, gg_rct_Blin13_Minus1_002, "BlinLeft")
+                call CreateObject(3, gg_rct_Blin13_Minus1_003, "BlinLeft")
+                call CreateObject(4, gg_rct_Propelly13_Minus1_001, "FlyLeft")
+                call CreateObject(5, gg_rct_Propelly13_Minus1_002, "FlyLeft")
+                set BoxsCount = 5
             endif
         endif
     endfunction
@@ -1325,6 +1331,12 @@ library Stage initializer init
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
                     call TriggerExecute( TrueEnding3_Trigger )
+                elseif Status.World == 14 and Status.Level+i > 5 and PracticeMode == false then
+                    set SecretEnding2 = true
+                    call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                    call CinematicModeBJ( true, GetPlayersAll() )
+                    call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
+                    call TriggerExecute( TrueEnding3_Trigger )
                 else
                     call tk.start(1.5, false, function ClearTimer)
                 endif
@@ -1509,7 +1521,7 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 12, 7, gg_rct_StartRect095)
         call SaveRectHandle(StartRectList, 12, 8, gg_rct_StartRect096)
 
-        call SaveRectHandle(StartRectList, 13, -1, gg_rct_StartRect13_Minus1)
+        call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect13_Minus1)
         call SaveRectHandle(StartRectList, 13, 1, gg_rct_StartRect097)
         call SaveRectHandle(StartRectList, 13, 2, gg_rct_StartRect098)
         call SaveRectHandle(StartRectList, 13, 3, gg_rct_StartRect099)
@@ -1521,9 +1533,10 @@ library Stage initializer init
 
         call SaveRectHandle(StartRectList, 14, 1, gg_rct_StartRect105)
         call SaveRectHandle(StartRectList, 14, 2, gg_rct_StartRect106)
+        call SaveRectHandle(StartRectList, 14, 3, gg_rct_StartRect107)
         
         // 2번째 소환위치
-        call SaveRectHandle(StartRectList, -13, -1, gg_rct_StartRectSub13_Minus1)
+        call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub13_Minus1)
         call SaveRectHandle(StartRectList, -13, 1, gg_rct_StartRectSub097)
         call SaveRectHandle(StartRectList, -13, 2, gg_rct_StartRectSub098)
         call SaveRectHandle(StartRectList, -13, 3, gg_rct_StartRectSub099)
