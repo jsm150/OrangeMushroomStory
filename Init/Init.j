@@ -84,6 +84,7 @@ scope initialize initializer init
         set s = s + "11.4\n"
         set s = s + "-랜덤월드 골드리프 획득량이 감소하였습니다.\n"
         set s = s + "-카페 3-8 버그가 수정되었습니다.\n"
+        set s = s + "-새로운 월드가 추가되었습니다.\n"
         call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.2~11.4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "10.7\n"
         set s = s + "- 아래 맵들의 난이도가 하향 조정됬습니다.\n"
@@ -692,6 +693,12 @@ scope initialize initializer init
         set s = s + "  3-6 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
         set s = s + "  3-7 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
         set s = s + "  3-8 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n\n"
+        set s = s + "--- 월드 첼린지 II ---:\n"
+        set s = s + "  3-1 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
+        set s = s + "  3-2 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
+        set s = s + "  3-3 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
+        set s = s + "  3-4 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
+        set s = s + "  3-5 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "랜덤 월드 확률표4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "● Kirby Super Star Ultra - Green Greens\n"
         set s = s + "● Sword Lord - William tell Overture Remix\n"
