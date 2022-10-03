@@ -901,7 +901,13 @@ library Stage initializer init
                 call CreateObject(2, gg_rct_CokeMushroom14_3_001, "CokeMushroomRight")
                 call CreateObject(3, gg_rct_CokeMushroom14_3_002, "CokeMushroomRight")
                 call CreateObject(4, gg_rct_CokeMushroom14_3_003, "CokeMushroomRight")
-                set BoxsCount = 4
+                call CreateObject(5, gg_rct_Bloctopus14_3_001, "Left")
+                set BoxsCount = 5
+            elseif Status.Level == 4 then
+                call CreateObject(0, gg_rct_Sentinel14_4_001, "SentinelRight")
+                call CreateObject(1, gg_rct_Bloctopus14_4_001, "Left")
+                call CreateObject(2, gg_rct_KingBloctopus14_4_001, "AutoRight")
+                set BoxsCount = 2
             elseif Status.Level == 5 then
                 call CreateObject(1, gg_rct_Blin13_Minus1_001, "BlinRight")
                 call CreateObject(2, gg_rct_Blin13_Minus1_002, "BlinLeft")
@@ -1180,7 +1186,7 @@ library Stage initializer init
                 if Status.World == 6 and Status.Level == 8 then
                     call SetUnitPosition(OrangeMushroom[i], GetRectCenterX(StartRect), GetRectMinY(StartRect)+(100*(i-1)))
                     call SetUnitPosition( BackGroundUnits[i], GetRectCenterX(StartRect), GetRectMinY(StartRect)+(100*(i-1)))
-                elseif Status.World == 13 then
+                elseif Status.World == 13 or (Status.World == 14 and Status.Level == 5) then
                     if ModuloInteger(playerCount, 2) == 1 then
                         call SetUnitPosition(OrangeMushroom[i], GetRectMinX(StartRect)+(128 * ((playerCount - 1) / 2)), GetRectCenterY(StartRect))
                         call SetUnitPosition( BackGroundUnits[i], GetRectMinX(StartRect)+(128 * ((playerCount - 1) / 2)), GetRectCenterY(StartRect))
@@ -1521,7 +1527,6 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 12, 7, gg_rct_StartRect095)
         call SaveRectHandle(StartRectList, 12, 8, gg_rct_StartRect096)
 
-        call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect13_Minus1)
         call SaveRectHandle(StartRectList, 13, 1, gg_rct_StartRect097)
         call SaveRectHandle(StartRectList, 13, 2, gg_rct_StartRect098)
         call SaveRectHandle(StartRectList, 13, 3, gg_rct_StartRect099)
@@ -1534,6 +1539,8 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 14, 1, gg_rct_StartRect105)
         call SaveRectHandle(StartRectList, 14, 2, gg_rct_StartRect106)
         call SaveRectHandle(StartRectList, 14, 3, gg_rct_StartRect107)
+        call SaveRectHandle(StartRectList, 14, 4, gg_rct_StartRect108)
+        call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect13_Minus1)
         
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub13_Minus1)

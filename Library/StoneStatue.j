@@ -410,6 +410,69 @@ library StoneStatue initializer Init needs Key
         call st.AddBlock(removedBlock.create(15488, 10240, CokeStageTerrain))
         call stoneStatueList.AddFirst(st)
 
+        // -------------------------------------------------------
+        set st = stoneStatue.create(gg_rct_StoneStatue005, 14, 4)
+        call st.AddBlock(generatedBlock.create(15744, 26880, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(15744 + 768, 26880, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(15744 + 1536 , 26880, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(15744 + 2304 , 26880, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(16096, 26880, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(16096 + 768 , 26880, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(16096 + 1536, 26880, CokeStageTerrain))
+
+        call st.AddBlock(generatedBlock.create(17152, 27520, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(17152 +128, 27520, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(17920, 28288, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(17920, 28288 - 128, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(17920, 28288 - 256, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(17632, 27520, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(17632 + 128, 27520, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(18400, 28288, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(18400, 28288 - 128, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(18400, 28288 - 256, CokeStageTerrain))
+                
+        call st.AddBlock(removedBlock.create(16000, 25600, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(16000, 25600 - 128, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(16000 + 512, 25600, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(16000 + 512, 25600 - 128, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(16000 + 256, 25600, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(16000 + 256, 25600 - 128, CokeStageTerrain))
+
+        call st.AddBlock(generatedBlock.create(19456, 27904, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(19456, 27904 - 128, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(19456, 27904 - 128 * 4, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(19456, 27904 - 128 * 5, CokeStageTerrain))
+
+        call st.AddBlock(generatedBlock.create(19716, 28160, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(19716, 28160 - 128, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(19716, 28160 - 128 * 4, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(19716, 28160 - 128 * 5, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(19716, 28160 - 128 * 8, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(19716, 28160 - 128 * 9, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(19716, 28160 - 128 * 12, CokeStageTerrain))
+
+        call st.AddBlock(generatedBlock.create(19968, 27904, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(19968, 27904 - 128, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(19968, 27904 - 128 * 4, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(19968, 27904 - 128 * 5, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(19968, 27904 - 128 * 8, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(19968, 27904 - 128 * 9, CokeStageTerrain))
+
+        call st.AddBlock(generatedBlock.create(20228, 28160, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(20228, 28160 - 128, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(20228, 28160 - 128 * 4, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(20228, 28160 - 128 * 5, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(20228, 28160 - 128 * 8, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(20228, 28160 - 128 * 9, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(20228, 28160 - 128 * 12, CokeStageTerrain))
+
+        call st.AddBlock(generatedBlock.create(20480, 27392, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(20480, 27392 - 128, CokeStageTerrain))
+        call st.AddBlock(generatedBlock.create(20480, 27392 - 128 * 4, CokeStageTerrain))
+        call st.AddBlock(removedBlock.create(20480, 27392 - 128 * 5, CokeStageTerrain))
+
+        call stoneStatueList.AddFirst(st)
+
 
     endfunction
 

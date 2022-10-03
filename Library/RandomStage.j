@@ -238,6 +238,7 @@ library RandomStage initializer Init
         call random.Add(Map.create(14, 1, LevelUnit.VeryHard))
         call random.Add(Map.create(14, 2, LevelUnit.VeryHard))
         call random.Add(Map.create(14, 3, LevelUnit.VeryHard))
+        call random.Add(Map.create(14, 4, LevelUnit.VeryHard))
         call random.Add(Map.create(14, 5, LevelUnit.VeryHard))
 
         call random.PickUp()

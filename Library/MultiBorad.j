@@ -65,7 +65,7 @@ library Multiboard// initializer init
             set BackgroundMusic = gg_snd_EllinforestBGM
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h001')
-        elseif world == 12 then
+        elseif world == 12 or (world == 14 and stage == 4) then
             set BackgroundMusic = gg_snd_Waterflame___Red___Layerz_OST
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h002')
