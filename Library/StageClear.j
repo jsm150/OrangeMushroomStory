@@ -350,6 +350,18 @@ library Stage initializer init
             call SetTerrainType(23552+128, -14208, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(23552+128+128, -14208, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(23552, -14208, SENTINEL_TERRAIN, -1, 1, 0)
+        elseif i == 14 then
+            call SetTerrainType(11008, 28416, SENTINEL_TERRAIN, -1, 1, 0)
+        elseif i == 15 then
+            call SetTerrainType(18304, 26880, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(18560, 28032, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(18560 + 128, 28032, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(16640, 25856, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(16640, 25856 - 128, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(20352, 28288, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(20352, 28288 - 128, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(20352, 28288 - 256, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(20352, 28288 - 384, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
@@ -897,6 +909,7 @@ library Stage initializer init
                 call CreateObject(3, gg_rct_CokeMushroom14_2_001, "CokeMushroomRight")
                 set BoxsCount = 3
             elseif Status.Level == 3 then
+                call SentinelChangeTerrain(14)
                 call CreateObject(1, gg_rct_Box14_3_001, "null")
                 call CreateObject(2, gg_rct_CokeMushroom14_3_001, "CokeMushroomRight")
                 call CreateObject(3, gg_rct_CokeMushroom14_3_002, "CokeMushroomRight")
@@ -904,6 +917,7 @@ library Stage initializer init
                 call CreateObject(5, gg_rct_Bloctopus14_3_001, "Left")
                 set BoxsCount = 5
             elseif Status.Level == 4 then
+                call SentinelChangeTerrain(15)
                 call CreateObject(0, gg_rct_Sentinel14_4_001, "SentinelRight")
                 call CreateObject(1, gg_rct_Bloctopus14_4_001, "Left")
                 call CreateObject(2, gg_rct_KingBloctopus14_4_001, "AutoRight")
