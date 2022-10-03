@@ -3,7 +3,7 @@ scope initialize initializer init
         hashtable Hash = InitHashtable()
         
         constant integer PLAYER_MAXINUM = 7
-        constant boolean TESTMODE = true
+        constant boolean TESTMODE = false
         boolean PracticeMode = false
         unit array OrangeMushroom
         unit array OrangeMushroomSkin
@@ -588,6 +588,7 @@ scope initialize initializer init
         set s = s + "엘린숲 : 450\n"
         set s = s + "얼음동굴 : 700\n"
         set s = s + "아랫마을 : 800\n"
+        set s = s + "월드 첼린지II : 1000\n"
         set s = s + "랜덤 : 150~350\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "골드리프?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
 //        call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "이벤트?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
