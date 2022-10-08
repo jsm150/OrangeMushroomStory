@@ -226,7 +226,6 @@ library RandomStage initializer Init
         call random.Add(Map.create(12, 7, LevelUnit.VeryHard))
         call random.Add(Map.create(12, 8, LevelUnit.VeryHard))
 
-        call random.Add(Map.create(13, -1, LevelUnit.Hidden))
         call random.Add(Map.create(13, 1, LevelUnit.Normal))
         call random.Add(Map.create(13, 2, LevelUnit.Normal))
         call random.Add(Map.create(13, 3, LevelUnit.Normal))
@@ -235,6 +234,12 @@ library RandomStage initializer Init
         call random.Add(Map.create(13, 6, LevelUnit.VeryHard))
         call random.Add(Map.create(13, 7, LevelUnit.VeryHard))
         call random.Add(Map.create(13, 8, LevelUnit.VeryHard))
+
+        call random.Add(Map.create(14, 1, LevelUnit.VeryHard))
+        call random.Add(Map.create(14, 2, LevelUnit.VeryHard))
+        call random.Add(Map.create(14, 3, LevelUnit.VeryHard))
+        call random.Add(Map.create(14, 4, LevelUnit.VeryHard))
+        call random.Add(Map.create(14, 5, LevelUnit.VeryHard))
 
         call random.PickUp()
         call random.destroy()

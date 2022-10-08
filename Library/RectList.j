@@ -35,7 +35,6 @@ library Rect initializer init
         set Unlimited = CreateRegion()
         call RegionAddRect(Unlimited, gg_rct_Unlimited001)
         call RegionAddRect(Unlimited, gg_rct_Unlimited002)
-        call RegionAddRect(Unlimited, gg_rct_Unlimited003)
         
         call RegionAddRect( Subway, gg_rct_Subway )
         call RegionAddRect( WitchTower, gg_rct_WitchTower )
@@ -152,6 +151,10 @@ library Rect initializer init
         call RegionAddRect( Portal, gg_rct_Portal107 )
         call RegionAddRect( Portal, gg_rct_Portal108 )
         call RegionAddRect( Portal, gg_rct_Portal109 )
+        call RegionAddRect( Portal, gg_rct_Portal110 )
+        call RegionAddRect( Portal, gg_rct_Portal111 )
+        call RegionAddRect( Portal, gg_rct_Portal112 )
+        call RegionAddRect( Portal, gg_rct_Portal113 )
 
         call RegionAddRect( Portal, gg_rct_PortalSub097 )
         call RegionAddRect( Portal, gg_rct_PortalSub098 )

@@ -81,7 +81,13 @@ scope initialize initializer init
         set s = s + "-히든스킨 이벤트가 종료되었습니다.\n"
         set s = s + "-얼음동굴 3-7 버그가 수정되었습니다.\n"
         set s = s + "-얼음동굴입구가 보이지 않던 버그가 수정되었습니다.\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.2~11.3", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "11.4\n"
+        set s = s + "-랜덤월드 골드리프 획득량이 감소하였습니다.\n"
+        set s = s + "-카페 3-8 버그가 수정되었습니다.\n"
+        set s = s + "-새로운 월드가 추가되었습니다.\n"
+        set s = s + "11.5\n"
+        set s = s + "-스톤볼로 블럭을 부셔도 재시작시 다시 블럭이 생기지 않는 버그를 수정했습니다.\n"
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.2~11.5", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "10.7\n"
         set s = s + "- 아래 맵들의 난이도가 하향 조정됬습니다.\n"
         set s = s + "  지하철: 3-3\n"
@@ -108,7 +114,7 @@ scope initialize initializer init
         set s = s + "11.1\n"
         set s = s + "- 상점이 추가되었습니다.\n"
         set s = s + "- -상점 / -shop 명령어가 추가되었습니다.\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.7~11.2", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "10.7~11.1", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "10.2\n"
         set s = s + "- 스킨 인벤토리가 추가되었습니다.\n"
         set s = s + "  스킨은 월드를 클리어 하면 추가됩니다.\n"
@@ -584,7 +590,8 @@ scope initialize initializer init
         set s = s + "엘린숲 : 450\n"
         set s = s + "얼음동굴 : 700\n"
         set s = s + "아랫마을 : 800\n"
-        set s = s + "랜덤 : 100~500\n"
+        set s = s + "월드 첼린지II : 1000\n"
+        set s = s + "랜덤 : 150~350\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "골드리프?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
 //        call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "이벤트?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = TeamColor[7] + "쉬움|r : 1.62%, " + TeamColor[5] + "보통|r : 1.21%, " + TeamColor[6] + "어려움|r : 0.81%," + TeamColor[1] + " 매우어려움|r : 0.4%\n\n"
@@ -689,6 +696,12 @@ scope initialize initializer init
         set s = s + "  3-6 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
         set s = s + "  3-7 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
         set s = s + "  3-8 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n\n"
+        set s = s + "--- 월드 첼린지 II ---:\n"
+        set s = s + "  3-1 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
+        set s = s + "  3-2 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
+        set s = s + "  3-3 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
+        set s = s + "  3-4 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"
+        set s = s + "  3-5 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "랜덤 월드 확률표4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "● Kirby Super Star Ultra - Green Greens\n"
         set s = s + "● Sword Lord - William tell Overture Remix\n"

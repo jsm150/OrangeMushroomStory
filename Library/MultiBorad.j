@@ -53,23 +53,23 @@ library Multiboard// initializer init
             set BackgroundMusic = gg_snd_CokeTown001
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('ebal')
-        elseif world == 9 or (world == 14 and stage == 1) then
+        elseif world == 9 or (world == 14 and stage == 3) then
             set BackgroundMusic = gg_snd_skylight_harbor
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('hgyr')
-        elseif world == 10 then
+        elseif world == 10 or (world == 14 and stage == 1) then
             set BackgroundMusic = gg_snd_Ariant
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h000')
-        elseif world == 11 then
+        elseif world == 11 or (world == 14 and stage == 2) then
             set BackgroundMusic = gg_snd_EllinforestBGM
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h001')
-        elseif world == 12 then
+        elseif world == 12 or (world == 14 and stage == 4) then
             set BackgroundMusic = gg_snd_Waterflame___Red___Layerz_OST
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h002')
-        elseif world == 13 then
+        elseif world == 13 or (world == 14 and stage == 5) then
             set BackgroundMusic = gg_snd_EverybodyBounce
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h00D')
@@ -98,7 +98,7 @@ library Multiboard// initializer init
                 if FinalStage == false then
                     call SetBackgroundAndMusic(this.World, this.Level)
                 endif
-            elseif this.World == 8 or RandomStage_isRandom or PracticeMode then
+            elseif this.World == 8 or RandomStage_isRandom or PracticeMode or this.World == 14 then
                 call SetBackgroundAndMusic(this.World, this.Level)
             endif
             if this.World >= 3 then

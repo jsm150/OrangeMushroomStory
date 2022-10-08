@@ -53,7 +53,7 @@ library CaveHiddenRectHint initializer Init
         call SetRect(t, gg_rct_CaveHintTeleport005_in, gg_rct_HideDownArrow005)
         call SetRect(t, gg_rct_CaveHintTeleport006_in, gg_rct_HideDownArrow006)
         call SetRect(t, gg_rct_CaveHintTeleport007_in, gg_rct_HideDownArrow007)
-        call SetRect(t, gg_rct_HiddenSkinTeleport001_in, gg_rct_HideDownArrow008)
+        call SetRect(t, gg_rct_TeleportStone340, gg_rct_HideDownArrow008)
         
         call TriggerAddAction(t, function Action)
         

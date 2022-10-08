@@ -350,6 +350,18 @@ library Stage initializer init
             call SetTerrainType(23552+128, -14208, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(23552+128+128, -14208, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(23552, -14208, SENTINEL_TERRAIN, -1, 1, 0)
+        elseif i == 14 then
+            call SetTerrainType(11008, 28416, SENTINEL_TERRAIN, -1, 1, 0)
+        elseif i == 15 then
+            call SetTerrainType(18304, 26880, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(18560, 28032, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(18560 + 128, 28032, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(16640, 25856, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(16640, 25856 - 128, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(20352, 28288, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(20352, 28288 - 128, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(20352, 28288 - 256, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(20352, 28288 - 384, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
@@ -843,14 +855,7 @@ library Stage initializer init
                 set BoxsCount = 2
             endif
         elseif Status.World == 13 then
-            if Status.Level == -1 then
-                call CreateObject(1, gg_rct_Blin13_Minus1_001, "BlinRight")
-                call CreateObject(2, gg_rct_Blin13_Minus1_002, "BlinLeft")
-                call CreateObject(3, gg_rct_Blin13_Minus1_003, "BlinLeft")
-                call CreateObject(4, gg_rct_Propelly13_Minus1_001, "FlyLeft")
-                call CreateObject(5, gg_rct_Propelly13_Minus1_002, "FlyLeft")
-                set BoxsCount = 5
-            elseif Status.Level == 1 then
+            if Status.Level == 1 then
                 call CreateObject(1, gg_rct_Box13_1_001, "null")
                 call CreateObject(2, gg_rct_KingBloctopus13_1_001, "AutoRight")
                 set BoxsCount = 2
@@ -888,6 +893,42 @@ library Stage initializer init
                 call CreateObject(2, gg_rct_Box13_8_001, "null")
                 call CreateObject(3, gg_rct_Propelly13_8_001, "FlyRight")
                 set BoxsCount = 3
+            endif
+        elseif Status.World == 14 then
+            if Status.Level == 1  then
+                call CreateObject(1, gg_rct_Box14_1_001, "null")
+                call CreateObject(2, gg_rct_Box14_1_002, "null")
+                call CreateObject(3, gg_rct_Box14_1_003, "null")
+                call CreateObject(4, gg_rct_Box14_1_004, "null")
+                call CreateObject(5, gg_rct_Box14_1_005, "null")
+                call CreateObject(6, gg_rct_CokeMushroom14_1_001, "CokeMushroomRight")
+                set BoxsCount = 6
+            elseif Status.Level == 2 then
+                call CreateObject(1, gg_rct_Box14_2_001, "null")
+                call CreateObject(2, gg_rct_Bloctopus14_2_001, "Right")
+                call CreateObject(3, gg_rct_CokeMushroom14_2_001, "CokeMushroomRight")
+                set BoxsCount = 3
+            elseif Status.Level == 3 then
+                call SentinelChangeTerrain(14)
+                call CreateObject(1, gg_rct_Box14_3_001, "null")
+                call CreateObject(2, gg_rct_CokeMushroom14_3_001, "CokeMushroomRight")
+                call CreateObject(3, gg_rct_CokeMushroom14_3_002, "CokeMushroomRight")
+                call CreateObject(4, gg_rct_CokeMushroom14_3_003, "CokeMushroomRight")
+                call CreateObject(5, gg_rct_Bloctopus14_3_001, "Left")
+                set BoxsCount = 5
+            elseif Status.Level == 4 then
+                call SentinelChangeTerrain(15)
+                call CreateObject(0, gg_rct_Sentinel14_4_001, "SentinelRight")
+                call CreateObject(1, gg_rct_Bloctopus14_4_001, "Left")
+                call CreateObject(2, gg_rct_KingBloctopus14_4_001, "AutoRight")
+                set BoxsCount = 2
+            elseif Status.Level == 5 then
+                call CreateObject(1, gg_rct_Blin13_Minus1_001, "BlinRight")
+                call CreateObject(2, gg_rct_Blin13_Minus1_002, "BlinLeft")
+                call CreateObject(3, gg_rct_Blin13_Minus1_003, "BlinLeft")
+                call CreateObject(4, gg_rct_Propelly13_Minus1_001, "FlyLeft")
+                call CreateObject(5, gg_rct_Propelly13_Minus1_002, "FlyLeft")
+                set BoxsCount = 5
             endif
         endif
     endfunction
@@ -1159,7 +1200,7 @@ library Stage initializer init
                 if Status.World == 6 and Status.Level == 8 then
                     call SetUnitPosition(OrangeMushroom[i], GetRectCenterX(StartRect), GetRectMinY(StartRect)+(100*(i-1)))
                     call SetUnitPosition( BackGroundUnits[i], GetRectCenterX(StartRect), GetRectMinY(StartRect)+(100*(i-1)))
-                elseif Status.World == 13 then
+                elseif Status.World == 13 or (Status.World == 14 and Status.Level == 5) then
                     if ModuloInteger(playerCount, 2) == 1 then
                         call SetUnitPosition(OrangeMushroom[i], GetRectMinX(StartRect)+(128 * ((playerCount - 1) / 2)), GetRectCenterY(StartRect))
                         call SetUnitPosition( BackGroundUnits[i], GetRectMinX(StartRect)+(128 * ((playerCount - 1) / 2)), GetRectCenterY(StartRect))
@@ -1256,8 +1297,8 @@ library Stage initializer init
                     if Status.World == 1 and Status.Level == 0 then
                         call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
                         if TESTMODE == true then
-                            call Status.SetLevel(12, 8)
-                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 깊은 산속" )
+                            call Status.SetLevel(13, 8)
+                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지 2" )
                             call tk.start(3.0, false, function WorldTimer)
                         else
                             call tk.start(1.0, false, function WorldTimer)
@@ -1306,6 +1347,12 @@ library Stage initializer init
                     call TriggerExecute( TrueEnding3_Trigger )
                 elseif Status.World == 11 and Status.Level+i > 5 and PracticeMode == false then
                     set TrueEnding3END_EllinEnding = true
+                    call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                    call CinematicModeBJ( true, GetPlayersAll() )
+                    call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
+                    call TriggerExecute( TrueEnding3_Trigger )
+                elseif Status.World == 14 and Status.Level+i > 5 and PracticeMode == false then
+                    set SecretEnding2 = true
                     call SkinFrame_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
@@ -1494,7 +1541,6 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 12, 7, gg_rct_StartRect095)
         call SaveRectHandle(StartRectList, 12, 8, gg_rct_StartRect096)
 
-        call SaveRectHandle(StartRectList, 13, -1, gg_rct_StartRect13_Minus1)
         call SaveRectHandle(StartRectList, 13, 1, gg_rct_StartRect097)
         call SaveRectHandle(StartRectList, 13, 2, gg_rct_StartRect098)
         call SaveRectHandle(StartRectList, 13, 3, gg_rct_StartRect099)
@@ -1503,9 +1549,15 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 13, 6, gg_rct_StartRect102)
         call SaveRectHandle(StartRectList, 13, 7, gg_rct_StartRect103)
         call SaveRectHandle(StartRectList, 13, 8, gg_rct_StartRect104)
+
+        call SaveRectHandle(StartRectList, 14, 1, gg_rct_StartRect105)
+        call SaveRectHandle(StartRectList, 14, 2, gg_rct_StartRect106)
+        call SaveRectHandle(StartRectList, 14, 3, gg_rct_StartRect107)
+        call SaveRectHandle(StartRectList, 14, 4, gg_rct_StartRect108)
+        call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect13_Minus1)
         
         // 2번째 소환위치
-        call SaveRectHandle(StartRectList, -13, -1, gg_rct_StartRectSub13_Minus1)
+        call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub13_Minus1)
         call SaveRectHandle(StartRectList, -13, 1, gg_rct_StartRectSub097)
         call SaveRectHandle(StartRectList, -13, 2, gg_rct_StartRectSub098)
         call SaveRectHandle(StartRectList, -13, 3, gg_rct_StartRectSub099)

@@ -3,7 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        string mapVersion = "v11.3"
+        string mapVersion = "v11.4"
         public key GoldLeafChangedEvent
     endglobals
 
@@ -19,6 +19,7 @@ scope User initializer Init
         integer Forest = 0
         integer IceCave = 0
         integer DownTown = 0
+        integer WorldChallenge2 = 0
         integer Random = 0
     endstruct
 
@@ -115,6 +116,8 @@ scope User initializer Init
                 return this.ClearList.IceCave
             elseif worldId == 13 then
                 return this.ClearList.DownTown
+            elseif worldId == 14 then
+                return this.ClearList.WorldChallenge2
             else
                 return 0
             endif
@@ -210,6 +213,10 @@ scope User initializer Init
             set none = false
             call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, "　　　　　　아랫 마을: " + WorldKey_Code12[i + 1])
         endif
+        if UserList[i].ClearList.WorldChallenge2 > 0 then
+            set none = false
+            call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, "　　　　　　월드2: " + WorldKey_Code12[i + 1])
+        endif
         if UserList[i].ClearList.Random > 0 then
             set none = false
             call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, "　　　　　　랜덤: " + WorldKey_Code10[i + 1])
@@ -248,8 +255,10 @@ scope User initializer Init
             set amount = Money.create(700)
         elseif world == "DownTown" then
             set amount = Money.create(800)
+        elseif world == "WorldChallenge2" then
+            set amount = Money.create(1000)
         elseif world == "Random" then
-            set amount = Money.create(GetRandomInt(100, 500))
+            set amount = Money.create(GetRandomInt(150, 350))
         endif
 
         call User_UserList[playerId].Deposit(playerId, amount.ToInt())
@@ -293,6 +302,7 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("Forest", "UserList[idx].ClearList.Forest", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("IceCave", "UserList[idx].ClearList.IceCave", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("DownTown", "UserList[idx].ClearList.DownTown", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
+    //! runtextmacro MakeFuncToDataLoadSync("WorldChallenge2", "UserList[idx].ClearList.WorldChallenge2", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("BellaPet", "UserList[idx].BellaPet", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
@@ -318,6 +328,7 @@ scope User initializer Init
             call DataLoadSyncToForest(playerId, name, "Forest")
             call DataLoadSyncToIceCave(playerId, name, "IceCave")
             call DataLoadSyncToDownTown(playerId, name, "DownTown")
+            call DataLoadSyncToWorldChallenge2(playerId, name, "WorldChallenge2")
             call DataLoadSyncToRandom(playerId, name, "Random")
             call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
             call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")

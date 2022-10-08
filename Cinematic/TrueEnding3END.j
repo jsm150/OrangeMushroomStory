@@ -229,6 +229,8 @@ library TrueEnding3END initializer init needs Cinematic
                         call User_GameClearDataUpload.evaluate(i - 1, name, "Desert")
                     elseif EllinEnding == true then
                         call User_GameClearDataUpload.evaluate(i - 1, name, "Forest")
+                    elseif SecretEnding2 == true then
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "WorldChallenge2")
                     else
                         call User_GameClearDataUpload.evaluate(i - 1, name, "Coke")
                     endif
