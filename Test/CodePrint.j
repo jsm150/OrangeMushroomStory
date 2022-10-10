@@ -15,6 +15,7 @@ library CodePrint initializer Init
         local string array Code10
         local string array Code11
         local string array Code12
+        local string array Code13
 	    local string s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         local string userChat = SubString(GetEventPlayerChatString(), 1, StringLength(GetEventPlayerChatString()))
 
@@ -203,6 +204,21 @@ library CodePrint initializer Init
         set Code12[i] = Code12[i] + SubString(s,CharCode[2],CharCode[2]+1)
         set Code12[i] = Code12[i] + SubString(s,CharCode[3],CharCode[3]+1)
         call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "아랫 마을: " + Code12[i])
+
+        set saveIntName = StringHash(Code12[i])
+        if saveIntName < 0 then
+            set saveIntName = saveIntName * -1
+        endif
+        if saveIntName < 100000 then
+            set saveIntName = saveIntName + 100000
+        endif
+        set CharCode[1] = ModuloInteger(S2I(SubString(I2S(saveIntName),0,2)), 26)
+        set CharCode[2] = ModuloInteger(S2I(SubString(I2S(saveIntName),2,4)), 26)
+        set CharCode[3] = ModuloInteger(S2I(SubString(I2S(saveIntName),4,6)), 26)
+        set Code13[i] = SubString(s,CharCode[1],CharCode[1]+1)
+        set Code13[i] = Code13[i] + SubString(s,CharCode[2],CharCode[2]+1)
+        set Code13[i] = Code13[i] + SubString(s,CharCode[3],CharCode[3]+1)
+        call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "월드 첼린지II: " + Code13[i])
     endfunction
 
     private function Init takes nothing returns nothing

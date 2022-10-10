@@ -121,6 +121,7 @@ scope PracticeCommand initializer Init
         set s = s + "  엘린 숲 : 11\n"
         set s = s + "  얼음 동굴 : 12\n"
         set s = s + "  깊은 산속 : 13\n"
+        set s = s + "  월드 첼린지II : 14\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "|cffFF0202월드 번호|r", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
     endfunction
 
