@@ -3,7 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        string mapVersion = "v11.4"
+        string mapVersion = "v11.6"
         public key GoldLeafChangedEvent
     endglobals
 
@@ -215,7 +215,7 @@ scope User initializer Init
         endif
         if UserList[i].ClearList.WorldChallenge2 > 0 then
             set none = false
-            call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, "　　　　　　월드2: " + WorldKey_Code12[i + 1])
+            call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, "　　　　　　월드2: " + WorldKey_Code13[i + 1])
         endif
         if UserList[i].ClearList.Random > 0 then
             set none = false
