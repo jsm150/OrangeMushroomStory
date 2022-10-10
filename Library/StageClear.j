@@ -23,7 +23,7 @@ library Stage initializer init
         local integer i = 1
         local integer j = 1
         local integer sum = 0
-        local integer worldCount = 12
+        local integer worldCount = 13
         
         loop
             exitwhen i > worldCount
@@ -362,6 +362,7 @@ library Stage initializer init
             call SetTerrainType(20352, 28288 - 128, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(20352, 28288 - 256, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(20352, 28288 - 384, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(24704, 25344, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
@@ -921,7 +922,9 @@ library Stage initializer init
                 call CreateObject(0, gg_rct_Sentinel14_4_001, "SentinelRight")
                 call CreateObject(1, gg_rct_Bloctopus14_4_001, "Left")
                 call CreateObject(2, gg_rct_KingBloctopus14_4_001, "AutoRight")
-                set BoxsCount = 2
+                call CreateObject(3, gg_rct_Bloctopus14_4_002, "Left")
+                call CreateObject(4, gg_rct_CokeMushroom14_4_001, "CokeMushroomLeft")
+                set BoxsCount = 4
             elseif Status.Level == 5 then
                 call CreateObject(1, gg_rct_Blin13_Minus1_001, "BlinRight")
                 call CreateObject(2, gg_rct_Blin13_Minus1_002, "BlinLeft")
@@ -1066,6 +1069,7 @@ library Stage initializer init
         set HiddenPortalCount[9] = 0
         set HiddenPortalCount[10] = 0
         set HiddenPortalCount[11] = 0
+        set HiddenPortalCount[12] = 0
         set GravityChanger_SentinelTime = 0
         set GravityChanger_SentinelTime2 = 0
         call PauseTimer(SentinelTimer)
