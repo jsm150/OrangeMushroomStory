@@ -251,9 +251,6 @@ library MovePortal initializer Init needs MushroomMoving, Water
         call ObjectCreate(gg_rct_MovePortal12_7_003, gg_rct_MovePortal12_7_004)
         call SetLevel(12, 8)
         call ObjectCreate(gg_rct_MovePortal12_8_001, gg_rct_MovePortal12_8_002)
-        call SetLevel(14, 5)
-        call ObjectCreate(gg_rct_MovePortal13_Minus1_001, gg_rct_MovePortal13_Minus1_002)
-        call ObjectCreate(gg_rct_MovePortal13_Minus1_003, gg_rct_MovePortal13_Minus1_004)
         call SetLevel(13, 6)
         call ObjectCreate(gg_rct_MovePortal13_6_001, gg_rct_MovePortal13_6_002)
         call SetLevel(13, 8)
@@ -266,5 +263,10 @@ library MovePortal initializer Init needs MushroomMoving, Water
         call ObjectCreate(gg_rct_MovePortal14_2_001, gg_rct_MovePortal14_2_002)
         call SetLevel(14, 3)
         call ObjectCreate(gg_rct_MovePortal14_3_001, gg_rct_MovePortal14_3_002)
+        call SetLevel(14, 5)
+        call ObjectCreate(gg_rct_MovePortal13_Minus1_001, gg_rct_MovePortal13_Minus1_002)
+        call ObjectCreate(gg_rct_MovePortal13_Minus1_003, gg_rct_MovePortal13_Minus1_004)
+        call ObjectCreate(gg_rct_MovePortal13_Minus1_005, gg_rct_MovePortal13_Minus1_006)
+        call ObjectCreate(gg_rct_MovePortal13_Minus1_007, gg_rct_MovePortal13_Minus1_008)
     endfunction
 endlibrary
