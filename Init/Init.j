@@ -87,7 +87,10 @@ scope initialize initializer init
         set s = s + "-새로운 월드가 추가되었습니다.\n"
         set s = s + "11.5\n"
         set s = s + "-스톤볼로 블럭을 부셔도 재시작시 다시 블럭이 생기지 않는 버그를 수정했습니다.\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.2~11.5", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "11.6\n"
+        set s = s + "-월드 첼린지2에서 스테이지가 넘어가지 않던 버그를 수정했습니다.\n"
+        set s = s + "-월드 첼린지2의 스테이지들이 수정되었습니다. \n"
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.2~11.6", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "10.7\n"
         set s = s + "- 아래 맵들의 난이도가 하향 조정됬습니다.\n"
         set s = s + "  지하철: 3-3\n"

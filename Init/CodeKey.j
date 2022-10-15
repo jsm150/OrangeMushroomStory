@@ -13,6 +13,7 @@ library WorldKey initializer init
         public string array Code10
         public string array Code11
         public string array Code12
+        public string array Code13
     endglobals
 
     private function Main takes nothing returns nothing
@@ -197,6 +198,21 @@ library WorldKey initializer init
                 set Code12[i] = SubString(s,CharCode[1],CharCode[1]+1)
                 set Code12[i] = Code12[i] + SubString(s,CharCode[2],CharCode[2]+1)
                 set Code12[i] = Code12[i] + SubString(s,CharCode[3],CharCode[3]+1)
+
+
+                set saveIntName = StringHash(Code12[i])
+                if saveIntName < 0 then
+                    set saveIntName = saveIntName * -1
+                endif
+                if saveIntName < 100000 then
+                    set saveIntName = saveIntName + 100000
+                endif
+                set CharCode[1] = ModuloInteger(S2I(SubString(I2S(saveIntName),0,2)), 26)
+                set CharCode[2] = ModuloInteger(S2I(SubString(I2S(saveIntName),2,4)), 26)
+                set CharCode[3] = ModuloInteger(S2I(SubString(I2S(saveIntName),4,6)), 26)
+                set Code13[i] = SubString(s,CharCode[1],CharCode[1]+1)
+                set Code13[i] = Code13[i] + SubString(s,CharCode[2],CharCode[2]+1)
+                set Code13[i] = Code13[i] + SubString(s,CharCode[3],CharCode[3]+1)
             endif
         set i = i + 1
         endloop
