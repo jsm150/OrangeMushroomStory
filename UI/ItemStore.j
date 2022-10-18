@@ -1,5 +1,6 @@
 library ItemStore initializer Init
     globals
+        // 이벤트 선언
         private key ContinueAddItemBoughtEvent
     endglobals
 
@@ -311,6 +312,14 @@ library ItemStore initializer Init
         endmethod
     endstruct
 
+//------------------------------------------------------------
+/* 
+ * 이벤트 추가는 아래 구조체 복사해서
+ * 이벤트키(ContinueAddItemBoughtEvent), 구조체 이름, Apply 메서드의 내용을 바꿔주면 됩니다.
+ * 이벤트 동작 추가는 여기에 해주세요.
+ */
+
+    // 컨티뉴 2증가 이벤트
     private struct ContinueAddItem
         public method Apply takes nothing returns nothing
             local integer playerId = Events.GetEventArgs(ContinueAddItemBoughtEvent)
@@ -324,6 +333,8 @@ library ItemStore initializer Init
         endmethod
     endstruct
 
+    //------------------------------------------------------------
+
     globals
         public ItemStoreUI array ItemStoreUIList[PLAYER_MAXINUM]
     endglobals
@@ -332,6 +343,12 @@ library ItemStore initializer Init
         call ItemStoreUIList[i].ClickDown(x, y)
     endfunction
 
+    /* 
+     * 여기가 아이템 추가하는 부분입니다.
+     * 첫 인자값은 상점에 보여질 아이템 이미지, 두번째 인자값은 아이템 객체를 넣는데
+     * 아이템 객체의 인자값은 아이템의 금액과 수량, 아이템이 구매됬을때 동작할 이벤트를 넣어주면 됩니다.
+     * 이벤트는 최 상단에 선언후, 이벤트를 받는 구조체(struct)를 선언하여 구매 후 동작을 정의합니다.
+     */
     private function CreateItemUIList takes nothing returns ItemUIList
         local ItemUIList uiList = ItemUIList.create()
         call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", Item.create(Money.create(300), 1, ContinueAddItemBoughtEvent)))
