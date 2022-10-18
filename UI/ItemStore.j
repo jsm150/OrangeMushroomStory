@@ -1,7 +1,6 @@
 library ItemStore initializer Init
     globals
         private key ContinueAddItemBoughtEvent
-        private key ItemPurchaseButtonClickedEvent
     endglobals
 
     private struct ItemPurchaseButtonClickedEventArgs
@@ -22,15 +21,45 @@ library ItemStore initializer Init
         endmethod
     endstruct
 
+    private struct Item
+        private Money price
+        private integer quantity
+        private integer purchasedEvent
+        
+        public method Purchase takes integer playerId returns nothing
+            if this.quantity == 0 or User_UserList[playerId].Balance() < this.price.ToInt() then
+                return
+            endif
+
+            call User_UserList[playerId].Withdraw(playerId, this.price.ToInt())
+            call User_UserList[playerId].GoldLeafUpload(playerId)
+            call PrivateLogging.evaluate(playerId, GetPlayerName(Player(playerId)) + "님이 골드리프 " + this.price.ToString() + "을 사용했습니다. 잔액은 " /*
+                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafUseLog")
+
+            set this.quantity = this.quantity - 1
+            call Events.Raise(purchasedEvent, playerId)
+        endmethod
+
+        public method PriceTag takes nothing returns string
+            return this.price.ToString()
+        endmethod
+
+        public static method create takes Money price, integer quantity, integer purchasedEvent returns thistype
+            local thistype this = thistype.allocate()
+            set this.price = price
+            set this.quantity = quantity
+            set this.purchasedEvent = purchasedEvent
+            return this
+        endmethod
+    endstruct
+
     private struct ItemUI
         private static constant real sizeX = 0.233
         private static constant real sizeY = 0.315
         private static constant real ratio = 0.3
         private integer frame
-        private Money price
         private integer priceLetter
-        private integer quantity
-        private integer purchasedEvent
+        private Item item
 
         public method ClickInPurchaseButton takes integer idx, real posX, real posY returns boolean
             local real minX = 0.174
@@ -48,8 +77,7 @@ library ItemStore initializer Init
         endmethod
 
         public method Purchase takes integer playerId returns nothing
-            set this.quantity = this.quantity - 1
-            call Events.Raise(ItemPurchaseButtonClickedEvent, ItemPurchaseButtonClickedEventArgs.create(this, playerId, this.quantity + 1, this.price, this.purchasedEvent))
+            call this.item.Purchase(playerId)
         endmethod
 
         public method Show takes integer playerId, integer idx, integer refFrame returns nothing
@@ -59,7 +87,7 @@ library ItemStore initializer Init
             local real offsetIdxY = -0.11
             local real x = offsetX + offsetIdxX * ModuloInteger(idx, 5)
             local real y = offsetY + offsetIdxY * R2I(idx / 5)
-            local string price = this.price.ToString()
+            local string price = this.item.PriceTag()
 
             if GetLocalPlayer() == Player(playerId) then
                 call DzFrameSetPoint(this.frame, JN_FRAMEPOINT_TOPLEFT, refFrame, JN_FRAMEPOINT_BOTTOMLEFT, x, y)
@@ -78,11 +106,7 @@ library ItemStore initializer Init
             endif
         endmethod
 
-        public method RollBack takes nothing returns nothing
-            set this.quantity = this.quantity + 1
-        endmethod
-
-        public static method create takes string blp, Money price, integer quantity, integer purchasedEvent returns thistype
+        public static method create takes string blp, Item i_tem returns thistype
             local thistype this = thistype.allocate()
             set this.frame = DzCreateFrameByTagName("BACKDROP", "", DzGetGameUI(), "", 0)
             call DzFrameSetSize(this.frame, thistype.sizeX * thistype.ratio, thistype.sizeY * thistype.ratio)
@@ -94,9 +118,7 @@ library ItemStore initializer Init
             call DzFrameSetEnable(this.priceLetter, false)
             call DzFrameShow(this.priceLetter, false)
 
-            set this.price = price
-            set this.quantity = quantity
-            set this.purchasedEvent = purchasedEvent
+            set this.item = i_tem
             return this
         endmethod
     endstruct
@@ -289,43 +311,6 @@ library ItemStore initializer Init
         endmethod
     endstruct
 
-    private struct ItemPurchase
-        public method Purchase takes nothing returns nothing
-            local ItemPurchaseButtonClickedEventArgs args = Events.GetEventArgs(ItemPurchaseButtonClickedEvent)
-            local integer playerId = args.playerId
-            local integer quantity = args.quantity
-            local Money price = args.price
-            local integer purchasedEvent = args.purchasedEvent
-            
-            if quantity == 0 then
-                debug call JNWriteLog("매진되었습니다.")
-                call ItemUI(args.sender).RollBack()
-                call args.destroy()
-                return
-            endif
-            if User_UserList[playerId].Balance() < price.ToInt() then
-                debug call JNWriteLog("잔액부족 입니다.")
-                call ItemUI(args.sender).RollBack()
-                call args.destroy()
-                return
-            endif
-
-            call User_UserList[playerId].Withdraw(playerId, price.ToInt())
-            call User_UserList[playerId].GoldLeafUpload(playerId)
-            call PrivateLogging.evaluate(playerId, GetPlayerName(Player(playerId)) + "님이 골드리프 " + price.ToString() + "을 사용했습니다. 잔액은 " /*
-                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafUseLog")
-            call Events.Raise(purchasedEvent, playerId)
-
-            call args.destroy()
-        endmethod
-        
-        private static method onInit takes nothing returns nothing
-            local thistype this = thistype.create()
-            call Events.Add(ItemPurchaseButtonClickedEvent, this, this.Purchase)
-        endmethod
-    endstruct
-
-
     private struct ContinueAddItem
         public method Apply takes nothing returns nothing
             local integer playerId = Events.GetEventArgs(ContinueAddItemBoughtEvent)
@@ -349,7 +334,7 @@ library ItemStore initializer Init
 
     private function CreateItemUIList takes nothing returns ItemUIList
         local ItemUIList uiList = ItemUIList.create()
-        call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", Money.create(300), 1, ContinueAddItemBoughtEvent))
+        call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", Item.create(Money.create(300), 1, ContinueAddItemBoughtEvent)))
         return uiList
     endfunction
 
