@@ -16,7 +16,7 @@
                 <mxCell id="3" value="ItemUIList" style="html=1;" parent="1" vertex="1">
                     <mxGeometry x="560" y="220" width="110" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="18" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="4" target="12">
+                <mxCell id="22" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="21">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="ItemUI" style="html=1;" parent="1" vertex="1">
@@ -28,20 +28,11 @@
                 <mxCell id="11" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="670" y="220" width="20" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="12" value="&lt;span&gt;ItemBuyRequestEventArgs&lt;/span&gt;" style="html=1;" vertex="1" parent="1">
-                    <mxGeometry x="725" y="340" width="180" height="50" as="geometry"/>
+                <mxCell id="17" value="«ContinueAddItemBoughtEvent&lt;span&gt;»&lt;/span&gt;&lt;br&gt;&lt;div style=&quot;line-height: 19px&quot;&gt;&lt;div style=&quot;line-height: 19px&quot;&gt;ContinueAddItem&lt;/div&gt;&lt;/div&gt;" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="340" width="210" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="21" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="13" target="12">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="13" value="«ItemBuyRequestEvent&lt;span&gt;»&lt;/span&gt;&lt;br&gt;&lt;div style=&quot;line-height: 19px&quot;&gt;&lt;b&gt;ItemPurchase&lt;/b&gt;&lt;/div&gt;" style="html=1;" vertex="1" parent="1">
-                    <mxGeometry x="730" y="460" width="170" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="17" value="«ContinueAddItemBoughtEvent&lt;span&gt;»&lt;/span&gt;&lt;br&gt;&lt;div style=&quot;line-height: 19px&quot;&gt;&lt;div style=&quot;line-height: 19px&quot;&gt;ContinueAddItem&lt;/div&gt;&lt;/div&gt;" style="html=1;" vertex="1" parent="1">
-                    <mxGeometry x="430" y="460" width="210" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="19" value="&amp;lt;create&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-                    <mxGeometry x="820" y="300" width="60" height="20" as="geometry"/>
+                <mxCell id="21" value="Item" style="html=1;" vertex="1" parent="1">
+                    <mxGeometry x="760" y="340" width="110" height="50" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
