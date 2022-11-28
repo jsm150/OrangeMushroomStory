@@ -16,7 +16,7 @@
                 <mxCell id="3" value="ItemUIList" style="html=1;" parent="1" vertex="1">
                     <mxGeometry x="560" y="220" width="110" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="22" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="21">
+                <mxCell id="22" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="4" target="21" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="ItemUI" style="html=1;" parent="1" vertex="1">
@@ -28,11 +28,28 @@
                 <mxCell id="11" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="670" y="220" width="20" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" value="«ContinueAddItemBoughtEvent&lt;span&gt;»&lt;/span&gt;&lt;br&gt;&lt;div style=&quot;line-height: 19px&quot;&gt;&lt;div style=&quot;line-height: 19px&quot;&gt;ContinueAddItem&lt;/div&gt;&lt;/div&gt;" style="html=1;" parent="1" vertex="1">
-                    <mxGeometry x="370" y="340" width="210" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="21" value="Item" style="html=1;" vertex="1" parent="1">
+                <mxCell id="21" value="Item" style="html=1;" parent="1" vertex="1">
                     <mxGeometry x="760" y="340" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="&lt;div style=&quot;line-height: 19px&quot;&gt;ContinueAddItem&lt;/div&gt;" style="html=1;" vertex="1" parent="1">
+                    <mxGeometry x="660" y="440" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="&lt;div style=&quot;line-height: 19px&quot;&gt;&lt;div style=&quot;line-height: 19px&quot;&gt;HardRandomTicketItem&lt;/div&gt;&lt;/div&gt;" style="html=1;" vertex="1" parent="1">
+                    <mxGeometry x="870" y="440" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="" style="endArrow=block;endSize=16;endFill=0;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="23" target="21">
+                    <mxGeometry x="-0.0909" y="25" width="160" relative="1" as="geometry">
+                        <mxPoint x="650" y="350" as="sourcePoint"/>
+                        <mxPoint x="810" y="350" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="26" value="" style="endArrow=block;endSize=16;endFill=0;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="24" target="21">
+                    <mxGeometry x="-0.0909" y="25" width="160" relative="1" as="geometry">
+                        <mxPoint x="655" y="450" as="sourcePoint"/>
+                        <mxPoint x="825" y="400" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
                 </mxCell>
             </root>
         </mxGraphModel>
