@@ -1,4 +1,4 @@
-library ItemStore initializer Init
+library ItemStore initializer Init needs RandomStage
     private struct Item
         private Money price
         private integer quantity
@@ -56,6 +56,20 @@ library ItemStore initializer Init
         private stub method GiveItem takes integer playerId returns nothing
             call Status.SetContinues(Status.Continues + 2)
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[playerId + 1] + GetPlayerName(Player(playerId)) + "|r 님이 컨티뉴 2개를 구매했습니다." )
+        endmethod
+    endstruct
+
+    // 하드 랜덤 월드로 바꾸는 아이템
+    private struct HardRandomTicketItem extends Item
+        private stub method Check takes nothing returns boolean
+            return (Status.World == 2 and Status.Level == 8) and RandomStage_isHard == false
+        endmethod 
+
+        private stub method GiveItem takes integer playerId returns nothing
+            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[playerId + 1] + GetPlayerName(Player(playerId)) + "|r 님이 랜덤 월드(" + TeamColor[1] + "Hard|r)를 열었습니다!" )
+            call CinematicFilterGenericBJ( 1, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 100, 0.00, 0.00, 50.00, 100.00, 0, 0, 100.00 )
+            call SetDoodadAnimation(2563, 196, 128.00, 'D000', false, "Stand2", false)
+            call RandomStage_SetHardMode()
         endmethod
     endstruct
 
@@ -334,6 +348,7 @@ library ItemStore initializer Init
     private function CreateItemUIList takes nothing returns ItemUIList
         local ItemUIList uiList = ItemUIList.create()
         call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", ContinueAddItem.create(Money.create(300), 1)))
+        call uiList.Add(ItemUI.create("HardRandomTicketSlot.blp", HardRandomTicketItem.create(Money.create(50), 1)))
         return uiList
     endfunction
 
