@@ -595,6 +595,7 @@ scope initialize initializer init
         set s = s + "아랫마을 : 800\n"
         set s = s + "월드 첼린지II : 1000\n"
         set s = s + "랜덤 : 150~350\n"
+        set s = s + "랜덤(하드) : 350~650\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "골드리프?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
 //        call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "이벤트?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = TeamColor[7] + "쉬움|r : 1.62%, " + TeamColor[5] + "보통|r : 1.21%, " + TeamColor[6] + "어려움|r : 0.81%," + TeamColor[1] + " 매우어려움|r : 0.4%\n\n"
@@ -693,7 +694,7 @@ scope initialize initializer init
         set s = s + "--- 깊은 산속 ---:\n"
         set s = s + "  3-1 : " + TeamColor[5] + "보통|r( 1.21% )\n"
         set s = s + "  3-2 : " + TeamColor[5] + "보통|r( 1.21% )\n"
-        set s = s + "  3-3 : " + TeamColor[5] + "보통|r( 1.21% )\n"
+        set s = s + "  3-3 : " + TeamColor[6] + "어려움|r( 0.81% )\n"
         set s = s + "  3-4 : " + TeamColor[6] + "어려움|r( 0.81% )\n"
         set s = s + "  3-5 : " + TeamColor[6] + "어려움|r( 0.81% )\n"
         set s = s + "  3-6 : " + TeamColor[1] + "매우 어려움|r( 0.4% )\n"

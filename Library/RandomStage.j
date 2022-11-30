@@ -4,6 +4,7 @@ library RandomStage initializer Init
         public integer array randomStage
         public integer state = 1
         public boolean isRandom = false
+        public boolean isHard = false
         public integer ReSelectCount = 2
     endglobals
     
@@ -37,26 +38,44 @@ library RandomStage initializer Init
         
         public method Add takes Map map returns nothing
             set this.WeightTotal = this.WeightTotal + map.Weight
-            call mapList.AddLast(map)
+            call this.mapList.AddLast(map)
+        endmethod
+
+        public method HardMode takes nothing returns nothing
+            local MapNode node
+
+            //! runtextmacro LinkedList_Foreach_Top("node", "this.mapList")
+                if node.Item.Weight == LevelUnit.Easy or node.Item.Weight == LevelUnit.Normal then
+                    set this.WeightTotal = this.WeightTotal - node.Item.Weight
+                    call node.Item.destroy()
+                    set node = node.Prev
+                    call this.mapList.RemoveNode(node.Next)
+                endif
+            //! runtextmacro LinkedList_Foreach_Bottom()
+            call this.PickUp()
         endmethod
 
         public method PickUp takes nothing returns nothing
             local integer acc
             local integer random
             local integer i
+            local integer total
             local MapNode node
 
             debug call JNWriteLog("  가중치 합 : " + I2S(this.WeightTotal))
+            set total = this.WeightTotal
 
             //! runtextmacro for("set i = 1", "i <= 10") // stage 8개 + 재선택 2번
-                set random = GetRandomInt(1, this.WeightTotal)
+                set random = GetRandomInt(1, total)
                 set acc = 0
                 //! runtextmacro LinkedList_Foreach_Top("node", "this.mapList")
                     set acc = acc + node.Item.Weight
                     if random <= acc then
                         set randomWorld[i] = node.Item.World
                         set randomStage[i] = node.Item.Stage
-                        set this.WeightTotal = this.WeightTotal - node.Item.Weight
+                        set total = total - node.Item.Weight
+                        call this.mapList.AddLast(Map.create(node.Item.World, node.Item.Stage, node.Item.Weight))
+                        call node.Item.destroy()
                         call this.mapList.RemoveNode(node)
                         exitwhen true
                     endif
@@ -80,6 +99,15 @@ library RandomStage initializer Init
             call thistype.deallocate(this)
         endmethod
     endstruct
+
+    globals
+        private RandomPickMachine randomPickMachine
+    endglobals
+
+    public function SetHardMode takes nothing returns nothing
+        set isHard = true
+        call randomPickMachine.HardMode()
+    endfunction
 
     public function PrintRandomStage takes player p returns nothing
         local integer i = 1
@@ -132,116 +160,115 @@ library RandomStage initializer Init
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 이제 더이상 사용할 수 없습니다." )
         endif
     endfunction
-    
+
     private function Init takes nothing returns nothing
-        local RandomPickMachine random = RandomPickMachine.create()
+        set randomPickMachine = RandomPickMachine.create()
+
+        call randomPickMachine.Add(Map.create(3, -1, LevelUnit.Hidden))
+        call randomPickMachine.Add(Map.create(3, 1, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(3, 2, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(3, 3, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(3, 4, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(3, 5, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(3, 6, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(3, 7, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(3, 8, LevelUnit.Easy))
+
+        call randomPickMachine.Add(Map.create(4, -1, LevelUnit.Hidden))
+        call randomPickMachine.Add(Map.create(4, 1, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(4, 2, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(4, 3, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(4, 4, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(4, 5, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(4, 6, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(4, 7, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(4, 8, LevelUnit.Easy))
+
+        call randomPickMachine.Add(Map.create(5, 1, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(5, 2, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(5, 3, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(5, 4, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(5, 5, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(5, 6, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(5, 7, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(5, 8, LevelUnit.Easy))
+
+        call randomPickMachine.Add(Map.create(6, 1, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(6, 2, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(6, 3, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(6, 4, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(6, 5, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(6, 6, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(6, 7, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(6, 8, LevelUnit.Easy))
+
+        call randomPickMachine.Add(Map.create(7, 1, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(7, 2, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(7, 3, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(7, 4, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(7, 5, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(7, 6, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(7, 7, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(7, 8, LevelUnit.Easy))
+
+        call randomPickMachine.Add(Map.create(8, 1, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(8, 2, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(8, 3, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(8, 4, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(8, 5, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(8, 6, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(8, 7, LevelUnit.VeryHard))
+
+        call randomPickMachine.Add(Map.create(9, -1, LevelUnit.Hidden))
+        call randomPickMachine.Add(Map.create(9, -2, LevelUnit.Hidden))
+        call randomPickMachine.Add(Map.create(9, 1, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(9, 2, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(9, 3, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(9, 4, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(9, 5, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(9, 6, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(9, 7, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(9, 8, LevelUnit.Hard))
+
+        call randomPickMachine.Add(Map.create(10, 1, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(10, 2, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(10, 3, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(10, 4, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(10, 5, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(10, 6, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(10, 7, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(10, 8, LevelUnit.VeryHard))
+
+        call randomPickMachine.Add(Map.create(11, 1, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(11, 2, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(11, 3, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(11, 4, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(11, 5, LevelUnit.VeryHard))
         
-        call random.Add(Map.create(3, -1, LevelUnit.Hidden))
-        call random.Add(Map.create(3, 1, LevelUnit.Easy))
-        call random.Add(Map.create(3, 2, LevelUnit.Easy))
-        call random.Add(Map.create(3, 3, LevelUnit.Easy))
-        call random.Add(Map.create(3, 4, LevelUnit.Easy))
-        call random.Add(Map.create(3, 5, LevelUnit.Easy))
-        call random.Add(Map.create(3, 6, LevelUnit.Easy))
-        call random.Add(Map.create(3, 7, LevelUnit.Easy))
-        call random.Add(Map.create(3, 8, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(12, 1, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(12, 2, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(12, 3, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(12, 4, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(12, 5, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(12, 6, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(12, 7, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(12, 8, LevelUnit.VeryHard))
 
-        call random.Add(Map.create(4, -1, LevelUnit.Hidden))
-        call random.Add(Map.create(4, 1, LevelUnit.Easy))
-        call random.Add(Map.create(4, 2, LevelUnit.Easy))
-        call random.Add(Map.create(4, 3, LevelUnit.Easy))
-        call random.Add(Map.create(4, 4, LevelUnit.Easy))
-        call random.Add(Map.create(4, 5, LevelUnit.Easy))
-        call random.Add(Map.create(4, 6, LevelUnit.Easy))
-        call random.Add(Map.create(4, 7, LevelUnit.Easy))
-        call random.Add(Map.create(4, 8, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(13, 1, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(13, 2, LevelUnit.Normal))
+        call randomPickMachine.Add(Map.create(13, 3, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(13, 4, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(13, 5, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(13, 6, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(13, 7, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(13, 8, LevelUnit.VeryHard))
 
-        call random.Add(Map.create(5, 1, LevelUnit.Easy))
-        call random.Add(Map.create(5, 2, LevelUnit.Easy))
-        call random.Add(Map.create(5, 3, LevelUnit.Easy))
-        call random.Add(Map.create(5, 4, LevelUnit.Easy))
-        call random.Add(Map.create(5, 5, LevelUnit.Easy))
-        call random.Add(Map.create(5, 6, LevelUnit.Easy))
-        call random.Add(Map.create(5, 7, LevelUnit.Easy))
-        call random.Add(Map.create(5, 8, LevelUnit.Easy))
+        call randomPickMachine.Add(Map.create(14, 1, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(14, 2, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(14, 3, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(14, 4, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(14, 5, LevelUnit.VeryHard))
 
-        call random.Add(Map.create(6, 1, LevelUnit.Easy))
-        call random.Add(Map.create(6, 2, LevelUnit.Easy))
-        call random.Add(Map.create(6, 3, LevelUnit.Easy))
-        call random.Add(Map.create(6, 4, LevelUnit.Easy))
-        call random.Add(Map.create(6, 5, LevelUnit.Normal))
-        call random.Add(Map.create(6, 6, LevelUnit.Easy))
-        call random.Add(Map.create(6, 7, LevelUnit.Normal))
-        call random.Add(Map.create(6, 8, LevelUnit.Easy))
-
-        call random.Add(Map.create(7, 1, LevelUnit.Easy))
-        call random.Add(Map.create(7, 2, LevelUnit.Easy))
-        call random.Add(Map.create(7, 3, LevelUnit.Easy))
-        call random.Add(Map.create(7, 4, LevelUnit.Easy))
-        call random.Add(Map.create(7, 5, LevelUnit.Easy))
-        call random.Add(Map.create(7, 6, LevelUnit.Easy))
-        call random.Add(Map.create(7, 7, LevelUnit.Easy))
-        call random.Add(Map.create(7, 8, LevelUnit.Easy))
-
-        call random.Add(Map.create(8, 1, LevelUnit.VeryHard))
-        call random.Add(Map.create(8, 2, LevelUnit.Normal))
-        call random.Add(Map.create(8, 3, LevelUnit.Normal))
-        call random.Add(Map.create(8, 4, LevelUnit.Hard))
-        call random.Add(Map.create(8, 5, LevelUnit.Hard))
-        call random.Add(Map.create(8, 6, LevelUnit.Hard))
-        call random.Add(Map.create(8, 7, LevelUnit.VeryHard))
-
-        call random.Add(Map.create(9, -1, LevelUnit.Hidden))
-        call random.Add(Map.create(9, -2, LevelUnit.Hidden))
-        call random.Add(Map.create(9, 1, LevelUnit.Normal))
-        call random.Add(Map.create(9, 2, LevelUnit.Normal))
-        call random.Add(Map.create(9, 3, LevelUnit.Normal))
-        call random.Add(Map.create(9, 4, LevelUnit.Normal))
-        call random.Add(Map.create(9, 5, LevelUnit.Hard))
-        call random.Add(Map.create(9, 6, LevelUnit.VeryHard))
-        call random.Add(Map.create(9, 7, LevelUnit.VeryHard))
-        call random.Add(Map.create(9, 8, LevelUnit.Hard))
-
-        call random.Add(Map.create(10, 1, LevelUnit.Hard))
-        call random.Add(Map.create(10, 2, LevelUnit.Normal))
-        call random.Add(Map.create(10, 3, LevelUnit.Normal))
-        call random.Add(Map.create(10, 4, LevelUnit.Normal))
-        call random.Add(Map.create(10, 5, LevelUnit.Hard))
-        call random.Add(Map.create(10, 6, LevelUnit.VeryHard))
-        call random.Add(Map.create(10, 7, LevelUnit.VeryHard))
-        call random.Add(Map.create(10, 8, LevelUnit.VeryHard))
-
-        call random.Add(Map.create(11, 1, LevelUnit.Normal))
-        call random.Add(Map.create(11, 2, LevelUnit.Hard))
-        call random.Add(Map.create(11, 3, LevelUnit.Hard))
-        call random.Add(Map.create(11, 4, LevelUnit.VeryHard))
-        call random.Add(Map.create(11, 5, LevelUnit.VeryHard))
-        
-        call random.Add(Map.create(12, 1, LevelUnit.Normal))
-        call random.Add(Map.create(12, 2, LevelUnit.Hard))
-        call random.Add(Map.create(12, 3, LevelUnit.Hard))
-        call random.Add(Map.create(12, 4, LevelUnit.VeryHard))
-        call random.Add(Map.create(12, 5, LevelUnit.VeryHard))
-        call random.Add(Map.create(12, 6, LevelUnit.VeryHard))
-        call random.Add(Map.create(12, 7, LevelUnit.VeryHard))
-        call random.Add(Map.create(12, 8, LevelUnit.VeryHard))
-
-        call random.Add(Map.create(13, 1, LevelUnit.Normal))
-        call random.Add(Map.create(13, 2, LevelUnit.Normal))
-        call random.Add(Map.create(13, 3, LevelUnit.Normal))
-        call random.Add(Map.create(13, 4, LevelUnit.Hard))
-        call random.Add(Map.create(13, 5, LevelUnit.Hard))
-        call random.Add(Map.create(13, 6, LevelUnit.VeryHard))
-        call random.Add(Map.create(13, 7, LevelUnit.VeryHard))
-        call random.Add(Map.create(13, 8, LevelUnit.VeryHard))
-
-        call random.Add(Map.create(14, 1, LevelUnit.VeryHard))
-        call random.Add(Map.create(14, 2, LevelUnit.VeryHard))
-        call random.Add(Map.create(14, 3, LevelUnit.VeryHard))
-        call random.Add(Map.create(14, 4, LevelUnit.VeryHard))
-        call random.Add(Map.create(14, 5, LevelUnit.VeryHard))
-
-        call random.PickUp()
-        call random.destroy()
+        call randomPickMachine.PickUp()
     endfunction
 endlibrary
