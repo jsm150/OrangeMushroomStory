@@ -261,6 +261,14 @@ library ItemStore initializer Init needs RandomStage
             call this.itemList.Click(this.playerId, posX, posY)
         endmethod
 
+        public method HotKey takes nothing returns nothing
+            if this.isOpen == false then
+                call this.Show()
+            else
+                call this.Hide()
+            endif
+        endmethod
+
         public method Redisplay takes nothing returns nothing
             local string money = User_UserList[this.playerId].GoldLeaf.ToString()
 
@@ -338,6 +346,10 @@ library ItemStore initializer Init needs RandomStage
 
     public function ClickDownAction takes integer i, real x, real y returns nothing
         call ItemStoreUIList[i].ClickDown(x, y)
+    endfunction
+
+    public function InputKey takes integer i returns nothing
+        call ItemStoreUIList[i].HotKey()
     endfunction
 
     /* 
