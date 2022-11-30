@@ -59,6 +59,14 @@ scope HotKey initializer Init
         call Command_OBSMain(playerId + 1)
     //! runtextmacro HotKey_Event_Bottom("'V'")
 
+    //! runtextmacro HotKey_Event_Top("Inventory")
+        call SkinFrame_InputKey(playerId)
+    //! runtextmacro HotKey_Event_Bottom("'I'")
+
+    //! runtextmacro HotKey_Event_Top("Shop")
+        call ItemStore_InputKey(playerId)
+    //! runtextmacro HotKey_Event_Bottom("'O'")
+
     //! runtextmacro HotKey_Event_Top("Debug")
         debug call JNWriteLog("")
     //! runtextmacro HotKey_Event_Bottom("JN_OSKEY_P")

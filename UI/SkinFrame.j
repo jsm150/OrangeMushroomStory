@@ -899,6 +899,14 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             endif
         endmethod
 
+        public method HotKey takes nothing returns nothing
+            if this.isOpen == false then
+                call this.Open()
+            else
+                call this.Close()
+            endif
+        endmethod
+
         public method ShowButton takes nothing returns nothing
             call this.buttonUI.Show()
         endmethod
@@ -1025,6 +1033,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     public function ClickUpAction takes integer i, real x, real y returns nothing
         call PlayerSkinUI[i].ClickUp(x, y)
+    endfunction
+
+    public function InputKey takes integer i returns nothing
+        call PlayerSkinUI[i].HotKey()
     endfunction
 
     /* =======================

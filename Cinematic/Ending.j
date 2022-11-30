@@ -410,7 +410,11 @@ library Ending initializer init needs Cinematic
                     set name = StringCase(GetPlayerName(Player(i - 1)), false)
 
                     if RandomStage_isRandom == true then
-                        call User_GameClearDataUpload.evaluate(i - 1, name, "Random")
+                        if RandomStage_isHard then
+                            call User_GameClearDataUpload.evaluate(i - 1, name, "HardRandom")
+                        else
+                            call User_GameClearDataUpload.evaluate(i - 1, name, "Random")
+                        endif
                     elseif Status.World == 4 then
                         call DisplayTimedTextToPlayer(Player(i - 1), 0, 0, 60, "　　　　　　" + TeamColor[i] + GetPlayerName(Player(i-1)) + "|r 님의 두 번째 비밀 코드: " + WorldKey_Code2[i] )
                         call User_GameClearDataUpload.evaluate(i - 1, name, "Subway")

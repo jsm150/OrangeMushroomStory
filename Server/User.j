@@ -256,9 +256,11 @@ scope User initializer Init
         elseif world == "DownTown" then
             set amount = Money.create(800)
         elseif world == "WorldChallenge2" then
-            set amount = Money.create(1000)
+            set amount = Money.create(800)
         elseif world == "Random" then
             set amount = Money.create(GetRandomInt(150, 350))
+        elseif world == "HardRandom" then
+            set amount = Money.create(GetRandomInt(350, 650))
         endif
 
         call User_UserList[playerId].Deposit(playerId, amount.ToInt())

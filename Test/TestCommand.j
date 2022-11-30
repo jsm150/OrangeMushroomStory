@@ -78,7 +78,7 @@ library Test initializer Init
         elseif SubString(s, 0, 2) == "-a" then
             call SetUnitAnimationByIndex( OrangeMushroom[i], S2I(SubString(s, 2, 3)) )
         elseif SubString(s, 0, 2) == "-g" then
-            call User_UserList[0].Deposit(S2I(SubString(s, 2, 6)))
+            call User_UserList[0].Deposit(0, S2I(SubString(s, 2, 6)))
         endif
     endfunction
 

@@ -1,34 +1,21 @@
-library ItemStore initializer Init
-    globals
-        // 이벤트 선언
-        private key ContinueAddItemBoughtEvent
-    endglobals
-
-    private struct ItemPurchaseButtonClickedEventArgs
-        integer sender
-        integer playerId
-        integer quantity
-        Money price
-        integer purchasedEvent
-
-        public static method create takes integer sender, integer playerId, integer quantity, Money price, integer purchasedEvent returns thistype
-            local thistype this = thistype.allocate()
-            set this.sender = sender
-            set this.playerId = playerId
-            set this.quantity = quantity
-            set this.price = price
-            set this.purchasedEvent = purchasedEvent
-            return this
-        endmethod
-    endstruct
-
+library ItemStore initializer Init needs RandomStage
     private struct Item
         private Money price
         private integer quantity
-        private integer purchasedEvent
         
+        private stub method Check takes nothing returns boolean
+            return true
+        endmethod 
+
+        private stub method GiveItem takes integer playerId returns nothing
+        endmethod
+
         public method Purchase takes integer playerId returns nothing
             if this.quantity == 0 or User_UserList[playerId].Balance() < this.price.ToInt() then
+                return
+            endif
+
+            if not(this.Check()) then
                 return
             endif
 
@@ -38,19 +25,51 @@ library ItemStore initializer Init
                 */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafUseLog")
 
             set this.quantity = this.quantity - 1
-            call Events.Raise(purchasedEvent, playerId)
+            call this.GiveItem(playerId)
         endmethod
 
         public method PriceTag takes nothing returns string
             return this.price.ToString()
         endmethod
 
-        public static method create takes Money price, integer quantity, integer purchasedEvent returns thistype
+        public static method create takes Money price, integer quantity returns thistype
             local thistype this = thistype.allocate()
             set this.price = price
             set this.quantity = quantity
-            set this.purchasedEvent = purchasedEvent
             return this
+        endmethod
+    endstruct
+
+     //------------------------------------------------------------
+    /* 
+    * 아이템 추가는 아래 구조체 복사해서
+    * 구매 조건(Check), 구매시 동작(GiveItem)을 정의해주면 됩니다.
+    * 아이템 추가는 여기에 해주세요.
+    */
+
+    // 컨티뉴 2증가 아이템
+    private struct ContinueAddItem extends Item
+        private stub method Check takes nothing returns boolean
+            return true
+        endmethod 
+
+        private stub method GiveItem takes integer playerId returns nothing
+            call Status.SetContinues(Status.Continues + 2)
+            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[playerId + 1] + GetPlayerName(Player(playerId)) + "|r 님이 컨티뉴 2개를 구매했습니다." )
+        endmethod
+    endstruct
+
+    // 하드 랜덤 월드로 바꾸는 아이템
+    private struct HardRandomTicketItem extends Item
+        private stub method Check takes nothing returns boolean
+            return (Status.World == 2 and Status.Level == 8) and RandomStage_isHard == false
+        endmethod 
+
+        private stub method GiveItem takes integer playerId returns nothing
+            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[playerId + 1] + GetPlayerName(Player(playerId)) + "|r 님이 랜덤 월드(" + TeamColor[1] + "Hard|r)를 열었습니다!" )
+            call CinematicFilterGenericBJ( 1, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 100, 0.00, 0.00, 50.00, 100.00, 0, 0, 100.00 )
+            call SetDoodadAnimation(2563, 196, 128.00, 'D000', false, "Stand2", false)
+            call RandomStage_SetHardMode()
         endmethod
     endstruct
 
@@ -242,6 +261,14 @@ library ItemStore initializer Init
             call this.itemList.Click(this.playerId, posX, posY)
         endmethod
 
+        public method HotKey takes nothing returns nothing
+            if this.isOpen == false then
+                call this.Show()
+            else
+                call this.Hide()
+            endif
+        endmethod
+
         public method Redisplay takes nothing returns nothing
             local string money = User_UserList[this.playerId].GoldLeaf.ToString()
 
@@ -312,28 +339,6 @@ library ItemStore initializer Init
         endmethod
     endstruct
 
-//------------------------------------------------------------
-/* 
- * 이벤트 추가는 아래 구조체 복사해서
- * 이벤트키(ContinueAddItemBoughtEvent), 구조체 이름, Apply 메서드의 내용을 바꿔주면 됩니다.
- * 이벤트 동작 추가는 여기에 해주세요.
- */
-
-    // 컨티뉴 2증가 이벤트
-    private struct ContinueAddItem
-        public method Apply takes nothing returns nothing
-            local integer playerId = Events.GetEventArgs(ContinueAddItemBoughtEvent)
-            call Status.SetContinues(Status.Continues + 2)
-            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[playerId + 1] + GetPlayerName(Player(playerId)) + "|r 님이 컨티뉴 2개를 구매했습니다." )
-        endmethod
-
-        private static method onInit takes nothing returns nothing
-            local thistype this = thistype.create()
-            call Events.Add(ContinueAddItemBoughtEvent, this, this.Apply)
-        endmethod
-    endstruct
-
-    //------------------------------------------------------------
 
     globals
         public ItemStoreUI array ItemStoreUIList[PLAYER_MAXINUM]
@@ -343,15 +348,19 @@ library ItemStore initializer Init
         call ItemStoreUIList[i].ClickDown(x, y)
     endfunction
 
+    public function InputKey takes integer i returns nothing
+        call ItemStoreUIList[i].HotKey()
+    endfunction
+
     /* 
      * 여기가 아이템 추가하는 부분입니다.
      * 첫 인자값은 상점에 보여질 아이템 이미지, 두번째 인자값은 아이템 객체를 넣는데
-     * 아이템 객체의 인자값은 아이템의 금액과 수량, 아이템이 구매됬을때 동작할 이벤트를 넣어주면 됩니다.
-     * 이벤트는 최 상단에 선언후, 이벤트를 받는 구조체(struct)를 선언하여 구매 후 동작을 정의합니다.
+     * 아이템 객체의 인자값은 아이템의 금액과 수량을 넣어주면 됩니다.
      */
     private function CreateItemUIList takes nothing returns ItemUIList
         local ItemUIList uiList = ItemUIList.create()
-        call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", Item.create(Money.create(300), 1, ContinueAddItemBoughtEvent)))
+        call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", ContinueAddItem.create(Money.create(300), 1)))
+        call uiList.Add(ItemUI.create("HardRandomTicketSlot.blp", HardRandomTicketItem.create(Money.create(50), 1)))
         return uiList
     endfunction
 
