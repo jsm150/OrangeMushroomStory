@@ -99,6 +99,10 @@ scope initialize initializer init
         set s = s + "- 월드 챌린지2의 클리어 보상이 소폭 하향되었습니다.\n"
         set s = s + "- 랜덤(하드)가 추가되었습니다.\n"
         set s = s + "- 단축키가 추가되었습니다.\n"
+        set s = s + "11.8\n"
+        set s = s + "- 월드 첼린지2의 랙을 최적화 하였습니다.\n"
+        set s = s + "- 월드 첼린지2의 일부 스테이지 난이도가 소폭 하향되었습니다.\n"
+        set s = s + "- 월드 첼린지2 3-2의 버그가 수정되었습니다.\n"
         call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.2~11.7", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "10.7\n"
         set s = s + "- 아래 맵들의 난이도가 하향 조정됬습니다.\n"
