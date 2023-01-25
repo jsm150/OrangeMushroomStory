@@ -507,8 +507,6 @@ scope initialize initializer init
         set s = s + "- 다시 입력하면 관전이 해제됩니다.\n\n"
         set s = s + "● I\n"
         set s = s + "- 인벤토리를 열고 닫습니다.\n\n"
-        set s = s + "● I\n"
-        set s = s + "- 인벤토리를 열고 닫습니다.\n\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "단축키", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "● 상자\n"
         set s = s + "-밟고 올라가거나 밀어서 옮길 수 있습니다.\n"
