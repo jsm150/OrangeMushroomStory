@@ -700,9 +700,10 @@ scope Frame initializer init
         endloop
         set i = 1
         loop
-        exitwhen i > PLAYER_MAXINUM+Stage_BoxsCount
-            if i <= PLAYER_MAXINUM then
-                if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
+        // + 4는 관전자 숫자이다.
+        exitwhen i > PLAYER_MAXINUM + Stage_BoxsCount + 4
+            if i <= PLAYER_MAXINUM + 4 then
+                if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING or i > PLAYER_MAXINUM then
                     if CinematicMode == false then
                         if Observer_ViewNumber[i] == 0 then
                             if GravityChanger_State == false then
