@@ -1311,7 +1311,7 @@ library Key initializer Init
         
         set j = 0
         loop
-            exitwhen j > 4
+            exitwhen j > 2
                 call posList.AddFirst(blockLocation.create(-7040, 27392 - (256 * j)))
             set j = j + 1
         endloop
@@ -1337,11 +1337,17 @@ library Key initializer Init
 
         call keyMapManager.CreateEvent(BLUE_KEY_ID, gg_rct_Key14_1_003)
         set posList = blockLocationLinkedList.create()
+        set posList2 = blockLocationLinkedList.create()
         call posList.AddFirst(blockLocation.create(-3328, 27264))
         call posList.AddFirst(blockLocation.create(-3328 - 128, 27264 - 128))
         call posList.AddFirst(blockLocation.create(-3200, 26496))
         call posList.AddFirst(blockLocation.create(-3200 + 128, 26496 - 128))
+
+        call posList2.AddFirst(blockLocation.create(-7040 , 26048))
+        call posList2.AddFirst(blockLocation.create(-7040 + 128 , 26048))
+        call posList2.AddFirst(blockLocation.create(-7040 + 256 , 26048))
         call keyMapManager.AddAction(posList, "Remove")
+        call keyMapManager.AddAction(posList2, "Create")
         call keyMapManager.SaveEvent()
 
         call keyMapManager.CreateEvent(WHITE_KEY_ID, gg_rct_Key14_1_004)
@@ -1408,8 +1414,15 @@ library Key initializer Init
         call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 6))
         call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 7))
         call posList.AddFirst(blockLocation.create(5376, 26496 - 128 * 8))
-        call posList.AddFirst(blockLocation.create(5248, 25600))
-        call posList.AddFirst(blockLocation.create(5248, 25600 - 128))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 0))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 1))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 2))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 3))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 4))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 5))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 6))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 7))
+        call posList.AddFirst(blockLocation.create(5248, 26496 - 128 * 8))
         call keyMapManager.AddAction(posList, "Create")
         call keyMapManager.SaveEvent()
  
