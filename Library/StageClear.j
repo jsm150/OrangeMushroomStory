@@ -900,10 +900,8 @@ library Stage initializer init
                 call CreateObject(1, gg_rct_Box14_1_001, "null")
                 call CreateObject(2, gg_rct_Box14_1_002, "null")
                 call CreateObject(3, gg_rct_Box14_1_003, "null")
-                call CreateObject(4, gg_rct_Box14_1_004, "null")
-                call CreateObject(5, gg_rct_Box14_1_005, "null")
-                call CreateObject(6, gg_rct_CokeMushroom14_1_001, "CokeMushroomRight")
-                set BoxsCount = 6
+                call CreateObject(4, gg_rct_CokeMushroom14_1_001, "CokeMushroomRight")
+                set BoxsCount = 4
             elseif Status.Level == 2 then
                 call CreateObject(1, gg_rct_Box14_2_001, "null")
                 call CreateObject(2, gg_rct_Bloctopus14_2_001, "Right")
@@ -1261,11 +1259,7 @@ library Stage initializer init
             elseif HiddenPortalState() == 8 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 엘린 숲" )
             elseif HiddenPortalState() == 9 then
-                if RandomStage_isHard then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Random World(" + TeamColor[1] + "Hard|r): ???" )
-                else
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Random World: ???" )
-                endif
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Random World: ???" )
             elseif HiddenPortalState() == 11 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 깊은 산속" )
             elseif HiddenPortalState() == 12 then
