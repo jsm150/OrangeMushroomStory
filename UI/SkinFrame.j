@@ -177,7 +177,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call skinList.add(SkinInfo(SkinAnimationList[43]).Clone())
         endif
 
-        if User_UserList[id].LucidSoul == 1 or DEBUG_MODE then
+        if User_UserList[id].GetClearCountByWorldId(14) >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 44", "i <= 49")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
