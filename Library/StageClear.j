@@ -1556,10 +1556,12 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 14, 2, gg_rct_StartRect106)
         call SaveRectHandle(StartRectList, 14, 3, gg_rct_StartRect107)
         call SaveRectHandle(StartRectList, 14, 4, gg_rct_StartRect108)
-        call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect13_Minus1)
+        call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect109)
+
+        call SaveRectHandle(StartRectList, 15, 1, gg_rct_StartRect113)
         
         // 2번째 소환위치
-        call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub13_Minus1)
+        call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub109)
         call SaveRectHandle(StartRectList, -13, 1, gg_rct_StartRectSub097)
         call SaveRectHandle(StartRectList, -13, 2, gg_rct_StartRectSub098)
         call SaveRectHandle(StartRectList, -13, 3, gg_rct_StartRectSub099)
