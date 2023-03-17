@@ -6,8 +6,6 @@ scope initialize initializer init
         constant boolean TESTMODE = false
         boolean PracticeMode = false
         unit array OrangeMushroom
-        unit array OrangeMushroomSkin
-        unit array OrangeMushroomFloorSkin
         unit array BackGroundUnits
         timer array PlayerSentinelTimer
         
