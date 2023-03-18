@@ -193,6 +193,15 @@ scope Command initializer init
             else
                 call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "※ 방장(재시작 권한을 가진 사람)만 코드를 입력할 수 있습니다.")
             endif
+        elseif RectContainsUnit(gg_rct_RandomPortal, OrangeMushroom[i]) == true and HiddenCode[11] == false then
+            if i == HostNumber then
+                set HiddenCode[11] = true
+                call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\StaffOfPurification\\PurificationCaster.mdl", GetRectCenterX(gg_rct_RandomPortal), GetRectCenterY(gg_rct_RandomPortal) ))
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 랜덤 스테이지 입구가 열렸습니다!|r" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 단 랜덤 스테이지 입구로 들어간 인원이 다른 포탈에 들어간 인원보다 적으면 기존 스테이지로 이동합니다.|r" )
+            else
+                call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "※ 방장(재시작 권한을 가진 사람)만 코드를 입력할 수 있습니다.")
+            endif
         endif
     endfunction
     
