@@ -18,7 +18,8 @@ library Calculation
         set b = b or types == 'uban' or types == 'unec' or types == 'uobs' or types == 'ufro' or types == 'earc' or types == 'esen' or types == 'edry'
         set b = b or types == 'nmyr' or types == 'nnrg' or types == 'nhyc' or types == 'nmpe' or types == 'nanm' or types == 'nanb' or types == 'nanc' or types == 'nanw'
         set b = b or types == 'n000' or types == 'h003' or types == 'n007' or types == 'o003' or types == 'o002' or types == 'n008'
-        set b = b or types == 'ehpr' or types == 'echm' or types == 'edot' or types == 'edoc' or types == 'emtg'  or types == 'efdr'  or types == 'nnsw' 
+        set b = b or types == 'ehpr' or types == 'echm' or types == 'edot' or types == 'edoc' or types == 'emtg' or types == 'efdr'  or types == 'nnsw' 
+        set b = b or types == 'h00O' or types == 'h00N' or types == 'h00M' or types == 'h00J' or types == 'h00L' or types == 'h00K'  
         return b or types == 'h00F' or types == 'h00G'
     endfunction
 
