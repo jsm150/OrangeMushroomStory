@@ -177,6 +177,12 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call skinList.add(SkinInfo(SkinAnimationList[43]).Clone())
         endif
 
+        if User_UserList[id].GetClearCountByWorldId(14) >= 1 or DEBUG_MODE then
+            //! runtextmacro for("set i = 44", "i <= 49")
+                call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
+            //! runtextmacro for_end("set i = i + 1")
+        endif
+
         return skinList
     endfunction
     
@@ -1380,6 +1386,47 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         call skin.AddMotion("LucidSoul007.blp")
         call SkinAnimationList.add(skin)
 
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "RedBloctopus", 'h00N', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Redblockpus1.blp")
+        call skin.AddMotion("Redblockpus2.blp")
+        call SkinAnimationList.add(skin)
+        
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "BlueBloctopus", 'h00J', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Blueblockpus1.blp")
+        call skin.AddMotion("Blueblockpus2.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "TealBloctopus", 'h00M', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Tealblockpus1.blp")
+        call skin.AddMotion("Tealblockpus2.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "YellowBloctopus", 'h00O', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Yellowblockpus1.blp")
+        call skin.AddMotion("Yellowblockpus2.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "OrangeBloctopus", 'h00L', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Orangeblockpus1.blp")
+        call skin.AddMotion("Orangeblockpus2.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "GreenBloctopus", 'h00K', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("Greenblockpus1.blp")
+        call skin.AddMotion("Greenblockpus2.blp")
+        call SkinAnimationList.add(skin)
     endfunction
 
     public function ShowSkinInventoryButton takes boolean isVisible returns nothing

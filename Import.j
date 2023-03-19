@@ -21,6 +21,7 @@
 //! import "Cinematic\BossMain.j"
 //! import "Cinematic\CinematicMain.j"
 //! import "Cinematic\Ending.j"
+//! import "Cinematic\EndingSkip.j"
 //! import "Cinematic\FinalMsg.j"
 //! import "Cinematic\TrueEnding.j"
 //! import "Cinematic\TrueEnding2.j"
@@ -90,6 +91,7 @@
 
 // UI
 //! import "UI\ItemStore.j"
+//! import "UI\ObserverUI.j"
 //! import "UI\SkinFrame.j"
 //! import "UI\WaitingRoom.j"
 

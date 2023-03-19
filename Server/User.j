@@ -21,6 +21,7 @@ scope User initializer Init
         integer DownTown = 0
         integer WorldChallenge2 = 0
         integer Random = 0
+        integer HardRandom = 0
     endstruct
 
     struct Money extends Verification
@@ -306,6 +307,7 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("DownTown", "UserList[idx].ClearList.DownTown", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("WorldChallenge2", "UserList[idx].ClearList.WorldChallenge2", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
+    //! runtextmacro MakeFuncToDataLoadSync("HardRandom", "UserList[idx].ClearList.HardRandom", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("BellaPet", "UserList[idx].BellaPet", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("LucidSoul", "UserList[idx].LucidSoul", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
@@ -332,6 +334,7 @@ scope User initializer Init
             call DataLoadSyncToDownTown(playerId, name, "DownTown")
             call DataLoadSyncToWorldChallenge2(playerId, name, "WorldChallenge2")
             call DataLoadSyncToRandom(playerId, name, "Random")
+            call DataLoadSyncToHardRandom(playerId, name, "HardRandom")
             call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
             call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")
             call DataLoadSyncToLucidSoul(playerId, name, "Lucid Soul")
