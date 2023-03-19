@@ -4,7 +4,6 @@ library Stage initializer init
         
         hashtable StartRectList = InitHashtable()
         sound BackgroundMusic
-        private code SaveFunction
         public trigger Restart = CreateTrigger()
         public trigger SentinelTrigger = CreateTrigger()
         public boolean Loading = false
@@ -1233,6 +1232,12 @@ library Stage initializer init
                 set Water_State[i] = IsUnitInRegion(Water_Rects, OrangeMushroom[i])
             endif
         set i = i + 1
+        endloop
+        set i = 0
+        loop
+            exitwhen i == 4
+            call Observer_Watch.evaluate(PLAYER_MAXINUM + i, Observer_ViewNumber[PLAYER_MAXINUM + i])
+            set i = i + 1
         endloop
         set GravityChanger_State = false
     endfunction
