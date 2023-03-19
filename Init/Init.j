@@ -74,7 +74,12 @@ scope initialize initializer init
         set s = s + "- 이제 엔딩을 스킵할 수 있습니다.\n"
         set s = s + "- 월드 첼린지2의 랙을 최적화 하였습니다.\n"
         set s = s + "- 월드 첼린지2의 일부 스테이지 난이도가 소폭 하향되었습니다.\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.8", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "\n"
+        set s = s + "11.9\n"
+        set s = s + "- 특정 스킨이 오브젝트와 상호작용이 불가능하던 버그가 수정되었습니다.\n"
+        set s = s + "- 심판 자리에서 관전할 때 배경이 사라지던 버그가 수정되었습니다.\n"
+        set s = s + "- 이제 랜덤 월드에 입장하려면 지하철 코드가 필요합니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.8~11.9", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "11.2\n"
         set s = s + "- 카페 3-3 파란벽이 보이는 것 보다 낮은 점 수정되었습니다.\n"
         set s = s + "- 로딩창이 변경되었습니다.\n"
