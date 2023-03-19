@@ -1,4 +1,4 @@
-library Ending initializer init needs Cinematic
+library Ending initializer init needs Cinematic, EndingSkip
     globals
         public trigger Trigger
         private tick tk
@@ -33,8 +33,10 @@ library Ending initializer init needs Cinematic
         call tk.start(4.0, false, function CMTTick)
         if tk.data == 0 then
             call CinematicFilterGenericBJ( 1.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 0, 0, 0, 0 )
-            call tk.start(2.0, false, function CMTTick)
+            call EndingSkip_Ready(tk, 87)
+            call tk.start(5.5, false, function CMTTick)
         elseif tk.data == 1 then
+            call EndingSkip_Disable()
             call StartSound(gg_snd_door_open)
             call PanCameraToTimed(px, py, 0)
             call BackGroundChange('hgyr')

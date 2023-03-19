@@ -4,7 +4,19 @@ library Observer needs Stage
         public boolean array State
         public integer array ViewNumber
     endglobals
-    
+
+    public function Watch takes integer i, integer target returns nothing
+        if Player(i-1) == GetLocalPlayer() then
+            call SetUnitVertexColorBJ( BackGroundUnits[ViewNumber[i]], 0.00, 0.00, 0.00, 100 )
+        endif
+        set ViewNumber[i] = target
+        if Player(i-1) == GetLocalPlayer() then
+            call SetUnitVertexColorBJ( BackGroundUnits[i], 0.00, 0.00, 0.00, 100 )
+            call SetUnitVertexColorBJ( BackGroundUnits[target], 100.00, 100.00, 100.00, 0 )
+        endif
+        call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 1, TeamColor[target] + GetPlayerName(Player(target-1)) + "|r님을 관전합니다.")
+    endfunction
+
     public function Change takes integer i, boolean left returns nothing
         local integer j = ViewNumber[i]
         local integer k = 0
@@ -36,17 +48,9 @@ library Observer needs Stage
             exitwhen GetPlayerSlotState(Player(j-1)) == PLAYER_SLOT_STATE_PLAYING and LevelClearState[j] == false and i != j
             endloop
         endif
-        if Player(i-1) == GetLocalPlayer() then
-            call SetUnitVertexColorBJ( BackGroundUnits[ViewNumber[i]], 0.00, 0.00, 0.00, 100 )
-        endif
-        set ViewNumber[i] = j
-        if Player(i-1) == GetLocalPlayer() then
-            call SetUnitVertexColorBJ( BackGroundUnits[i], 0.00, 0.00, 0.00, 100 )
-            call SetUnitVertexColorBJ( BackGroundUnits[j], 100.00, 100.00, 100.00, 0 )
-        endif
-        call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 1, TeamColor[j] + GetPlayerName(Player(j-1)) + "|r님을 관전합니다.")
+        call Watch(i, j)
     endfunction
-    
+
     public function End takes integer i returns nothing
         if Player(i-1) == GetLocalPlayer() then
             call SetUnitVertexColorBJ( BackGroundUnits[i], 100.00, 100.00, 100.00, 0 )
