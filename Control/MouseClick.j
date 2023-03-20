@@ -19,22 +19,22 @@ scope MouseClick initializer Init
         call SkinFrame_ClickUpAction(i, x, y)
     //! runtextmacro Make_ButtonMouseEvent_Bottom("ScreenClickUp")
 
-    private function DownAsync takes nothing returns nothing
+    private function ClickDown takes nothing returns nothing
         call ScreenClickDown()
         // call MouseTeleport_MouseClick()
         call ClickEffect_MouseClick()
     endfunction
 
-    private function UpAsync takes nothing returns nothing
+    private function ClickUp takes nothing returns nothing
         call HotKey_ChatWindowChecker()
         call ScreenClickUp()
     endfunction
 
     private function Init takes nothing returns nothing
         local trigger t = CreateTrigger()
-        call DzTriggerRegisterMouseEventByCode(t, JN_MOUSE_BUTTON_TYPE_LEFT, 1, false, function DownAsync)
+        call DzTriggerRegisterMouseEventByCode(t, JN_MOUSE_BUTTON_TYPE_LEFT, 1, false, function ClickDown)
         set t = CreateTrigger()
-        call DzTriggerRegisterMouseEventByCode(t, JN_MOUSE_BUTTON_TYPE_LEFT, 0, false, function UpAsync)
+        call DzTriggerRegisterMouseEventByCode(t, JN_MOUSE_BUTTON_TYPE_LEFT, 0, false, function ClickUp)
 
         set t = null
     endfunction
