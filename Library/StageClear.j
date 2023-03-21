@@ -1264,7 +1264,11 @@ library Stage initializer init
             elseif HiddenPortalState() == 8 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 엘린 숲" )
             elseif HiddenPortalState() == 9 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Random World: ???" )
+                if RandomStage_isHard then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Random World: ??? |cffFF0202(Hard)|r" )
+                else
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Random World: ??? |cff1FBF00(Normal)|r" )
+                endif
             elseif HiddenPortalState() == 11 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 깊은 산속" )
             elseif HiddenPortalState() == 12 then

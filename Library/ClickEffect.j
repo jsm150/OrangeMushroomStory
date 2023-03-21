@@ -2,13 +2,30 @@ library ClickEffect initializer Init needs TriggerSleepAction
     globals
         private key eventKey
         private string array effectPath
+        private boolean array clickingArray[PLAYER_MAXINUM]
     endglobals
 
-    public function MouseClick takes nothing returns nothing
-        local player p = DzGetTriggerKeyPlayer()
-        if GetLocalPlayer() == p then
-            call DzSyncData(I2S(eventKey), R2S(DzGetMouseTerrainX())+", "+R2S(DzGetMouseTerrainY()))
-        endif
+    private function IsClicking takes integer playerId returns boolean
+        return clickingArray[playerId]
+    endfunction
+
+    private function SetClicking takes integer playerId, boolean isClick returns nothing
+        set clickingArray[playerId] = isClick
+    endfunction
+
+    public function EffectOff takes integer playerId returns nothing
+        call SetClicking(playerId, false)
+    endfunction
+
+    public function EffectOn takes integer playerId returns nothing
+        call SetClicking(playerId, true)
+        loop
+            exitwhen IsClicking(playerId) == false
+            if GetLocalPlayer() == Player(playerId) then
+                call DzSyncData(I2S(eventKey), R2S(DzGetMouseTerrainX())+", "+R2S(DzGetMouseTerrainY()))
+            endif
+            call TriggerSleepActionByTimer(0.07)
+        endloop
     endfunction
 
     private function Effect takes nothing returns nothing
