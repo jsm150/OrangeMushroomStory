@@ -1233,9 +1233,9 @@ library Stage initializer init
             endif
         set i = i + 1
         endloop
-        set i = 0
+        set i = 1
         loop
-            exitwhen i == 4
+            exitwhen i > 4
             call Observer_Watch.evaluate(PLAYER_MAXINUM + i, Observer_ViewNumber[PLAYER_MAXINUM + i])
             set i = i + 1
         endloop
