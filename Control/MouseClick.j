@@ -13,16 +13,17 @@ scope MouseClick initializer Init
         debug call JNWriteLog("  screen y: " + R2S(y))
         call SkinFrame_ClickDownAction(i, x, y)
         call ItemStore_ClickDownAction(i, x, y)
+        call ClickEffect_EffectOn(i)
     //! runtextmacro Make_ButtonMouseEvent_Bottom("ScreenClickDown")
 
     //! runtextmacro Make_ButtonMouseEvent_Top("ScreenClickUp")
         call SkinFrame_ClickUpAction(i, x, y)
+        call ClickEffect_EffectOff(i)
     //! runtextmacro Make_ButtonMouseEvent_Bottom("ScreenClickUp")
 
     private function ClickDown takes nothing returns nothing
         call ScreenClickDown()
         // call MouseTeleport_MouseClick()
-        call ClickEffect_MouseClick()
     endfunction
 
     private function ClickUp takes nothing returns nothing
