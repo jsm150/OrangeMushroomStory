@@ -78,6 +78,8 @@ scope initialize initializer init
         set s = s + "11.9\n"
         set s = s + "- 특정 스킨이 오브젝트와 상호작용이 불가능하던 버그가 수정되었습니다.\n"
         set s = s + "- 심판 자리에서 관전할 때 배경이 사라지던 버그가 수정되었습니다.\n"
+        set s = s + "- 마우스 좌클릭을 유지할 때 핑이 연속으로 찍히도록 변경되었습니다.\n"
+        set s = s + "- 랜덤 스테이지에 입장할 때 난이도가 표기됩니다.\n"
         set s = s + "- 이제 랜덤 월드에 입장하려면 지하철 코드가 필요합니다."
         call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.8~11.9", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "11.2\n"
