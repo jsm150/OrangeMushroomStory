@@ -80,8 +80,11 @@ scope initialize initializer init
         set s = s + "- 심판 자리에서 관전할 때 배경이 사라지던 버그가 수정되었습니다.\n"
         set s = s + "- 마우스 좌클릭을 유지할 때 핑이 연속으로 찍히도록 변경되었습니다.\n"
         set s = s + "- 랜덤 스테이지에 입장할 때 난이도가 표기됩니다.\n"
-        set s = s + "- 이제 랜덤 월드에 입장하려면 지하철 코드가 필요합니다."
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.8~11.9", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 이제 랜덤 월드에 입장하려면 지하철 코드가 필요합니다.\n"
+        set s = s + "\n"
+        set s = s + "12.0\n"
+        set s = s + "- 초록 플레이어가 배경이 보이지 않던 버그가 수정되었습니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.8~12.0", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "11.2\n"
         set s = s + "- 카페 3-3 파란벽이 보이는 것 보다 낮은 점 수정되었습니다.\n"
         set s = s + "- 로딩창이 변경되었습니다.\n"
