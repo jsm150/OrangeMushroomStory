@@ -70,7 +70,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             set this.playing = false
         endmethod
 
-        public method ChangeSkin takes integer playerId, SkinSelectWindow window returns nothing
+        public method Use takes integer playerId, SkinSelectWindow window returns nothing
             call Events.Raise(inventoryClickedEventKey, InventoryClickedEvent.create(playerId, this, window))
         endmethod
 
@@ -364,9 +364,9 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             return (page - 1) * thistype.size + itemIdx < skinList.size
         endmethod
 
-        private method ChangeSkin takes integer itemIdx, SkinSelectWindow window returns nothing
+        private method Use takes integer itemIdx, SkinSelectWindow window returns nothing
             local SkinInfo skin = this.skinList[(page - 1) * thistype.size + itemIdx]
-            call skin.ChangeSkin(this.playerId, window)
+            call skin.Use(this.playerId, window)
         endmethod
 
         private method CoolDownTime takes nothing returns nothing
@@ -385,7 +385,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for("set i = 0", "i < thistype.size")
                 if MousePosInInventory(posX, posY, i) and HasSkinInInventory(i) then
                     call this.CoolDownTime.execute()
-                    call ChangeSkin(i, window)
+                    call Use(i, window)
                     return
                 endif
             //! runtextmacro for_end("set i = i + 1")
@@ -888,6 +888,14 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private SkinSelectWindow skinSelectWindow
         private boolean isOpen = false
 
+        public method ChangeSkin takes SkinInfo skinAnimation returns nothing
+            call this.skinSelectWindow.ChangeSkin(skinAnimation)
+        endmethod
+
+        public method ChangeDecorateSkin takes DecorateSkin decorateSkin returns nothing
+            call this.skinSelectWindow.ChangeDecorateSkin(decorateSkin)
+        endmethod
+
         public method IsOpen takes nothing returns boolean
             return this.isOpen
         endmethod
@@ -950,10 +958,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
     endstruct
 
+    globals
+        private PlayerSkinSelect array PlayerSkinUI[PLAYER_MAXINUM]
+    endglobals
+
     struct InventoryClickedEvent
         private integer id
         private SkinInfo skinInfo
-        private SkinSelectWindow skinSelectWindow
 
         public method operator Id takes nothing returns integer
             return this.id
@@ -963,15 +974,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             return this.skinInfo
         endmethod
 
-        public method operator Window takes nothing returns SkinSelectWindow
-            return this.skinSelectWindow
-        endmethod
-        
-        public static method create takes integer id, SkinInfo skinInfo, SkinSelectWindow skinSelectWindow returns thistype
+        public static method create takes integer id, SkinInfo skinInfo returns thistype
             local thistype this = thistype.allocate()
             set this.id = id
             set this.skinInfo = skinInfo
-            set this.skinSelectWindow = skinSelectWindow
             return this
         endmethod
     endstruct
@@ -981,10 +987,9 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local InventoryClickedEvent ev = Events.GetEventArgs(decorateSkinChangeKey)
             local integer id = ev.Id
             local DecorateSkinInfo skin = ev.Skin
-            local SkinSelectWindow window = ev.Window
 
             call Decorate_AddDecorate(id, skin.Id, skin.Type)
-            call window.ChangeDecorateSkin(skin.CreateDecorateSkin())
+            call PlayerSkinUI[id].ChangeDecorateSkin(skin.CreateDecorateSkin())
 
             call ev.destroy()
         endmethod
@@ -1005,7 +1010,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             local InventoryClickedEvent ev = Events.GetEventArgs(characterSkinChangeKey)
             local integer id = ev.Id + 1
             local SkinInfo skin = ev.Skin
-            local SkinSelectWindow window = ev.Window
 
             local real x = GetUnitX(OrangeMushroom[id])
             local real y = GetUnitY(OrangeMushroom[id])
@@ -1033,7 +1037,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     
                 endif
                 
-                call window.ChangeSkin(skin.Clone())
+                call PlayerSkinUI[id - 1].ChangeSkin(skin.Clone())
             endif
 
             call ev.destroy()
@@ -1049,10 +1053,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call thistype.create()
         endmethod
     endstruct
-
-    globals
-        private PlayerSkinSelect array PlayerSkinUI[PLAYER_MAXINUM]
-    endglobals
 
     public function ClickDownAction takes integer i, real x, real y returns nothing
         call PlayerSkinUI[i].ClickDown(x, y)
