@@ -60,7 +60,7 @@ library TrueEnding4END initializer Init needs Cinematic
                 endif
             set i = i + 1
             endloop
-            call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+            call Inventory_ShowSkinInventoryButton.evaluate(false)
             call CinematicModeBJ( true, GetPlayersAll() )
             call CinematicFilterGenericBJ( 1.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 100.00, 100, 100, 100, 0 )
         elseif tk.data == 1 then

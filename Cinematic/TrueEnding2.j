@@ -408,7 +408,7 @@ library TrueEnding2 initializer init needs Cinematic
             call tk.start(1.5, false, function CMTTick)
         elseif tk.data == 50 then
             set FinalStage = true
-            call SkinFrame_ShowSkinInventoryButton.evaluate(true)
+            call Inventory_ShowSkinInventoryButton.evaluate(true)
             call CinematicModeBJ( false, GetPlayersAll() )
             set Stage_Loading = false
             call Cinematic_End()
@@ -547,7 +547,7 @@ library TrueEnding2 initializer init needs Cinematic
             loop
             exitwhen i > PLAYER_MAXINUM
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and LevelClearState[i] == false then
-                    call SkinFrame_ShowSkinInventoryButton.evaluate(true)
+                    call Inventory_ShowSkinInventoryButton.evaluate(true)
                     call CinematicModeBJ( false, bj_FORCE_PLAYER[i-1] )
                 endif
             set i = i + 1
@@ -565,7 +565,7 @@ library TrueEnding2 initializer init needs Cinematic
                 loop
                 exitwhen i > PLAYER_MAXINUM
                     if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and LevelClearState[i] == false then
-                        call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                        call Inventory_ShowSkinInventoryButton.evaluate(false)
                         call CinematicModeBJ( true, bj_FORCE_PLAYER[i-1] )
                     endif
                 set i = i + 1
@@ -679,7 +679,7 @@ library TrueEnding2 initializer init needs Cinematic
             call tk.start(3.0, false, function CMTTick)
         else
             call PauseTimer(TimeLimit)
-            call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+            call Inventory_ShowSkinInventoryButton.evaluate(false)
             call CinematicModeBJ( true, GetPlayersAll() )
             call DestroyTimerDialog(TLDialog)
             set tk = tick.create(0)

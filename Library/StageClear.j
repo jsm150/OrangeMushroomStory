@@ -1042,7 +1042,7 @@ library Stage initializer init
                 if Stage_WorldSkip then
                     call Status.SetLevel(2, 8)
                     call BackGroundChange('hkni')
-                    call SkinFrame_ShowSkinInventoryButton.evaluate(true)
+                    call Inventory_ShowSkinInventoryButton.evaluate(true)
                     call CinematicModeBJ( false, GetPlayersAll() )
                     set BackgroundMusic = gg_snd_William_tell_Overture_Remix
                     call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
@@ -1073,14 +1073,14 @@ library Stage initializer init
         call PauseTimer(SentinelTimer2)
         if tk.data > 0 then
             if RandomStage_isRandom == true and RandomStage_state == 1 then
-                call SkinFrame_ShowSkinInventoryButton.evaluate(true)
+                call Inventory_ShowSkinInventoryButton.evaluate(true)
                 call CinematicModeBJ( false, GetPlayersAll() )
             elseif RandomStage_isRandom == false then
                 if Status.World >= 8 and Status.Level > 1 then
                     call Status.SetContinues(Status.Continues + 1)
                 endif
                 if Status.Level == 1 then
-                    call SkinFrame_ShowSkinInventoryButton.evaluate(true)
+                    call Inventory_ShowSkinInventoryButton.evaluate(true)
                     call CinematicModeBJ( false, GetPlayersAll() )
                     if Status.World >= 8 then
                         call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 해당 월드는 클리어마다 컨티뉴가 1씩 추가됩니다." )
@@ -1303,7 +1303,7 @@ library Stage initializer init
 
             if RandomStage_isRandom == false then
                 if (Status.Level+i > 8 or (Status.World == 1 and Status.Level == 0)) then
-                    call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                    call Inventory_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     if Status.World == 1 and Status.Level == 0 then
                         call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
@@ -1346,25 +1346,25 @@ library Stage initializer init
                         endif
                     endif
                 elseif HiddenPortalState() == 10 and i > 0 then
-                    call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                    call Inventory_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call StopSound( BackgroundMusic, false, true )
                     call tk.start(2.0, false, function WorldTimer)
                 elseif Status.Level+i > 7 and Status.World == 8 and PracticeMode == false then
                     set SecretEnding = true
-                    call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                    call Inventory_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
                     call TriggerExecute( TrueEnding3_Trigger )
                 elseif Status.World == 11 and Status.Level+i > 5 and PracticeMode == false then
                     set TrueEnding3END_EllinEnding = true
-                    call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                    call Inventory_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
                     call TriggerExecute( TrueEnding3_Trigger )
                 elseif Status.World == 14 and Status.Level+i > 5 and PracticeMode == false then
                     set SecretEnding2 = true
-                    call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                    call Inventory_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
                     call TriggerExecute( TrueEnding3_Trigger )
@@ -1372,7 +1372,7 @@ library Stage initializer init
                     call tk.start(1.5, false, function ClearTimer)
                 endif
             elseif RandomStage_state + i > 8 then
-                call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+                call Inventory_ShowSkinInventoryButton.evaluate(false)
                 call CinematicModeBJ( true, GetPlayersAll() )
                 call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
                 call TriggerExecute( Ending_Trigger )

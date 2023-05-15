@@ -306,7 +306,7 @@ library TrueEnding3 initializer init needs Cinematic
             call SetUnitPosition( BlackBoss, -768, -30080 )
             call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 100 )
             set FinalStage = true
-            call SkinFrame_ShowSkinInventoryButton.evaluate(true)
+            call Inventory_ShowSkinInventoryButton.evaluate(true)
             call CinematicModeBJ( false, GetPlayersAll() )
             set Stage_Loading = false
             call Cinematic_End()

@@ -1,4 +1,4 @@
-library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
+library Inventory initializer Init needs TeamColor, TriggerSleepAction
     globals
         private key characterSkinChangeKey
         private key decorateSkinChangeKey
