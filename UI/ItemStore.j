@@ -217,6 +217,10 @@ library ItemStore initializer Init needs RandomStage
             return posX >= minX and posX <= maxX and posY >= minY and posY <= maxY
         endmethod
 
+        public method IsOpen takes nothing returns boolean
+            return this.isOpen
+        endmethod
+
         public method Show takes nothing returns nothing
             local string money = User_UserList[this.playerId].GoldLeaf.ToString()
 
@@ -236,6 +240,10 @@ library ItemStore initializer Init needs RandomStage
         endmethod
 
         public method Hide takes nothing returns nothing
+            if this.isOpen == false then
+                return
+            endif
+
             set this.isOpen = false
             if GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(thistype.topLeftFrame, false)
@@ -350,6 +358,14 @@ library ItemStore initializer Init needs RandomStage
 
     public function InputKey takes integer i returns nothing
         call ItemStoreUIList[i].HotKey()
+    endfunction
+
+    public function WindowOff takes integer i returns nothing
+        call ItemStoreUIList[i].Hide()
+    endfunction
+
+    public function IsActivated takes integer i returns boolean
+        return ItemStoreUIList[i].IsOpen()
     endfunction
 
     /* 

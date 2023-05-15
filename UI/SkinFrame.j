@@ -873,16 +873,22 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private SkinSelectWindow skinSelectWindow
         private boolean isOpen = false
 
+        public method IsOpen takes nothing returns boolean
+            return this.isOpen
+        endmethod
+
         private method Open takes nothing returns nothing
             set this.isOpen = true
             call this.buttonUI.ChangeOfStatus(this.isOpen)
             call this.skinSelectWindow.Show()
         endmethod
 
-        private method Close takes nothing returns nothing
-            set this.isOpen = false
-            call this.buttonUI.ChangeOfStatus(this.isOpen)
-            call this.skinSelectWindow.Hide()
+        public method Close takes nothing returns nothing
+            if this.isOpen then
+                set this.isOpen = false
+                call this.buttonUI.ChangeOfStatus(this.isOpen)
+                call this.skinSelectWindow.Hide()
+            endif
         endmethod
 
         public method ClickDown takes real posX, real posY returns nothing
@@ -1043,6 +1049,14 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
     public function InputKey takes integer i returns nothing
         call PlayerSkinUI[i].HotKey()
+    endfunction
+
+    public function WindowOff takes integer i returns nothing
+        call PlayerSkinUI[i].Close()
+    endfunction
+
+    public function IsActivated takes integer i returns boolean
+        return PlayerSkinUI[i].IsOpen()
     endfunction
 
     /* =======================
