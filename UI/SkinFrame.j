@@ -183,6 +183,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for_end("set i = i + 1")
         endif
 
+        if User_UserList[id].SpiritPendant == 1 then
+            call skinList.add(SkinInfo(SkinAnimationList[50]).Clone())
+        endif
+
         return skinList
     endfunction
     
@@ -467,11 +471,21 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call this.Show()
         endmethod
 
+        private method InventoryInit takes nothing returns nothing
+            set this.skinList = RegisterSkinOfUser(this.playerId)
+            set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
+            call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
+        endmethod
+
         private method BringUserSkinData takes nothing returns nothing
             if this.playerId == Events.GetEventArgs(User_ReconnectedEventKey) then
-                set this.skinList = RegisterSkinOfUser(this.playerId)
-                set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
-                call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
+                call this.InventoryInit()
+            endif
+        endmethod
+
+        private method ItemAdd takes nothing returns nothing
+            if this.playerId == StorageItemsBuyEvent(Events.GetEventArgs(StorageItemsBuyEventKey)).PlayerId then
+                call this.InventoryInit()
             endif
         endmethod
 
@@ -520,6 +534,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             endif
 
             call Events.Add(User_ReconnectedEventKey, this, this.BringUserSkinData)
+            call Events.Add(StorageItemsBuyEventKey, this, this.ItemAdd)
 
             return this
         endmethod
@@ -1440,6 +1455,11 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         set skin = SkinInfo.create(0.250, "GreenBloctopus", 'h00K', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Greenblockpus1.blp")
         call skin.AddMotion("Greenblockpus2.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+        set skin = SkinInfo.create(0, "SpiritPendant", 'h00K', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("SpiritPendant.blp")
         call SkinAnimationList.add(skin)
     endfunction
 

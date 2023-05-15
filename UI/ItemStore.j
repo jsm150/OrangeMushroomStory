@@ -1,9 +1,23 @@
 library ItemStore initializer Init needs RandomStage
+    globals
+        key StorageItemsBuyEventKey
+    endglobals
+
+    struct StorageItemsBuyEvent
+        integer PlayerId
+        
+        static method create takes integer playerId returns thistype
+            local thistype this = thistype.allocate()
+            set this.PlayerId = playerId
+            return this
+        endmethod
+    endstruct
+
     private struct Item
         private Money price
         private integer quantity
         
-        private stub method Check takes nothing returns boolean
+        private stub method Check takes integer playerId returns boolean
             return true
         endmethod 
 
@@ -15,7 +29,7 @@ library ItemStore initializer Init needs RandomStage
                 return
             endif
 
-            if not(this.Check()) then
+            if not(this.Check(playerId)) then
                 return
             endif
 
@@ -49,7 +63,7 @@ library ItemStore initializer Init needs RandomStage
 
     // 컨티뉴 2증가 아이템
     private struct ContinueAddItem extends Item
-        private stub method Check takes nothing returns boolean
+        private stub method Check takes integer playerId returns boolean
             return true
         endmethod 
 
@@ -61,7 +75,7 @@ library ItemStore initializer Init needs RandomStage
 
     // 하드 랜덤 월드로 바꾸는 아이템
     private struct HardRandomTicketItem extends Item
-        private stub method Check takes nothing returns boolean
+        private stub method Check takes integer playerId returns boolean
             return (Status.World == 2 and Status.Level == 8) and RandomStage_isHard == false
         endmethod 
 
@@ -70,6 +84,19 @@ library ItemStore initializer Init needs RandomStage
             call CinematicFilterGenericBJ( 1, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 100, 0.00, 0.00, 50.00, 100.00, 0, 0, 100.00 )
             call SetDoodadAnimation(2563, 196, 128.00, 'D000', false, "Stand2", false)
             call RandomStage_SetHardMode()
+        endmethod
+    endstruct
+
+    // 정령의 펜던트
+    private struct SpiritPendantItem extends Item
+        private stub method Check takes integer playerId returns boolean
+            return User_UserList[playerId].SpiritPendant == 0
+        endmethod 
+
+        private stub method GiveItem takes integer playerId returns nothing
+            set User_UserList[playerId].SpiritPendant = 1
+            call User_UserList[playerId].InventoryUpload(playerId)
+            call Events.Raise(StorageItemsBuyEventKey, StorageItemsBuyEvent.create(playerId))
         endmethod
     endstruct
 
@@ -377,6 +404,7 @@ library ItemStore initializer Init needs RandomStage
         local ItemUIList uiList = ItemUIList.create()
         call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", ContinueAddItem.create(Money.create(300), 1)))
         call uiList.Add(ItemUI.create("HardRandomTicketSlot.blp", HardRandomTicketItem.create(Money.create(50), 1)))
+        call uiList.Add(ItemUI.create("SpiritPendantItemSlot.blp", SpiritPendantItem.create(Money.create(99900), 7)))
         return uiList
     endfunction
 

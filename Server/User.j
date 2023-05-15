@@ -3,7 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        string mapVersion = "v11.6"
+        string mapVersion = "v12.1"
         public key GoldLeafChangedEvent
     endglobals
 
@@ -90,6 +90,7 @@ scope User initializer Init
         integer PinkBeanDesignation = 0
         integer BellaPet = 0
         integer LucidSoul = 0
+        integer SpiritPendant = 0
         Money GoldLeaf
 
         public method GetClearCountByWorldId takes integer worldId returns integer
@@ -127,6 +128,14 @@ scope User initializer Init
         public method GoldLeafUpload takes integer playerId returns nothing
             local string name = StringCase(GetPlayerName(Player(playerId)), false)
             call JNObjectCharacterSetInt(name, "GoldLeaf", this.GoldLeaf.ToInt())
+            if GetLocalPlayer() == Player(playerId) then
+                call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
+            endif
+        endmethod
+
+        public method InventoryUpload takes integer playerId returns nothing
+            local string name = StringCase(GetPlayerName(Player(playerId)), false)
+            call JNObjectCharacterSetInt(name, "SpiritPendant", this.SpiritPendant)
             if GetLocalPlayer() == Player(playerId) then
                 call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
             endif
@@ -294,6 +303,7 @@ scope User initializer Init
         endloop
     endfunction
 
+    // world
     //! runtextmacro MakeFuncToDataLoadSync("CaptainJack", "UserList[idx].ClearList.CaptainJack", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("Subway", "UserList[idx].ClearList.Subway", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("Valentine", "UserList[idx].ClearList.Valentine", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
@@ -308,10 +318,16 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("WorldChallenge2", "UserList[idx].ClearList.WorldChallenge2", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("HardRandom", "UserList[idx].ClearList.HardRandom", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
+
+    // item
     //! runtextmacro MakeFuncToDataLoadSync("PinkBeanDesignation", "UserList[idx].PinkBeanDesignation", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("BellaPet", "UserList[idx].BellaPet", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
     //! runtextmacro MakeFuncToDataLoadSync("LucidSoul", "UserList[idx].LucidSoul", "S2I", "string name, string itemName", "JNUseUserRoleItemInfo(mapId, secretKey, name, itemName)")
+    //! runtextmacro MakeFuncToDataLoadSync("SpiritPendant", "UserList[idx].SpiritPendant", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
+
+    // money
     //! runtextmacro MakeFuncToDataLoadSync("GoldLeaf", "UserList[idx].GoldLeaf", "Money.CreateArgsString", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
+
 
     public function LoadUserData takes integer playerId returns nothing
         local string name = ""
@@ -338,6 +354,7 @@ scope User initializer Init
             call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")
             call DataLoadSyncToBellaPet(playerId, name, "Bella Pet")
             call DataLoadSyncToLucidSoul(playerId, name, "Lucid Soul")
+            call DataLoadSyncToSpiritPendant(playerId, name, "SpiritPendant")
             static if DEBUG_MODE then
                 set UserList[playerId].GoldLeaf = Money.create(99999)
             else
