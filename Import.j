@@ -92,7 +92,7 @@
 // UI
 //! import "UI\ItemStore.j"
 //! import "UI\ObserverUI.j"
-//! import "UI\SkinFrame.j"
+//! import "UI\Inventory.j"
 //! import "UI\WaitingRoom.j"
 
 // Test

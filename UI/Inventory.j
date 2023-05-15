@@ -2,21 +2,14 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
     globals
         private key characterSkinChangeKey
         private key decorateSkinChangeKey
+
+        private key SpiritPendant_ItemUseEventKey
     endglobals
 
-    private struct SkinInfo
-        private integer id
+    private struct Item
         private string name
-        private real size
-        private real motionDelay
         private integer inventoryClickedEventKey
-        private static hashtable motionList = InitHashtable()
-        private integer fileCount = 0
-        private boolean playing = false
-
-        public method operator Id takes nothing returns integer
-            return this.id
-        endmethod 
+        private real size
 
         public method operator Name takes nothing returns string
             return this.name
@@ -26,19 +19,74 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             return this.size
         endmethod 
 
-        public method operator Delay takes nothing returns real
-            return this.motionDelay
-        endmethod 
-
         public method operator EventKey takes nothing returns integer
             return this.inventoryClickedEventKey
+        endmethod 
+
+        public method Use takes integer playerId returns nothing
+            call Events.Raise(EventKey, InventoryClickedEvent.create(playerId, this))
+        endmethod
+
+        public stub method Display takes integer frame, integer playerId returns nothing
+        endmethod
+
+        public stub method Stop takes nothing returns nothing
+        endmethod
+
+        public stub method Clone takes nothing returns thistype
+            return thistype.create(this.Name, this.Size, this.EventKey)
+        endmethod
+
+        public static method create takes string name, real size, integer inventoryClickedEventKey returns thistype
+            local thistype this = thistype.allocate()
+            set this.name = name
+            set this.size = size
+            set this.inventoryClickedEventKey = inventoryClickedEventKey
+            return this
+        endmethod
+    endstruct
+
+    private struct ConsumptionItem extends Item
+        private string img
+
+        public stub method Display takes integer frame, integer playerId returns nothing
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetSize(frame, this.Size, this.Size)
+                call DzFrameSetTexture(frame, this.img, 0)
+            endif
+        endmethod
+
+        public stub method Clone takes nothing returns thistype
+            return thistype.create(this.Name, this.img, this.Size, this.EventKey)
+        endmethod
+
+        public static method create takes string name, string img, real size, integer inventoryClickedEventKey returns thistype
+            local thistype this = thistype.allocate(name, size, inventoryClickedEventKey)
+            set this.img = img
+            return this
+        endmethod
+    endstruct
+
+    private struct SkinInfo extends Item
+        private integer id
+        private real motionDelay
+        private static hashtable motionList = InitHashtable()
+        private integer fileCount = 0
+        private boolean playing = false
+
+        public method operator Id takes nothing returns integer
+            return this.id
+        endmethod 
+
+        public method operator Delay takes nothing returns real
+            return this.motionDelay
         endmethod 
 
         private method ChangeAnimation takes integer frame, integer playerId returns nothing
             local integer currentIdx = 0
 
             if GetLocalPlayer() == Player(playerId) then
-                call DzFrameSetSize(frame, this.size, this.size)
+                call DzFrameSetSize(frame, this.Size, this.Size)
                 call DzFrameSetTexture(frame, LoadStr(thistype.motionList, this, currentIdx), 0)
             endif
 
@@ -59,7 +107,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             endloop
         endmethod
 
-        public method Run takes integer frame, integer playerId returns nothing
+        public method Display takes integer frame, integer playerId returns nothing
             if this.playing == false then
                 set this.playing = true
                 call this.ChangeAnimation.execute(frame, playerId)
@@ -70,10 +118,6 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             set this.playing = false
         endmethod
 
-        public method Use takes integer playerId, SkinSelectWindow window returns nothing
-            call Events.Raise(inventoryClickedEventKey, InventoryClickedEvent.create(playerId, this, window))
-        endmethod
-
         public method CopyMotion takes thistype target returns nothing
             local integer i
             //! runtextmacro for("set i = 0", "i < this.fileCount")
@@ -82,7 +126,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
         endmethod
 
         public stub method Clone takes nothing returns thistype
-            local thistype copy = thistype.create(this.motionDelay, this.name, this.id, this.size, this.inventoryClickedEventKey)
+            local thistype copy = thistype.create(this.motionDelay, this.Name, this.id, this.Size, this.EventKey)
             call this.CopyMotion(copy)
             return copy
         endmethod
@@ -97,12 +141,9 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
         endmethod
 
         public static method create takes real motionDelay, string name, integer id, real size, integer inventoryClickedEventKey returns thistype
-            local thistype this = thistype.allocate()
+            local thistype this = thistype.allocate(name, size, inventoryClickedEventKey)
             set this.motionDelay = motionDelay
-            set this.name = name
             set this.id = id
-            set this.size = size
-            set this.inventoryClickedEventKey = inventoryClickedEventKey
             return this
         endmethod
 
@@ -184,7 +225,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
         endif
 
         if User_UserList[id].SpiritPendant == 1 then
-            call skinList.add(SkinInfo(SkinAnimationList[50]).Clone())
+            call skinList.add(ConsumptionItem(SkinAnimationList[50]).Clone())
         endif
 
         return skinList
@@ -222,12 +263,12 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             call temp.destroy()
         endmethod
 
-        public method RunAnimation takes integer playerId, integer refFrame returns nothing
+        public method DisplayAnimation takes integer playerId, integer refFrame returns nothing
             if GetLocalPlayer() == Player(playerId) then
                 call DzFrameSetPoint(this.skinFrame, JN_FRAMEPOINT_CENTER, refFrame, JN_FRAMEPOINT_CENTER, this.offsetX, this.offsetY)
                 call DzFrameShow(this.skinFrame, true)
             endif
-            call motion.Run(this.skinFrame, playerId)
+            call motion.Display(this.skinFrame, playerId)
         endmethod
 
         public method Stop takes integer playerId returns nothing
@@ -364,9 +405,9 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             return (page - 1) * thistype.size + itemIdx < skinList.size
         endmethod
 
-        private method Use takes integer itemIdx, SkinSelectWindow window returns nothing
-            local SkinInfo skin = this.skinList[(page - 1) * thistype.size + itemIdx]
-            call skin.Use(this.playerId, window)
+        private method Use takes integer itemIdx returns nothing
+            local Item skin = this.skinList[(page - 1) * thistype.size + itemIdx]
+            call skin.Use(this.playerId)
         endmethod
 
         private method CoolDownTime takes nothing returns nothing
@@ -385,7 +426,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for("set i = 0", "i < thistype.size")
                 if MousePosInInventory(posX, posY, i) and HasSkinInInventory(i) then
                     call this.CoolDownTime.execute()
-                    call Use(i, window)
+                    call Use(i)
                     return
                 endif
             //! runtextmacro for_end("set i = i + 1")
@@ -403,7 +444,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
 
             set frameIdx = 0
             //! runtextmacro for("set skinIdx = thistype.size * (this.page - 1)", "skinIdx < max")
-                call SkinInfo(this.skinList[skinIdx]).Run(thistype.framePool[frameIdx], playerId)
+                call Item(this.skinList[skinIdx]).Display(thistype.framePool[frameIdx], playerId)
                 if GetLocalPlayer() == Player(this.playerId) then
                     call DzFrameShow(thistype.framePool[frameIdx], true)
                 endif
@@ -429,7 +470,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
 
             set frameIdx = 0
             //! runtextmacro for("set skinIdx = thistype.size * (this.page - 1)", "skinIdx < max")
-                call SkinInfo(this.skinList[skinIdx]).Stop()
+                call Item(this.skinList[skinIdx]).Stop()
                 if GetLocalPlayer() == Player(this.playerId) then
                     call DzFrameShow(thistype.framePool[frameIdx], false)
                 endif
@@ -606,10 +647,10 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             endif
         endmethod
 
-        private method DecorateSkinRun takes nothing returns nothing
+        private method DecorateSkinDisplay takes nothing returns nothing
             local integer i = 0
             //! runtextmacro for("set i = 0", "i < decorateSkinFrameList.size")
-                call DecorateSkin(decorateSkinFrameList[i]).RunAnimation(this.playerId, this.skinFrame)
+                call DecorateSkin(decorateSkinFrameList[i]).DisplayAnimation(this.playerId, this.skinFrame)
             //! runtextmacro for_end("set i = i + 1")
         endmethod
 
@@ -634,8 +675,8 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
                 call DzFrameShow(this.skinFrame, this.isShow)
             endif
 
-            call this.skinAnimation.Run(this.skinFrame, this.playerId)
-            call this.DecorateSkinRun()
+            call this.skinAnimation.Display(this.skinFrame, this.playerId)
+            call this.DecorateSkinDisplay()
             call this.nameUI.Show()
             call this.inventory.Show()
         endmethod
@@ -664,7 +705,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             call this.skinAnimation.destroy()
             set this.skinAnimation = skinAnimation
             if this.isShow then
-                call this.skinAnimation.Run(this.skinFrame, this.playerId)
+                call this.skinAnimation.Display(this.skinFrame, this.playerId)
             endif
         endmethod
 
@@ -696,7 +737,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             set temp = this.skinAnimation
             set this.skinAnimation = temp.Clone()
             call temp.destroy()
-            call this.skinAnimation.Run(this.skinFrame, this.playerId)
+            call this.skinAnimation.Display(this.skinFrame, this.playerId)
 
             //! runtextmacro for("", "i < decorateSkinFrameList.size")
                 call DecorateSkin(decorateSkinFrameList[i]).Stop(this.playerId)
@@ -714,7 +755,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
                     call decorateSkinFrameList.remove(skin)
                     call skin.destroy()
                     call decorateSkin.destroy()
-                    call this.DecorateSkinRun()
+                    call this.DecorateSkinDisplay()
                     return
                 endif
                 if DecorateSkin(decorateSkinFrameList[i]).GetType() == decorateSkin.GetType() then
@@ -722,13 +763,13 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
                     call decorateSkinFrameList.remove(skin)
                     call skin.destroy()
                     call decorateSkinFrameList.add(decorateSkin)
-                    call this.DecorateSkinRun()
+                    call this.DecorateSkinDisplay()
                     return
                 endif
             //! runtextmacro for_end("set i = i + 1")
             call decorateSkinFrameList.add(decorateSkin)
             call this.FramePrioritySetting()
-            call this.DecorateSkinRun()
+            call this.DecorateSkinDisplay()
         endmethod
 
         public static method create takes integer playerId, sList skinList returns thistype
@@ -982,7 +1023,34 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
         endmethod
     endstruct
 
+
+//! textmacro 아이템_사용_이벤트_등록 takes key
+
+public static method create takes nothing returns thistype
+    local thistype this = thistype.allocate()
+    call Events.Add($key$, this, this.Apply)
+    return this
+endmethod
+
+private static method onInit takes nothing returns nothing
+    call thistype.create()
+endmethod
+
+//! endtextmacro
+
+
+    // Item Ability
+    private struct SpiritPendant
+        //! runtextmacro 아이템_사용_이벤트_등록("SpiritPendant_ItemUseEventKey")
+        
+        public method Apply takes nothing returns nothing
+            call BJDebugMsg("정령의 펜던트 사용!!!")
+        endmethod
+    endstruct
+
     private struct DecorateSkinChange
+        //! runtextmacro 아이템_사용_이벤트_등록("decorateSkinChangeKey")
+
         public method Apply takes nothing returns nothing
             local InventoryClickedEvent ev = Events.GetEventArgs(decorateSkinChangeKey)
             local integer id = ev.Id
@@ -993,19 +1061,11 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
 
             call ev.destroy()
         endmethod
-
-        public static method create takes nothing returns thistype
-            local thistype this = thistype.allocate()
-            call Events.Add(decorateSkinChangeKey, this, this.Apply)
-            return this
-        endmethod
-
-        private static method onInit takes nothing returns nothing
-            call thistype.create()
-        endmethod
     endstruct
 
     private struct CharacterSkinChange
+        //! runtextmacro 아이템_사용_이벤트_등록("characterSkinChangeKey")
+
         public method Apply takes nothing returns nothing
             local InventoryClickedEvent ev = Events.GetEventArgs(characterSkinChangeKey)
             local integer id = ev.Id + 1
@@ -1041,16 +1101,6 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
             endif
 
             call ev.destroy()
-        endmethod
-
-        public static method create takes nothing returns thistype
-            local thistype this = thistype.allocate()
-            call Events.Add(characterSkinChangeKey, this, this.Apply)
-            return this
-        endmethod
-
-        private static method onInit takes nothing returns nothing
-            call thistype.create()
         endmethod
     endstruct
 
@@ -1458,8 +1508,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
         call SkinAnimationList.add(skin)
 
         //====================================================
-        set skin = SkinInfo.create(0, "SpiritPendant", 'h00K', 0.044, characterSkinChangeKey)
-        call skin.AddMotion("SpiritPendant.blp")
+        set skin = ConsumptionItem.create("SpiritPendant", "SpiritPendant.blp", 0.044, SpiritPendant_ItemUseEventKey)
         call SkinAnimationList.add(skin)
     endfunction
 
