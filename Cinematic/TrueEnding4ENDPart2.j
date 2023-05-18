@@ -94,7 +94,7 @@ library TrueEnding4ENDPart2 initializer init needs Cinematic
                     endif
                 set i = i + 1
                 endloop
-            call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+            call Inventory_ShowSkinInventoryButton.evaluate(false)
             call CinematicModeBJ( true, GetPlayersAll() )
             call CinematicFilterGenericBJ( 1.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 100.00, 100, 100, 100, 0 )
         elseif tk.data == 1 then
@@ -134,7 +134,7 @@ library TrueEnding4ENDPart2 initializer init needs Cinematic
             call MultiboardSetItemValueBJ( Status.Borad, 1, 1, "컨티뉴(Continues):" )
             call Status.SetContinues(0)
             call MultiboardSetItemValueBJ( Status.Borad, 1, 3, "탈출인원(Escapers):" )
-            call SkinFrame_ShowSkinInventoryButton.evaluate(true)
+            call Inventory_ShowSkinInventoryButton.evaluate(true)
             call CinematicModeBJ( false, GetPlayersAll() )
             set Stage_Loading = false
             call Cinematic_End()
@@ -304,7 +304,7 @@ library TrueEnding4ENDPart2 initializer init needs Cinematic
             call tk.start(3.0, false, function CMTTick)
         else
             call CinematicFilterGenericBJ( 1.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 100.00, 100, 100, 100, 0 )
-            call SkinFrame_ShowSkinInventoryButton.evaluate(false)
+            call Inventory_ShowSkinInventoryButton.evaluate(false)
             call CinematicModeBJ( true, GetPlayersAll() )
             set tk = tick.create(0)
             call Cinematic_Start(3)

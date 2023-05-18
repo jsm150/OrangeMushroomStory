@@ -83,8 +83,13 @@ scope initialize initializer init
         set s = s + "- 이제 랜덤 월드에 입장하려면 지하철 코드가 필요합니다.\n"
         set s = s + "\n"
         set s = s + "12.0\n"
-        set s = s + "- 초록 플레이어가 배경이 보이지 않던 버그가 수정되었습니다."
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.8~12.0", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 초록 플레이어가 배경이 보이지 않던 버그가 수정되었습니다.\n"
+        set s = s + "\n"
+        set s = s + "12.1\n"
+        set s = s + "- 새로운 아이템이 추가되었습니다.\n"
+        set s = s + "- 상점 / 인벤토리 창을 ESC로 종료할 수 있습니다.\n"
+        set s = s + "- 월드(랜덤)의 보상이 소폭 감소하였습니다.(150~350 -> 150~300)"
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "11.8~12.1", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "11.2\n"
         set s = s + "- 카페 3-3 파란벽이 보이는 것 보다 낮은 점 수정되었습니다.\n"
         set s = s + "- 로딩창이 변경되었습니다.\n"
@@ -620,7 +625,7 @@ scope initialize initializer init
         set s = s + "얼음동굴 : 700\n"
         set s = s + "아랫마을 : 800\n"
         set s = s + "월드 첼린지II : 800\n"
-        set s = s + "랜덤 : 150~350\n"
+        set s = s + "랜덤 : 150~300\n"
         set s = s + "랜덤(하드) : 350~650\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "골드리프?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = TeamColor[7] + "쉬움|r : 1.62%, " + TeamColor[5] + "보통|r : 1.21%, " + TeamColor[6] + "어려움|r : 0.81%," + TeamColor[1] + " 매우어려움|r : 0.4%\n\n"

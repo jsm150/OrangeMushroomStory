@@ -2,6 +2,12 @@ scope ESCKey initializer init
     private function Main takes nothing returns nothing
         local integer i = GetPlayerId(GetTriggerPlayer())+1
 
+        if ItemStore_IsActivated(i - 1) or Inventory_IsActivated(i - 1) then
+            call ItemStore_WindowOff(i - 1)
+            call Inventory_WindowOff(i - 1)
+            return
+        endif
+
         if BossKill == false then
             if i == HostNumber then
                 if Stage_Loading == false and GravityChanger_Loading == false then

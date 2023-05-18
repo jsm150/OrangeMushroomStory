@@ -25,6 +25,43 @@ library Key initializer Init
         integer UnTerrain
     endglobals
 
+    public struct UseHistroy
+        static integer World = 0
+        static integer Stage = 0
+        static boolean Red = false
+        static boolean Yellow = false
+        static boolean Blue = false
+        static boolean White = false
+
+        public static method Record takes integer keyType returns nothing
+            if keyType == RED_KEY_ID then
+                call JNWriteLog("RED EAT")
+                set Red = true
+            endif
+            if keyType == YELLOW_KEY_ID then
+                call JNWriteLog("YELLOW EAT")
+                set Yellow = true
+            endif
+            if keyType == BLUE_KEY_ID then
+                call JNWriteLog("BLUE EAT")
+                set Blue = true
+            endif
+            if keyType == WHITE_KEY_ID then
+                call JNWriteLog("WHITE EAT")
+                set White = true
+            endif
+        endmethod
+
+        public static method Clear takes integer world, integer stage returns nothing
+            set World = world
+            set Stage = stage
+            set Red = false
+            set Yellow = false
+            set Blue = false
+            set White = false
+        endmethod
+    endstruct
+
     private function SetBlock takes nothing returns nothing
         set LeftRailTerrain = GetTerrainType(-8069,-32233)
         set RightRailTerrain = GetTerrainType(-7960,-32233)
@@ -158,7 +195,7 @@ library Key initializer Init
 
         private method Execute takes nothing returns nothing
             if this.isExecuted == false and TypeCondition() == true then
-                call this.Action()                
+                call this.Action()
             endif
         endmethod
 
@@ -170,6 +207,7 @@ library Key initializer Init
             set this.isExecuted = true
             call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\AIem\\AIemTarget.mdl", GetRectCenterX(this.keyRect), GetRectCenterY(this.keyRect)))
             call SetDoodadAnimationRect(keyRect, keyType, "Death", false)
+            call UseHistroy.Record(keyType)
         endmethod
 
         public method TryExecute takes integer keyType returns nothing
@@ -216,6 +254,7 @@ library Key initializer Init
             //! runtextmacro LinkedList_Foreach_Top("node", "eventList")
                 call node.Item.Reset()
             //! runtextmacro LinkedList_Foreach_Bottom()
+            call UseHistroy.Clear(world, stage)
         endmethod
 
         public static method Execute takes integer world, integer stage, integer keyType returns nothing

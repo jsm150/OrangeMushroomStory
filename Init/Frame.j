@@ -788,6 +788,29 @@ scope Frame initializer init
         return true
     endfunction
     
+    public struct LaserBlockHistory
+        static hashtable List = InitHashtable()
+        static integer Count = 0
+
+        public static method Add takes real x, real y returns nothing
+            call SaveLocationHandle(List, 0, Count, Location(x, y))
+            set Count = Count + 1
+        endmethod
+
+        public static method Clear takes nothing returns nothing
+            local integer i = 0
+            local location l 
+
+            //! runtextmacro for("set i = 0", "i < Count")
+                set l = LoadLocationHandle(List, 0, i)
+                call RemoveLocation(l)
+            //! runtextmacro for_end("set i = i + 1")
+
+            set Count = 0
+            set l = null
+        endmethod
+    endstruct
+
     private function SentinelMissileMove takes nothing returns nothing
         local integer i = 1
         local real x = GetUnitX(GetEnumUnit())
@@ -835,6 +858,7 @@ scope Frame initializer init
             call GroupRemoveUnit(SentinelMissile, GetEnumUnit())
             if GetTerrainType(x, y) == 'Xblm' then
                 call SetTerrainType(x, y, BACKGROUND_TILE, -1, 1, 0)
+                call LaserBlockHistory.Add(x, y)
             endif
         endif
     endfunction

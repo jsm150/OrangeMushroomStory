@@ -60,7 +60,7 @@ scope HotKey initializer Init
     //! runtextmacro HotKey_Event_Bottom("'V'")
 
     //! runtextmacro HotKey_Event_Top("Inventory")
-        call SkinFrame_InputKey(playerId)
+        call Inventory_InputKey(playerId)
     //! runtextmacro HotKey_Event_Bottom("'I'")
 
     //! runtextmacro HotKey_Event_Top("Shop")

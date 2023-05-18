@@ -17,6 +17,9 @@
 //! import "Init\Init.j"
 //! import "Init\Leave.j"
 
+// Item
+//! import "Item\SpiritPendant.j"
+
 // Cinematic
 //! import "Cinematic\BossMain.j"
 //! import "Cinematic\CinematicMain.j"
@@ -48,6 +51,7 @@
 //! import "EasterEgg\Maze.j"
 
 // Library
+//! import "Library\ArrayList.j"
 //! import "Library\Arrow.j"
 //! import "Library\Calculation.j"
 //! import "Library\ClickEffect.j"
@@ -92,7 +96,7 @@
 // UI
 //! import "UI\ItemStore.j"
 //! import "UI\ObserverUI.j"
-//! import "UI\SkinFrame.j"
+//! import "UI\Inventory.j"
 //! import "UI\WaitingRoom.j"
 
 // Test

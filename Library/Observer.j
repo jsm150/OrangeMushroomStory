@@ -51,17 +51,6 @@ library Observer needs Stage
         call Watch(i, j)
     endfunction
 
-    public function End takes integer i returns nothing
-        if Player(i-1) == GetLocalPlayer() then
-            call SetUnitVertexColorBJ( BackGroundUnits[i], 100.00, 100.00, 100.00, 0 )
-            call SetUnitVertexColorBJ( BackGroundUnits[ViewNumber[i]], 0.00, 0.00, 0.00, 100 )
-        endif
-        set State[i] = false
-        set ViewNumber[i] = 0
-        call ShowUnitShow(OrangeMushroom[i])
-        call SetTextTagVisibility(NameTextTag[i], true)
-    endfunction
-    
     public function Start takes integer i returns nothing 
         local real x
         local real y

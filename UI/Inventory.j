@@ -1,22 +1,15 @@
-library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
+library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPendant
     globals
         private key characterSkinChangeKey
         private key decorateSkinChangeKey
+
+        private key SpiritPendant_ItemUseEventKey
     endglobals
 
-    private struct SkinInfo
-        private integer id
+    private struct Item
         private string name
-        private real size
-        private real motionDelay
         private integer inventoryClickedEventKey
-        private static hashtable motionList = InitHashtable()
-        private integer fileCount = 0
-        private boolean playing = false
-
-        public method operator Id takes nothing returns integer
-            return this.id
-        endmethod 
+        private real size
 
         public method operator Name takes nothing returns string
             return this.name
@@ -26,19 +19,82 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             return this.size
         endmethod 
 
-        public method operator Delay takes nothing returns real
-            return this.motionDelay
-        endmethod 
-
         public method operator EventKey takes nothing returns integer
             return this.inventoryClickedEventKey
+        endmethod 
+
+        public method Use takes integer playerId returns nothing
+            call Events.Raise(EventKey, InventoryClickedEvent.create(playerId, this))
+        endmethod
+
+        public stub method Display takes integer frame, integer playerId returns nothing
+        endmethod
+
+        public stub method Stop takes nothing returns nothing
+        endmethod
+
+        public stub method Clone takes nothing returns thistype
+            return thistype.create(this.Name, this.Size, this.EventKey)
+        endmethod
+
+        public static method create takes string name, real size, integer inventoryClickedEventKey returns thistype
+            local thistype this = thistype.allocate()
+            set this.name = name
+            set this.size = size
+            set this.inventoryClickedEventKey = inventoryClickedEventKey
+            return this
+        endmethod
+    endstruct
+
+    private struct ConsumptionItem extends Item
+        private string img
+
+        public method operator Img takes nothing returns string
+            return this.img
+        endmethod 
+
+        public stub method Display takes integer frame, integer playerId returns nothing
+            if GetLocalPlayer() == Player(playerId) then
+                call DzFrameSetSize(frame, this.Size, this.Size)
+                call DzFrameSetTexture(frame, this.img, 0)
+            endif
+        endmethod
+
+        public stub method Clone takes nothing returns thistype
+            return thistype.create(this.Name, this.img, this.Size, this.EventKey)
+        endmethod
+
+        public method ReplaceImg takes string img returns nothing
+            set this.img = img
+        endmethod
+
+        public static method create takes string name, string img, real size, integer inventoryClickedEventKey returns thistype
+            local thistype this = thistype.allocate(name, size, inventoryClickedEventKey)
+            set this.img = img
+            return this
+        endmethod
+    endstruct
+
+    private struct SkinInfo extends Item
+        private integer id
+        private real motionDelay
+        private static hashtable motionList = InitHashtable()
+        private integer fileCount = 0
+        private boolean playing = false
+
+        public method operator Id takes nothing returns integer
+            return this.id
+        endmethod 
+
+        public method operator Delay takes nothing returns real
+            return this.motionDelay
         endmethod 
 
         private method ChangeAnimation takes integer frame, integer playerId returns nothing
             local integer currentIdx = 0
 
             if GetLocalPlayer() == Player(playerId) then
-                call DzFrameSetSize(frame, this.size, this.size)
+                call DzFrameSetSize(frame, this.Size, this.Size)
                 call DzFrameSetTexture(frame, LoadStr(thistype.motionList, this, currentIdx), 0)
             endif
 
@@ -59,7 +115,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             endloop
         endmethod
 
-        public method Run takes integer frame, integer playerId returns nothing
+        public method Display takes integer frame, integer playerId returns nothing
             if this.playing == false then
                 set this.playing = true
                 call this.ChangeAnimation.execute(frame, playerId)
@@ -70,10 +126,6 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             set this.playing = false
         endmethod
 
-        public method ChangeSkin takes integer playerId, SkinSelectWindow window returns nothing
-            call Events.Raise(inventoryClickedEventKey, InventoryClickedEvent.create(playerId, this, window))
-        endmethod
-
         public method CopyMotion takes thistype target returns nothing
             local integer i
             //! runtextmacro for("set i = 0", "i < this.fileCount")
@@ -82,7 +134,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
 
         public stub method Clone takes nothing returns thistype
-            local thistype copy = thistype.create(this.motionDelay, this.name, this.id, this.size, this.inventoryClickedEventKey)
+            local thistype copy = thistype.create(this.motionDelay, this.Name, this.id, this.Size, this.EventKey)
             call this.CopyMotion(copy)
             return copy
         endmethod
@@ -97,12 +149,9 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
 
         public static method create takes real motionDelay, string name, integer id, real size, integer inventoryClickedEventKey returns thistype
-            local thistype this = thistype.allocate()
+            local thistype this = thistype.allocate(name, size, inventoryClickedEventKey)
             set this.motionDelay = motionDelay
-            set this.name = name
             set this.id = id
-            set this.size = size
-            set this.inventoryClickedEventKey = inventoryClickedEventKey
             return this
         endmethod
 
@@ -183,6 +232,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for_end("set i = i + 1")
         endif
 
+        if User_UserList[id].SpiritPendant == 1 then
+            call skinList.add(ConsumptionItem(SkinAnimationList[50]).Clone())
+        endif
+
         return skinList
     endfunction
     
@@ -218,12 +271,12 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call temp.destroy()
         endmethod
 
-        public method RunAnimation takes integer playerId, integer refFrame returns nothing
+        public method DisplayAnimation takes integer playerId, integer refFrame returns nothing
             if GetLocalPlayer() == Player(playerId) then
                 call DzFrameSetPoint(this.skinFrame, JN_FRAMEPOINT_CENTER, refFrame, JN_FRAMEPOINT_CENTER, this.offsetX, this.offsetY)
                 call DzFrameShow(this.skinFrame, true)
             endif
-            call motion.Run(this.skinFrame, playerId)
+            call motion.Display(this.skinFrame, playerId)
         endmethod
 
         public method Stop takes integer playerId returns nothing
@@ -360,9 +413,9 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             return (page - 1) * thistype.size + itemIdx < skinList.size
         endmethod
 
-        private method ChangeSkin takes integer itemIdx, SkinSelectWindow window returns nothing
-            local SkinInfo skin = this.skinList[(page - 1) * thistype.size + itemIdx]
-            call skin.ChangeSkin(this.playerId, window)
+        private method Use takes integer itemIdx returns nothing
+            local Item skin = this.skinList[(page - 1) * thistype.size + itemIdx]
+            call skin.Use(this.playerId)
         endmethod
 
         private method CoolDownTime takes nothing returns nothing
@@ -381,7 +434,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             //! runtextmacro for("set i = 0", "i < thistype.size")
                 if MousePosInInventory(posX, posY, i) and HasSkinInInventory(i) then
                     call this.CoolDownTime.execute()
-                    call ChangeSkin(i, window)
+                    call Use(i)
                     return
                 endif
             //! runtextmacro for_end("set i = i + 1")
@@ -399,7 +452,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
             set frameIdx = 0
             //! runtextmacro for("set skinIdx = thistype.size * (this.page - 1)", "skinIdx < max")
-                call SkinInfo(this.skinList[skinIdx]).Run(thistype.framePool[frameIdx], playerId)
+                call Item(this.skinList[skinIdx]).Display(thistype.framePool[frameIdx], playerId)
                 if GetLocalPlayer() == Player(this.playerId) then
                     call DzFrameShow(thistype.framePool[frameIdx], true)
                 endif
@@ -425,7 +478,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
 
             set frameIdx = 0
             //! runtextmacro for("set skinIdx = thistype.size * (this.page - 1)", "skinIdx < max")
-                call SkinInfo(this.skinList[skinIdx]).Stop()
+                call Item(this.skinList[skinIdx]).Stop()
                 if GetLocalPlayer() == Player(this.playerId) then
                     call DzFrameShow(thistype.framePool[frameIdx], false)
                 endif
@@ -467,11 +520,21 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call this.Show()
         endmethod
 
+        private method InventoryInit takes nothing returns nothing
+            set this.skinList = RegisterSkinOfUser(this.playerId)
+            set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
+            call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
+        endmethod
+
         private method BringUserSkinData takes nothing returns nothing
             if this.playerId == Events.GetEventArgs(User_ReconnectedEventKey) then
-                set this.skinList = RegisterSkinOfUser(this.playerId)
-                set this.lastPage = R2I((this.skinList.size - 1) / thistype.size) + 1
-                call DzFrameSetText(this.maxPageLetter, I2S(this.lastPage) + "        ")
+                call this.InventoryInit()
+            endif
+        endmethod
+
+        private method ItemAdd takes nothing returns nothing
+            if this.playerId == StorageItemsBuyEvent(Events.GetEventArgs(StorageItemsBuyEventKey)).PlayerId then
+                call this.InventoryInit()
             endif
         endmethod
 
@@ -520,6 +583,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             endif
 
             call Events.Add(User_ReconnectedEventKey, this, this.BringUserSkinData)
+            call Events.Add(StorageItemsBuyEventKey, this, this.ItemAdd)
 
             return this
         endmethod
@@ -591,10 +655,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             endif
         endmethod
 
-        private method DecorateSkinRun takes nothing returns nothing
+        private method DecorateSkinDisplay takes nothing returns nothing
             local integer i = 0
             //! runtextmacro for("set i = 0", "i < decorateSkinFrameList.size")
-                call DecorateSkin(decorateSkinFrameList[i]).RunAnimation(this.playerId, this.skinFrame)
+                call DecorateSkin(decorateSkinFrameList[i]).DisplayAnimation(this.playerId, this.skinFrame)
             //! runtextmacro for_end("set i = i + 1")
         endmethod
 
@@ -619,8 +683,8 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                 call DzFrameShow(this.skinFrame, this.isShow)
             endif
 
-            call this.skinAnimation.Run(this.skinFrame, this.playerId)
-            call this.DecorateSkinRun()
+            call this.skinAnimation.Display(this.skinFrame, this.playerId)
+            call this.DecorateSkinDisplay()
             call this.nameUI.Show()
             call this.inventory.Show()
         endmethod
@@ -649,7 +713,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             call this.skinAnimation.destroy()
             set this.skinAnimation = skinAnimation
             if this.isShow then
-                call this.skinAnimation.Run(this.skinFrame, this.playerId)
+                call this.skinAnimation.Display(this.skinFrame, this.playerId)
             endif
         endmethod
 
@@ -681,7 +745,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
             set temp = this.skinAnimation
             set this.skinAnimation = temp.Clone()
             call temp.destroy()
-            call this.skinAnimation.Run(this.skinFrame, this.playerId)
+            call this.skinAnimation.Display(this.skinFrame, this.playerId)
 
             //! runtextmacro for("", "i < decorateSkinFrameList.size")
                 call DecorateSkin(decorateSkinFrameList[i]).Stop(this.playerId)
@@ -699,7 +763,7 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                     call decorateSkinFrameList.remove(skin)
                     call skin.destroy()
                     call decorateSkin.destroy()
-                    call this.DecorateSkinRun()
+                    call this.DecorateSkinDisplay()
                     return
                 endif
                 if DecorateSkin(decorateSkinFrameList[i]).GetType() == decorateSkin.GetType() then
@@ -707,13 +771,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
                     call decorateSkinFrameList.remove(skin)
                     call skin.destroy()
                     call decorateSkinFrameList.add(decorateSkin)
-                    call this.DecorateSkinRun()
+                    call this.DecorateSkinDisplay()
                     return
                 endif
             //! runtextmacro for_end("set i = i + 1")
             call decorateSkinFrameList.add(decorateSkin)
             call this.FramePrioritySetting()
-            call this.DecorateSkinRun()
+            call this.DecorateSkinDisplay()
         endmethod
 
         public static method create takes integer playerId, sList skinList returns thistype
@@ -873,16 +937,30 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         private SkinSelectWindow skinSelectWindow
         private boolean isOpen = false
 
+        public method ChangeSkin takes SkinInfo skinAnimation returns nothing
+            call this.skinSelectWindow.ChangeSkin(skinAnimation)
+        endmethod
+
+        public method ChangeDecorateSkin takes DecorateSkin decorateSkin returns nothing
+            call this.skinSelectWindow.ChangeDecorateSkin(decorateSkin)
+        endmethod
+
+        public method IsOpen takes nothing returns boolean
+            return this.isOpen
+        endmethod
+
         private method Open takes nothing returns nothing
             set this.isOpen = true
             call this.buttonUI.ChangeOfStatus(this.isOpen)
             call this.skinSelectWindow.Show()
         endmethod
 
-        private method Close takes nothing returns nothing
-            set this.isOpen = false
-            call this.buttonUI.ChangeOfStatus(this.isOpen)
-            call this.skinSelectWindow.Hide()
+        public method Close takes nothing returns nothing
+            if this.isOpen then
+                set this.isOpen = false
+                call this.buttonUI.ChangeOfStatus(this.isOpen)
+                call this.skinSelectWindow.Hide()
+            endif
         endmethod
 
         public method ClickDown takes real posX, real posY returns nothing
@@ -929,62 +1007,145 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         endmethod
     endstruct
 
+    globals
+        private PlayerSkinSelect array PlayerSkinUI[PLAYER_MAXINUM]
+    endglobals
+
+    public function ClickDownAction takes integer i, real x, real y returns nothing
+        call PlayerSkinUI[i].ClickDown(x, y)
+    endfunction
+
+    public function ClickUpAction takes integer i, real x, real y returns nothing
+        call PlayerSkinUI[i].ClickUp(x, y)
+    endfunction
+
+    public function InputKey takes integer i returns nothing
+        call PlayerSkinUI[i].HotKey()
+    endfunction
+
+    public function WindowOff takes integer i returns nothing
+        call PlayerSkinUI[i].Close()
+    endfunction
+
+    public function IsActivated takes integer i returns boolean
+        return PlayerSkinUI[i].IsOpen()
+    endfunction
+
+
     struct InventoryClickedEvent
         private integer id
-        private SkinInfo skinInfo
-        private SkinSelectWindow skinSelectWindow
+        private Item item
 
         public method operator Id takes nothing returns integer
             return this.id
         endmethod
 
-        public method operator Skin takes nothing returns SkinInfo
-            return this.skinInfo
+        public method operator Item takes nothing returns Item
+            return this.item
         endmethod
 
-        public method operator Window takes nothing returns SkinSelectWindow
-            return this.skinSelectWindow
-        endmethod
-        
-        public static method create takes integer id, SkinInfo skinInfo, SkinSelectWindow skinSelectWindow returns thistype
+        public static method create takes integer id, SkinInfo i_tem returns thistype
             local thistype this = thistype.allocate()
             set this.id = id
-            set this.skinInfo = skinInfo
-            set this.skinSelectWindow = skinSelectWindow
+            set this.item = i_tem
             return this
+        endmethod
+    endstruct
+
+
+//! textmacro 아이템_사용_이벤트_등록 takes key
+
+public static method create takes nothing returns thistype
+    local thistype this = thistype.allocate()
+    call Events.Add($key$, this, this.Apply)
+    return this
+endmethod
+
+private static method onInit takes nothing returns nothing
+    call thistype.create()
+endmethod
+
+//! endtextmacro
+
+
+    // Item Ability
+    private struct SpiritPendant
+        //! runtextmacro 아이템_사용_이벤트_등록("SpiritPendant_ItemUseEventKey")
+
+        private static method DelayExecution takes integer i returns nothing
+            set Stage_Loading = true
+            call SetSoundVolume(BackgroundMusic, 80)
+            call StopSound(gg_snd_MP_Rewind_Time_Sound, false, false)
+            call StartSound(gg_snd_MP_Rewind_Time_Sound)
+            call Stage_RemoveTimeLimit()
+            call TriggerSleepActionByTimer(1.1)
+            call SpiritPendant_Use(i)
+            call SpiritPendant_Remove(i)
+            call TriggerSleepActionByTimer(1.0)
+            call SetSoundVolume(BackgroundMusic, 127)
+            set GravityChanger_Loading = false
+            call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 0, 100, 100, 100, 100 )
+        endmethod
+
+        public method Apply takes nothing returns nothing
+            local InventoryClickedEvent ev = Events.GetEventArgs(SpiritPendant_ItemUseEventKey)
+            local integer i = ev.Id
+
+            if BossKill or Stage_Loading or GravityChanger_Loading or FinalStage then
+                return
+            endif
+
+            if SpiritPendant_Ready(i) then
+                if SpiritPendant_Check(i) then
+                    call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant.blp")
+                    call WindowOff(i)
+                    call ClearTextMessages()
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트가 시간을 되돌립니다." )
+                    call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 100, 100, 100, 100, 0 )
+                    call thistype.DelayExecution.execute(i)
+                else
+                    call SpiritPendant_Remove(i)
+                    call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant.blp")
+                    call WindowOff(i)
+                    if GetLocalPlayer() == Player(i) then
+                        call ClearTextMessages()
+                        call CinematicFilterGenericBJ( 0.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 50, 0, 0, 0, 100 )
+                    endif
+                    call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 깃든 신비로운 힘이 사라집니다.")
+                endif
+            else 
+                call SpiritPendant_Record(i)
+                call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant_Red.blp")
+                call WindowOff(i)
+                call ClearTextMessages()
+                call CinematicFilterGenericBJ( 0.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 50, 0, 0, 0, 100 )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 신비로운 힘이 깃듭니다." )
+            endif
         endmethod
     endstruct
 
     private struct DecorateSkinChange
+        //! runtextmacro 아이템_사용_이벤트_등록("decorateSkinChangeKey")
+
         public method Apply takes nothing returns nothing
             local InventoryClickedEvent ev = Events.GetEventArgs(decorateSkinChangeKey)
             local integer id = ev.Id
-            local DecorateSkinInfo skin = ev.Skin
-            local SkinSelectWindow window = ev.Window
+            local DecorateSkinInfo skin = ev.Item
 
             call Decorate_AddDecorate(id, skin.Id, skin.Type)
-            call window.ChangeDecorateSkin(skin.CreateDecorateSkin())
+            call PlayerSkinUI[id].ChangeDecorateSkin(skin.CreateDecorateSkin())
 
             call ev.destroy()
-        endmethod
-
-        public static method create takes nothing returns thistype
-            local thistype this = thistype.allocate()
-            call Events.Add(decorateSkinChangeKey, this, this.Apply)
-            return this
-        endmethod
-
-        private static method onInit takes nothing returns nothing
-            call thistype.create()
         endmethod
     endstruct
 
     private struct CharacterSkinChange
+        //! runtextmacro 아이템_사용_이벤트_등록("characterSkinChangeKey")
+
         public method Apply takes nothing returns nothing
             local InventoryClickedEvent ev = Events.GetEventArgs(characterSkinChangeKey)
             local integer id = ev.Id + 1
-            local SkinInfo skin = ev.Skin
-            local SkinSelectWindow window = ev.Window
+            local SkinInfo skin = ev.Item
 
             local real x = GetUnitX(OrangeMushroom[id])
             local real y = GetUnitY(OrangeMushroom[id])
@@ -1012,38 +1173,13 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
     
                 endif
                 
-                call window.ChangeSkin(skin.Clone())
+                call PlayerSkinUI[id - 1].ChangeSkin(skin.Clone())
             endif
 
             call ev.destroy()
         endmethod
-
-        public static method create takes nothing returns thistype
-            local thistype this = thistype.allocate()
-            call Events.Add(characterSkinChangeKey, this, this.Apply)
-            return this
-        endmethod
-
-        private static method onInit takes nothing returns nothing
-            call thistype.create()
-        endmethod
     endstruct
 
-    globals
-        private PlayerSkinSelect array PlayerSkinUI[PLAYER_MAXINUM]
-    endglobals
-
-    public function ClickDownAction takes integer i, real x, real y returns nothing
-        call PlayerSkinUI[i].ClickDown(x, y)
-    endfunction
-
-    public function ClickUpAction takes integer i, real x, real y returns nothing
-        call PlayerSkinUI[i].ClickUp(x, y)
-    endfunction
-
-    public function InputKey takes integer i returns nothing
-        call PlayerSkinUI[i].HotKey()
-    endfunction
 
     /* =======================
      * 순서 바꾸면 안됩니다.   /
@@ -1426,6 +1562,10 @@ library SkinFrame initializer Init needs TeamColor, TriggerSleepAction
         set skin = SkinInfo.create(0.250, "GreenBloctopus", 'h00K', 0.044, characterSkinChangeKey)
         call skin.AddMotion("Greenblockpus1.blp")
         call skin.AddMotion("Greenblockpus2.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+        set skin = ConsumptionItem.create("SpiritPendant", "SpiritPendant.blp", 0.044, SpiritPendant_ItemUseEventKey)
         call SkinAnimationList.add(skin)
     endfunction
 

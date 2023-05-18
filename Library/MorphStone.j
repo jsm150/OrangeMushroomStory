@@ -10,7 +10,28 @@ library MorphStone initializer init
         
         private rect array CompareRect
         private integer CountInt = 0
+
+        public integer array UseList
+        public integer UseCount
     endglobals
+
+
+    private function HistoryRecord takes integer i returns nothing
+        set UseList[UseCount] = i
+        set UseCount = UseCount + 1
+    endfunction
+
+    private function InitHistory takes nothing returns nothing
+        set UseCount = 0
+    endfunction
+
+    public function Use takes integer i returns nothing
+        call SetDoodadAnimationRect(CompareRect[i], 'LOcb', "Death", false)
+        call SetDoodadAnimationRect(CompareRect[i], 'LOss', "Death", false)
+        set RectState[i] = true
+        call SetUnitVertexColor(MorphUnit[i], 255, 255, 255, 0)
+        call HistoryRecord(i)
+    endfunction
     
     public function Init takes nothing returns nothing
         local integer i = 1
@@ -25,6 +46,8 @@ library MorphStone initializer init
             endif
         set i = i + 1
         endloop
+
+        call InitHistory()
     endfunction
     
     private function Main takes nothing returns nothing
@@ -77,6 +100,7 @@ library MorphStone initializer init
                 if i != 15 and i != 16 and i != 24 and i != 31 and i != 60 and i != 63 then
                     set RectState[i] = true
                     call SetUnitVertexColor(MorphUnit[i], 255, 255, 255, 0)
+                    call HistoryRecord(i)
                 endif
                 call DestroyEffect(AddSpecialEffect("war3mapImported\\Morph.mdl", x, y ))
                 call StopSound(gg_snd_Morph001, false, false)
