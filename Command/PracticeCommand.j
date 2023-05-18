@@ -23,7 +23,7 @@ scope PracticeCommand initializer Init
         if SubString(s, 0, 2) == "-n" then
             set world = S2I(JNStringSplit(s, " ", 1))
             set stage = S2I(JNStringSplit(s, " ", 2))
-            if world <= 0 or stage <= 0 or stage > 8 then
+            if world <= 0 or world > 14 or stage <= 0 or stage > 8 then
                 return
             endif
 
