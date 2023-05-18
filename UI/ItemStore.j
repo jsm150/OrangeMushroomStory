@@ -404,7 +404,7 @@ library ItemStore initializer Init needs RandomStage
         local ItemUIList uiList = ItemUIList.create()
         call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", ContinueAddItem.create(Money.create(300), 1)))
         call uiList.Add(ItemUI.create("HardRandomTicketSlot.blp", HardRandomTicketItem.create(Money.create(50), 1)))
-        call uiList.Add(ItemUI.create("SpiritPendantItemSlot.blp", SpiritPendantItem.create(Money.create(99900), 7)))
+        call uiList.Add(ItemUI.create("SpiritPendantItemSlot.blp", SpiritPendantItem.create(Money.create(99900), 1)))
         return uiList
     endfunction
 
