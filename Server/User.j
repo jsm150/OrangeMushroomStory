@@ -268,7 +268,7 @@ scope User initializer Init
         elseif world == "WorldChallenge2" then
             set amount = Money.create(800)
         elseif world == "Random" then
-            set amount = Money.create(GetRandomInt(150, 350))
+            set amount = Money.create(GetRandomInt(150, 300))
         elseif world == "HardRandom" then
             set amount = Money.create(GetRandomInt(350, 650))
         endif
