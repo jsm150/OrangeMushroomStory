@@ -1,4 +1,4 @@
-library Inventory initializer Init needs TeamColor, TriggerSleepAction
+library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPendant
     globals
         private key characterSkinChangeKey
         private key decorateSkinChangeKey
@@ -49,6 +49,10 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
     private struct ConsumptionItem extends Item
         private string img
 
+        public method operator Img takes nothing returns string
+            return this.img
+        endmethod 
+
         public stub method Display takes integer frame, integer playerId returns nothing
             if GetLocalPlayer() == Player(playerId) then
                 call DzFrameSetSize(frame, this.Size, this.Size)
@@ -58,6 +62,10 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
 
         public stub method Clone takes nothing returns thistype
             return thistype.create(this.Name, this.img, this.Size, this.EventKey)
+        endmethod
+
+        public method ReplaceImg takes string img returns nothing
+            set this.img = img
         endmethod
 
         public static method create takes string name, string img, real size, integer inventoryClickedEventKey returns thistype
@@ -1003,22 +1011,43 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction
         private PlayerSkinSelect array PlayerSkinUI[PLAYER_MAXINUM]
     endglobals
 
+    public function ClickDownAction takes integer i, real x, real y returns nothing
+        call PlayerSkinUI[i].ClickDown(x, y)
+    endfunction
+
+    public function ClickUpAction takes integer i, real x, real y returns nothing
+        call PlayerSkinUI[i].ClickUp(x, y)
+    endfunction
+
+    public function InputKey takes integer i returns nothing
+        call PlayerSkinUI[i].HotKey()
+    endfunction
+
+    public function WindowOff takes integer i returns nothing
+        call PlayerSkinUI[i].Close()
+    endfunction
+
+    public function IsActivated takes integer i returns boolean
+        return PlayerSkinUI[i].IsOpen()
+    endfunction
+
+
     struct InventoryClickedEvent
         private integer id
-        private SkinInfo skinInfo
+        private Item item
 
         public method operator Id takes nothing returns integer
             return this.id
         endmethod
 
-        public method operator Skin takes nothing returns SkinInfo
-            return this.skinInfo
+        public method operator Item takes nothing returns Item
+            return this.item
         endmethod
 
-        public static method create takes integer id, SkinInfo skinInfo returns thistype
+        public static method create takes integer id, SkinInfo i_tem returns thistype
             local thistype this = thistype.allocate()
             set this.id = id
-            set this.skinInfo = skinInfo
+            set this.item = i_tem
             return this
         endmethod
     endstruct
@@ -1042,9 +1071,56 @@ endmethod
     // Item Ability
     private struct SpiritPendant
         //! runtextmacro 아이템_사용_이벤트_등록("SpiritPendant_ItemUseEventKey")
-        
+
+        private static method DelayExecution takes integer i returns nothing
+            set Stage_Loading = true
+            call SetSoundVolume(BackgroundMusic, 80)
+            call StopSound(gg_snd_MP_Rewind_Time_Sound, false, false)
+            call StartSound(gg_snd_MP_Rewind_Time_Sound)
+            call Stage_RemoveTimeLimit()
+            call TriggerSleepActionByTimer(1.1)
+            call SpiritPendant_Use(i)
+            call SpiritPendant_Remove(i)
+            call TriggerSleepActionByTimer(1.0)
+            call SetSoundVolume(BackgroundMusic, 127)
+            set GravityChanger_Loading = false
+            call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 0, 100, 100, 100, 100 )
+        endmethod
+
         public method Apply takes nothing returns nothing
-            call BJDebugMsg("정령의 펜던트 사용!!!")
+            local InventoryClickedEvent ev = Events.GetEventArgs(SpiritPendant_ItemUseEventKey)
+            local integer i = ev.Id
+
+            if BossKill or Stage_Loading or GravityChanger_Loading or FinalStage then
+                return
+            endif
+
+            if SpiritPendant_Ready(i) then
+                if SpiritPendant_Check(i) then
+                    call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant.blp")
+                    call WindowOff(i)
+                    call ClearTextMessages()
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트가 시간을 되돌립니다." )
+                    call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 100, 100, 100, 100, 0 )
+                    call thistype.DelayExecution.execute(i)
+                else
+                    call SpiritPendant_Remove(i)
+                    call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant.blp")
+                    call WindowOff(i)
+                    if GetLocalPlayer() == Player(i) then
+                        call ClearTextMessages()
+                        call CinematicFilterGenericBJ( 0.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 50, 0, 0, 0, 100 )
+                    endif
+                    call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 깃든 신비로운 힘이 사라집니다.")
+                endif
+            else 
+                call SpiritPendant_Record(i)
+                call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant_Red.blp")
+                call WindowOff(i)
+                call ClearTextMessages()
+                call CinematicFilterGenericBJ( 0.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 50, 0, 0, 0, 100 )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 신비로운 힘이 깃듭니다." )
+            endif
         endmethod
     endstruct
 
@@ -1054,7 +1130,7 @@ endmethod
         public method Apply takes nothing returns nothing
             local InventoryClickedEvent ev = Events.GetEventArgs(decorateSkinChangeKey)
             local integer id = ev.Id
-            local DecorateSkinInfo skin = ev.Skin
+            local DecorateSkinInfo skin = ev.Item
 
             call Decorate_AddDecorate(id, skin.Id, skin.Type)
             call PlayerSkinUI[id].ChangeDecorateSkin(skin.CreateDecorateSkin())
@@ -1069,7 +1145,7 @@ endmethod
         public method Apply takes nothing returns nothing
             local InventoryClickedEvent ev = Events.GetEventArgs(characterSkinChangeKey)
             local integer id = ev.Id + 1
-            local SkinInfo skin = ev.Skin
+            local SkinInfo skin = ev.Item
 
             local real x = GetUnitX(OrangeMushroom[id])
             local real y = GetUnitY(OrangeMushroom[id])
@@ -1104,25 +1180,6 @@ endmethod
         endmethod
     endstruct
 
-    public function ClickDownAction takes integer i, real x, real y returns nothing
-        call PlayerSkinUI[i].ClickDown(x, y)
-    endfunction
-
-    public function ClickUpAction takes integer i, real x, real y returns nothing
-        call PlayerSkinUI[i].ClickUp(x, y)
-    endfunction
-
-    public function InputKey takes integer i returns nothing
-        call PlayerSkinUI[i].HotKey()
-    endfunction
-
-    public function WindowOff takes integer i returns nothing
-        call PlayerSkinUI[i].Close()
-    endfunction
-
-    public function IsActivated takes integer i returns boolean
-        return PlayerSkinUI[i].IsOpen()
-    endfunction
 
     /* =======================
      * 순서 바꾸면 안됩니다.   /

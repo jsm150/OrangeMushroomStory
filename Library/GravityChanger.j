@@ -12,8 +12,27 @@ library GravityChanger initializer init
         
         public real SentinelTime = 0
         public real SentinelTime2 = 0
+
+        public integer array UseList
+        public integer UseCount
     endglobals
     
+    private function HistoryRecord takes integer i returns nothing
+        set UseList[UseCount] = i
+        set UseCount = UseCount + 1
+        call JNWriteLog("Save " + I2S(i) + " Count " + I2S(UseCount))
+    endfunction
+
+    private function InitHistory takes nothing returns nothing
+        set UseCount = 0
+    endfunction
+
+    public function Use takes integer i returns nothing
+        call SetDoodadAnimationRect(CompareRect[i], 'LOar', "death", false)
+        set RectState[i] = true
+        call HistoryRecord(i)
+    endfunction
+
     private function SentinelStartAnimation takes nothing returns nothing
         call SetUnitTimeScale(GetEnumUnit(), 1)
     endfunction
@@ -27,20 +46,12 @@ library GravityChanger initializer init
         return MushroomType(kind) or kind == 'opeo' or kind == 'ogru' or kind == 'otau' or kind == 'ocat' or kind == 'ohun' or kind == 'o000' or kind == 'o001'
     endfunction
     
-    private function ChangeTimer takes nothing returns nothing
+    public function ChangeTimerAction takes nothing returns nothing
         local integer i = 1
         local real x
         local real y
-        
-        call tk.destroy()
-        set Loading = false
+
         set State = not(State)
-        call SetSoundVolume(BackgroundMusic, 127)
-        call CinematicFilterGenericBJ( 0.20, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 0.00, 0.00, 0.00, 30, 0, 0, 0, 100 )
-        call ForGroup(Stage_SentinelGroup, function SentinelStartAnimation)
-        if SentinelTime != 0 or SentinelTime2 != 0 then
-            call TriggerExecute( Stage_SentinelTrigger )
-        endif
         loop
         exitwhen i > PLAYER_MAXINUM+Stage_BoxsCount
             if i <= PLAYER_MAXINUM then
@@ -127,6 +138,18 @@ library GravityChanger initializer init
         set i = i + 1
         endloop
     endfunction
+
+    private function ChangeTimer takes nothing returns nothing
+        call tk.destroy()
+        set Loading = false
+        call SetSoundVolume(BackgroundMusic, 127)
+        call CinematicFilterGenericBJ( 0.20, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 0.00, 0.00, 0.00, 30, 0, 0, 0, 100 )
+        call ForGroup(Stage_SentinelGroup, function SentinelStartAnimation)
+        if SentinelTime != 0 or SentinelTime2 != 0 then
+            call TriggerExecute( Stage_SentinelTrigger )
+        endif
+        call ChangeTimerAction()
+    endfunction
     
     public function Init takes nothing returns nothing
         local integer i = 1
@@ -139,17 +162,12 @@ library GravityChanger initializer init
             endif
         set i = i + 1
         endloop
+        call InitHistory()
     endfunction
-    
-    private function Change takes nothing returns nothing
+
+    public function ChangeAction takes nothing returns nothing
         local integer i = 1
         
-        set Loading = true
-        call SetSoundVolume(BackgroundMusic, 80)
-        call StopSound(gg_snd_GearSound001, false, false)
-        call StartSound(gg_snd_GearSound001)
-        call ForGroup(Stage_SentinelGroup, function SentinelStopAnimation)
-        call CinematicFilterGenericBJ( 0.20, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 0.00, 0.00, 0.00, 100, 0, 0, 0, 30 )
         loop
         exitwhen i > PLAYER_MAXINUM+Stage_BoxsCount
             if i <= PLAYER_MAXINUM then
@@ -187,36 +205,56 @@ library GravityChanger initializer init
             endif
         set i = i + 1
         endloop
+
         if State == false then
             call SetCameraField(CAMERA_FIELD_ROTATION, 270.0, 1)
         else
             call SetCameraField(CAMERA_FIELD_ROTATION, 90.0, 1)
         endif
+    endfunction
+    
+    private function Change takes nothing returns nothing
+        set Loading = true
+        call SetSoundVolume(BackgroundMusic, 80)
+        call StopSound(gg_snd_GearSound001, false, false)
+        call StartSound(gg_snd_GearSound001)
+        call ForGroup(Stage_SentinelGroup, function SentinelStopAnimation)
+        call CinematicFilterGenericBJ( 0.20, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 0.00, 0.00, 0.00, 100, 0, 0, 0, 30 )
+        call ChangeAction()
+
+        
         set tk = tick.create(0)
         call tk.start(1.0, false, function ChangeTimer)
     endfunction
     
-    private function Main takes nothing returns nothing
-        local integer i = 1
+    public function Action takes integer i returns nothing
         local real x
         local real y
+
+        set SentinelTime = TimerGetRemaining(Stage_SentinelTimer)
+        call PauseTimer(Stage_SentinelTimer)
+        if TimerGetRemaining(Stage_SentinelTimer2) != 0 then
+            set SentinelTime2 = TimerGetRemaining(Stage_SentinelTimer2)
+            call PauseTimer(Stage_SentinelTimer2)
+        endif
+        set x = GetRectCenterX(CompareRect[i])
+        set y = GetRectCenterY(CompareRect[i])
+        call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\AIem\\AIemTarget.mdl", x, y ))
+        call SetDoodadAnimationRect(CompareRect[i], 'LOar', "death", false)
+        set RectState[i] = true
+        call HistoryRecord(i)
+        call Change()
+    endfunction
+
+    private function Main takes nothing returns nothing
+        local integer i = 1
+        
         
         if Loading == false and Stage_Loading == false then
         loop
         exitwhen CompareRect[i] == null
             if GetTriggeringRegion() == Rects[i] and RectState[i] == false and TypeCondition() == true then
-                set SentinelTime = TimerGetRemaining(Stage_SentinelTimer)
-                call PauseTimer(Stage_SentinelTimer)
-                if TimerGetRemaining(Stage_SentinelTimer2) != 0 then
-                    set SentinelTime2 = TimerGetRemaining(Stage_SentinelTimer2)
-                    call PauseTimer(Stage_SentinelTimer2)
-                endif
-                set x = GetRectCenterX(CompareRect[i])
-                set y = GetRectCenterY(CompareRect[i])
-                call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\AIem\\AIemTarget.mdl", x, y ))
-                call SetDoodadAnimationRect(CompareRect[i], 'LOar', "death", false)
-                set RectState[i] = true
-                call Change()
+                call Action(i)
             endif
         set i = i + 1
         endloop

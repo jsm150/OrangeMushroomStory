@@ -18,6 +18,10 @@ library Stage initializer init
         public group SentinelGroup = CreateGroup()
     endglobals
     
+    public function SetRestartMode takes nothing returns nothing
+        set tk = tick.create(0)
+    endfunction
+
     private function HiddenPortalState takes nothing returns integer
         local integer i = 1
         local integer j = 1
@@ -77,7 +81,7 @@ library Stage initializer init
             set RightArrow[PLAYER_MAXINUM+i] = false
             set Water_State[PLAYER_MAXINUM+i] = false
             set SteppedPlayer[PLAYER_MAXINUM+i] = 0
-             set Acceleration[PLAYER_MAXINUM+i] = 0
+            set Acceleration[PLAYER_MAXINUM+i] = 0
         endif
         if angle == "Left" then
             set LeftArrow[PLAYER_MAXINUM+i] = true
@@ -1007,7 +1011,7 @@ library Stage initializer init
         endif
     endfunction
 
-    private function ClearTimer takes nothing returns nothing
+    public function ResetStage takes nothing returns nothing
         local integer i = 1
         local integer playerCount = 0
         
@@ -1168,11 +1172,11 @@ library Stage initializer init
         call MorphStone_Init()
         call MovePortal_ResetCanMove.execute(Status.World, Status.Level)
         call StoneStatue_ResetBlocks.execute(Status.World, Status.Level)
+        call Frame_LaserBlockHistory.Clear()
         set StartRect = LoadRectHandle(StartRectList, Status.World, Status.Level)
         if CountUnitsInGroup(SentinelGroup) > 0 then
             call TimerStart(SentinelTimer, 1.5, false, function SentinelAttack)
         endif
-        call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 100 )
         call TriggerExecute( Water_Trigger )
         loop
         exitwhen i > PLAYER_MAXINUM
@@ -1241,6 +1245,11 @@ library Stage initializer init
         endloop
         set GravityChanger_State = false
     endfunction
+
+    private function ClearTimer takes nothing returns nothing
+        call ResetStage()
+        call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 100 )
+    endfunction
     
     private function WorldTimer takes nothing returns nothing
         call Status.SetContinues(20)
@@ -1290,15 +1299,19 @@ library Stage initializer init
             call tk.start(3.0, false, function ClearTimer)
         endif
     endfunction
+
+    public function RemoveTimeLimit takes nothing returns nothing
+        if (Status.World == 3 and Status.Level == 5) or (Status.World == 4 and Status.Level == 8) or (Status.World == 9 and Status.Level == 3) or (Status.World == 10 and Status.Level == 7) or (Status.World == 12 and Status.Level == 8) or (Status.World == 13 and Status.Level == 8) then
+            call PauseTimer(TimeLimit)
+            call DestroyTimerDialog(TimeLimitDialog)
+        endif
+    endfunction
     
     public function Clear takes integer i returns nothing
         if Stage_Loading == false then
             set Loading = true
             set tk = tick.create(i)
-            if (Status.World == 3 and Status.Level == 5) or (Status.World == 4 and Status.Level == 8) or (Status.World == 9 and Status.Level == 3) or (Status.World == 10 and Status.Level == 7) or (Status.World == 12 and Status.Level == 8) or (Status.World == 13 and Status.Level == 8) then
-                call PauseTimer(TimeLimit)
-                call DestroyTimerDialog(TimeLimitDialog)
-            endif
+            call RemoveTimeLimit()
             call SetFilter(1.00, 0, 0, 0, 100, 0, 0, 0, 0 )
 
             if RandomStage_isRandom == false then
