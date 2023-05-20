@@ -103,12 +103,25 @@ library World initializer Init
         endif
     endfunction
 
+    private function Trig_DragonEgg_Actions takes nothing returns nothing
+        local integer i = GetPlayerId(GetOwningPlayer(GetTriggerUnit())) + 1
+        
+        if MushroomType(GetUnitTypeId(GetTriggerUnit())) and HiddenCode[12] == false then
+            if GetLocalPlayer() == GetOwningPlayer(GetTriggerUnit()) then
+                call ClearTextMessages()
+            endif
+            call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "|cff49ac7f※ 방장(재시작 권한을 가진 사람)이 여기서 두 번째 비밀 코드를 입력하면 이용하실 수 있습니다!|r")
+            call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "|cff49ac7f※ 두 번째 비밀 코드는 지하철 루트를 클리어하면 얻을 수 있습니다.|r")
+            call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "|cff49ac7f※ 예: \"-???\"|r")
+        endif
+    endfunction
+
     
 
     private function Init takes nothing returns nothing
         local trigger array t
         local integer i = 0
-        local integer count = 7
+        local integer count = 8
 
         loop
             exitwhen i > count
@@ -124,6 +137,7 @@ library World initializer Init
         call TriggerRegisterEnterRectSimple( t[5], gg_rct_Pyramid )
         call TriggerRegisterEnterRectSimple( t[6], gg_rct_Cave )
         call TriggerRegisterEnterRectSimple( t[7], gg_rct_RandomPortal )
+        call TriggerRegisterEnterRectSimple( t[8], gg_rct_DragonEgg )
 
         call TriggerAddAction( t[0], function Trig_Subway_Actions )
         call TriggerAddAction( t[1], function Trig_WitchTower_Actions )
@@ -133,6 +147,7 @@ library World initializer Init
         call TriggerAddAction( t[5], function Trig_Pyramid_Actions )
         call TriggerAddAction( t[6], function Trig_Cave_Actions )
         call TriggerAddAction( t[7], function Trig_Random_Actions )
+        call TriggerAddAction( t[8], function Trig_DragonEgg_Actions )
 
         set i = 0
         loop
