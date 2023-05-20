@@ -215,7 +215,6 @@ library SpiritPendant needs Stage
         public static method create takes nothing returns thistype
             local thistype this = thistype.allocate()
             local integer i = 0
-            local integer j = 0
             local string move
 
             //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
