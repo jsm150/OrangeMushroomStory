@@ -7,6 +7,12 @@ scope User initializer Init
         public key GoldLeafChangedEvent
     endglobals
 
+    function PrivateLogging takes integer playerId, string log, string logType returns nothing
+        if GetLocalPlayer() == Player(playerId) then
+            call JNMapServerLogUseType(mapId, secretKey, mapVersion, log, logType)
+        endif
+    endfunction
+
     private struct worldCount
         integer CaptainJack = 0
         integer Subway = 0
@@ -275,6 +281,8 @@ scope User initializer Init
 
         call User_UserList[playerId].Deposit(playerId, amount.ToInt())
         call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[playerId].GoldLeaf.ToInt())
+        call PrivateLogging(playerId, GetPlayerName(Player(playerId)) + "님이 골드리프 " + amount.ToString() + "을 획득했습니다. 잔액은 " /*
+                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafUseLog")
         call IncWorldClearCount(name, world)
 
         if GetLocalPlayer() == Player(playerId) then
@@ -393,12 +401,6 @@ scope User initializer Init
             else
                 call BJDebugMsg("|cffFFFC00※ 이미 서버와 연결중입니다.|r")
             endif
-        endif
-    endfunction
-
-    function PrivateLogging takes integer playerId, string log, string logType returns nothing
-        if GetLocalPlayer() == Player(playerId) then
-            call JNMapServerLogUseType(mapId, secretKey, mapVersion, log, logType)
         endif
     endfunction
 
