@@ -68,6 +68,9 @@ scope initialize initializer init
     
     private function Quest takes nothing returns nothing
         local string s
+        set s = "12.2\n"
+        set s = s + "- 일부 아이템의 기능 및 가격이 수정됩니다"
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.2", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "11.8\n"
         set s = s + "- 새로운 스킨이 추가되었습니다.\n"
         set s = s + "- 심판 자리에서의 관전 버튼이 추가되었습니다.\n"

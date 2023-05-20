@@ -3,7 +3,7 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        string mapVersion = "v12.1"
+        string mapVersion = "v12.2"
         public key GoldLeafChangedEvent
     endglobals
 
