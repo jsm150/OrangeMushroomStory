@@ -1072,6 +1072,9 @@ endmethod
     private struct SpiritPendant
         //! runtextmacro 아이템_사용_이벤트_등록("SpiritPendant_ItemUseEventKey")
 
+        private static integer array usedWorld[PLAYER_MAXINUM]
+        private static integer array usedStage[PLAYER_MAXINUM]
+
         private static method DelayExecution takes integer i returns nothing
             set Stage_Loading = true
             call SetSoundVolume(BackgroundMusic, 80)
@@ -1096,11 +1099,12 @@ endmethod
             endif
 
             if SpiritPendant_Ready(i) then
-                if SpiritPendant_Check(i) then
+                if SpiritPendant_Check(i) and Status.Continues > 0 then
+                    call Status.SetContinues(Status.Continues-1)
                     call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant.blp")
                     call WindowOff(i)
                     call ClearTextMessages()
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트가 시간을 되돌립니다." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트가 컨티뉴를 소모하여 시간을 되돌립니다." )
                     call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 100, 100, 100, 100, 0 )
                     call thistype.DelayExecution.execute(i)
                 else
@@ -1113,13 +1117,21 @@ endmethod
                     endif
                     call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 깃든 신비로운 힘이 사라집니다.")
                 endif
-            else 
+            elseif not(usedWorld[i] == Status.World and usedStage[i] == Status.Level) then
+                set usedWorld[i] = Status.World
+                set usedStage[i] = Status.Level
                 call SpiritPendant_Record(i)
                 call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant_Red.blp")
                 call WindowOff(i)
                 call ClearTextMessages()
                 call CinematicFilterGenericBJ( 0.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 50, 0, 0, 0, 100 )
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 신비로운 힘이 깃듭니다." )
+            else
+                call WindowOff(i)
+                if GetLocalPlayer() == Player(i) then
+                    call ClearTextMessages()
+                endif
+                call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, "|cffFFFC00※ 레벨당 한번만 사용할 수 있습니다.|r")
             endif
         endmethod
     endstruct
