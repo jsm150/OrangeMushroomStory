@@ -65,6 +65,7 @@
 //! import "Library\MovePortal.j"
 //! import "Library\MultiBorad.j"
 //! import "Library\MushroomMoving.j"
+//! import "Library\Mute.j"
 //! import "Library\Observer.j"
 //! import "Library\RandomStage.j"
 //! import "Library\RectList.j"
