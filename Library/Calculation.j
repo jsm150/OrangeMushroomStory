@@ -4,6 +4,26 @@ library Calculation
         local real dy = y2 - y1
         return SquareRoot(dx * dx + dy * dy)
     endfunction
+
+    function HasUnit takes region r, real x, real y, integer i returns boolean
+        local boolean con = IsPointInRegion(r, x, y)
+
+        if GravityChanger_State == false then
+            set con = con or IsPointInRegion(r, x, y-40)
+            set con = con or IsPointInRegion(r, x-8, y-40)
+            set con = con or IsPointInRegion(r, x+40, y-40)
+        else
+            set con = con or IsPointInRegion(r, x, y+40)
+            set con = con or IsPointInRegion(r, x-8, y+40)
+            set con = con or IsPointInRegion(r, x+40, y+40)
+        endif
+        set con = con or IsPointInRegion(r, x-8, y)
+        set con = con or IsPointInRegion(r, x-8, y-gravity[i])
+        set con = con or IsPointInRegion(r, x-8, y+gravity[i])
+        set con = con or IsPointInRegion(r, x+40, y)
+        set con = con or IsPointInRegion(r, x+40, y-gravity[i])
+        return con or IsPointInRegion(r, x+40, y+gravity[i])
+    endfunction
     
     function PlayersPlayMusic takes nothing returns nothing
         local integer i = GetPlayerId(GetEnumPlayer())+1

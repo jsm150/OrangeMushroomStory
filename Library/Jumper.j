@@ -4,31 +4,10 @@ library Jumper initializer init
         private trigger MainTrigger = CreateTrigger()
         public region Rects
     endglobals
-    
-    public function Main takes integer i returns nothing
-        local real x = GetUnitX(OrangeMushroom[i])
-        local real y = GetUnitY(OrangeMushroom[i])
-        local boolean con
-        local integer k = 1
+
+    public function Jumping takes integer i, real x, real y returns nothing
         local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
 
-        set con = IsPointInRegion(Jumper_Rects, x, y)
-        if GravityChanger_State == false then
-            set con = con or IsPointInRegion(Jumper_Rects, x, y-40)
-            set con = con or IsPointInRegion(Jumper_Rects, x-8, y-40)
-            set con = con or IsPointInRegion(Jumper_Rects, x+40, y-40)
-        else
-            set con = con or IsPointInRegion(Jumper_Rects, x, y+40)
-            set con = con or IsPointInRegion(Jumper_Rects, x-8, y+40)
-            set con = con or IsPointInRegion(Jumper_Rects, x+40, y+40)
-        endif
-        set con = con or IsPointInRegion(Jumper_Rects, x-8, y)
-        set con = con or IsPointInRegion(Jumper_Rects, x-8, y-gravity[i])
-        set con = con or IsPointInRegion(Jumper_Rects, x-8, y+gravity[i])
-        set con = con or IsPointInRegion(Jumper_Rects, x+40, y)
-        set con = con or IsPointInRegion(Jumper_Rects, x+40, y-gravity[i])
-        set con = con or IsPointInRegion(Jumper_Rects, x+40, y+gravity[i])
-        if con == true then
         if GetUnitTypeId(OrangeMushroom[i]) != 'orai' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
             set gravity[i] = JUMPER_POWER
             set SteppedPlayer[i] = 0
@@ -65,6 +44,14 @@ library Jumper initializer init
                 endif
             endif
         endif
+    endfunction
+    
+    public function Main takes integer i returns nothing
+        local real x = GetUnitX(OrangeMushroom[i])
+        local real y = GetUnitY(OrangeMushroom[i])
+        
+        if HasUnit(Jumper_Rects, x, y, i) then
+            call Jumping(i, x, y)
         endif
     endfunction
     
