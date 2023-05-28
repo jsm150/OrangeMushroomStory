@@ -1,7 +1,8 @@
 library Mute initializer Init
     globals
-        private aList muteList
+        private hashtable list = InitHashtable()
     endglobals
+
     private struct Mute
         private region r1
         private region r2
@@ -44,18 +45,35 @@ library Mute initializer Init
         endmethod
     endstruct
 
-    public function Main takes integer playerId returns nothing
+    public function Main takes integer playerId, integer world, integer stage returns nothing
         local integer i = 0
-        //! runtextmacro for("set i = 0", "i < muteList.size")
-            if Mute(muteList[i]).Check(OrangeMushroom[playerId]) then
-                call Mute(muteList[i]).Action(OrangeMushroom[playerId])
+        local aList a = LoadInteger(list, world, stage)
+
+        if a == 0 then
+            return
+        endif
+
+        //! runtextmacro for("set i = 0", "i < a.size")
+            if Mute(a[i]).Check(OrangeMushroom[playerId]) then
+                call Mute(a[i]).Action(OrangeMushroom[playerId])
                 return
             endif
         //! runtextmacro for_end("set i = i + 1")
     endfunction
 
+    private function Add takes rect r1, rect r2, integer world, integer stage returns nothing
+        local aList a = LoadInteger(list, world, stage)
+
+        if a == 0 then
+            set a = aList.create()
+        endif
+
+        call a.add(Mute.create(r1, r2))
+        call SaveInteger(list, world, stage, a)
+    endfunction
+
     private function Init takes nothing returns nothing 
-        set muteList = aList.create()
+        
 
     endfunction
 endlibrary

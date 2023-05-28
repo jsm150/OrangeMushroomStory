@@ -306,7 +306,7 @@ scope ArrowKey initializer init
             
             call TeleportStone_Main(i)
             call TeleportMoon_Main(i)
-            call Mute_Main(i)
+            call Mute_Main(i, Status.World, Status.Level)
 
             if ((IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false) or Frame_MainPlayerY == 0) and Status.World == 11 or (Status.World == 14 and Status.Level == 2) then
                 call ShortTeleport_Main(i, x, y)
