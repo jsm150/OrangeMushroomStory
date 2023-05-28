@@ -282,7 +282,7 @@ scope User initializer Init
         call User_UserList[playerId].Deposit(playerId, amount.ToInt())
         call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[playerId].GoldLeaf.ToInt())
         call PrivateLogging(playerId, GetPlayerName(Player(playerId)) + "님이 골드리프 " + amount.ToString() + "을 획득했습니다. 잔액은 " /*
-                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafUseLog")
+                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafGetLog")
         call IncWorldClearCount(name, world)
 
         if GetLocalPlayer() == Player(playerId) then
