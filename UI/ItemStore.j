@@ -76,7 +76,7 @@ library ItemStore initializer Init needs RandomStage
     // 하드 랜덤 월드로 바꾸는 아이템
     private struct HardRandomTicketItem extends Item
         private stub method Check takes integer playerId returns boolean
-            return (Status.World == 2 and Status.Level == 8) and RandomStage_isHard == false
+            return (Status.World == 2 and Status.Level == 8) and RandomStage_isHard == false and Stage_Loading == false
         endmethod 
 
         private stub method GiveItem takes integer playerId returns nothing
