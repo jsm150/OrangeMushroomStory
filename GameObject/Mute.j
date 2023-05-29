@@ -73,7 +73,6 @@ library Mute initializer Init
     endfunction
 
     private function Init takes nothing returns nothing 
-        
 
     endfunction
 endlibrary

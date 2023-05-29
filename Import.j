@@ -9,6 +9,21 @@
 //! import "JN\MemoryLib.j"
 //! import "JN\Typecast.j"
 
+// GameObject
+//! import "GameObject\Arrow.j"
+//! import "GameObject\GravityChanger.j"
+//! import "GameObject\Jumper.j"
+//! import "GameObject\KeySwitch.j"
+//! import "GameObject\MorphStone.j"
+//! import "GameObject\MovePortal.j"
+//! import "GameObject\MovePropelly.j"
+//! import "GameObject\Mute.j"
+//! import "GameObject\ShortTeleport.j"
+//! import "GameObject\StoneStatue.j"
+//! import "GameObject\TeleportMoon.j"
+//! import "GameObject\TeleportStone.j"
+//! import "GameObject\Water.j"
+
 // Init
 //! import "Init\CodeKey.j"
 //! import "Init\Frame.j"
@@ -52,39 +67,24 @@
 
 // Library
 //! import "Library\ArrayList.j"
-//! import "Library\Arrow.j"
 //! import "Library\Calculation.j"
 //! import "Library\ClickEffect.j"
 //! import "Library\Decorate.j"
 //! import "Library\EndGameHook.j"
-//! import "Library\GravityChanger.j"
-//! import "Library\Jumper.j"
-//! import "Library\KeySwitch.j"
 //! import "Library\MethodEvent.j"
-//! import "Library\MorphStone.j"
-//! import "Library\MovePortal.j"
 //! import "Library\MultiBorad.j"
 //! import "Library\MushroomMoving.j"
-//! import "Library\Mute.j"
 //! import "Library\Observer.j"
 //! import "Library\RandomStage.j"
 //! import "Library\RectList.j"
 //! import "Library\Security.j"
-//! import "Library\ShortTeleport.j"
 //! import "Library\StageClear.j"
-//! import "Library\StoneStatue.j"
 //! import "Library\StructList.j"
 //! import "Library\TeamColor.j"
-//! import "Library\TeleportMoon.j"
-//! import "Library\TeleportStone.j"
 //! import "Library\TimerTick.j"
 //! import "Library\TimerUtils.j"
 //! import "Library\TriggerSleepAction.j"
-//! import "Library\Water.j"
 //! import "Library\World.j"
-
-// MovePropelly
-//! import "MovePropelly\MovePropelly.j"
 
 // Server
 //! import "Server\User.j"
