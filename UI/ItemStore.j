@@ -307,7 +307,7 @@ library ItemStore initializer Init needs RandomStage
         public method Redisplay takes nothing returns nothing
             local string money = User_UserList[this.playerId].GoldLeaf.ToString()
 
-            if this.playerId == Events.GetEventArgs(User_GoldLeafChangedEvent) and GetLocalPlayer() == Player(this.playerId) then
+            if this.isOpen and this.playerId == Events.GetEventArgs(User_GoldLeafChangedEvent) and GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.goldLeafLetter, false)
                 call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + money + "        ")
                 call DzFrameShow(this.goldLeafLetter, true)
