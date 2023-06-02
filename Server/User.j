@@ -289,6 +289,8 @@ scope User initializer Init
             if JNObjectCharacterServerConnectCheck() then
                 call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
                 call JNPublicMapServerLog(mapId, secretKey, mapVersion, name + "님이 " + world + " 월드를 클리어 했습니다.")
+                call BJDebugMsg("             " + TeamColor[playerId + 1] + GetPlayerName(GetLocalPlayer()) + "|r 님이 골드리프 " + amount.ToString() + "을 획득했습니다. 잔액은 " /*
+                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.")
                 call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
             else
                 call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
