@@ -300,6 +300,7 @@ scope ArrowKey initializer init
                         call HiddenWord_Main(i)
                     endif
                 endif
+                call DragonStone_Main(i, Status.World, Status.Level)
             elseif GetUnitTypeId(OrangeMushroom[i]) == 'orai' then
                 set gravity[i] = -8.00
             endif

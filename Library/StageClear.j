@@ -1173,6 +1173,7 @@ library Stage initializer init
         call Key_keyMap.ResetBlocks(Status.World, Status.Level)
         call GravityChanger_Init()
         call MorphStone_Init()
+        call DragonStone_Restore.evaluate(Status.World, Status.Level)
         call MovePortal_ResetCanMove.execute(Status.World, Status.Level)
         call StoneStatue_ResetBlocks.execute(Status.World, Status.Level)
         call Frame_LaserBlockHistory.Clear()

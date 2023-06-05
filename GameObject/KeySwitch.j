@@ -22,6 +22,7 @@ library Key initializer Init
         integer BeachStageTerrain
         integer CokeStageTerrain
         integer CrashTerrain
+        integer RefreStageTerrain
         integer UnTerrain
     endglobals
 
@@ -73,7 +74,8 @@ library Key initializer Init
         set BeachStageTerrain = GetTerrainType(-7173,-32233)
         set CokeStageTerrain = GetTerrainType(-7036,-32233)
         set CrashTerrain = GetTerrainType(-6906,-32233)
-        set UnTerrain = GetTerrainType(-6786,-32233)
+        set RefreStageTerrain = GetTerrainType(-6786,-32233)
+        set UnTerrain = GetTerrainType(-6786 + 128,-32233)
     endfunction
     
     private function TypeCondition takes nothing returns boolean
