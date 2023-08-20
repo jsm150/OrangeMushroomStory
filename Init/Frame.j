@@ -400,7 +400,7 @@ scope Frame initializer init
                 set y = y-gravity[i]
             endif
             set Landing[i] = true
-            if BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' then
+            if BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' or GetUnitTypeId(OrangeMushroom[i]) == 'h00S' or GetUnitTypeId(OrangeMushroom[i]) == 'h00T' then
                 if GetUnitTypeId(OrangeMushroom[i]) == 'o001' then
                     if Direction[i] == "Left" then
                         if GravityChanger_State == false then
@@ -520,7 +520,7 @@ scope Frame initializer init
                 endif
                 set AirCheckState = true
             endif
-            if MushroomMoving_RectCondition(i, x, y, 40,"DownWidth") == false and (BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000') and CinematicMode == false and GetUnitTypeId(OrangeMushroom[i]) != 'orai' then
+            if MushroomMoving_RectCondition(i, x, y, 40,"DownWidth") == false and (BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' or GetUnitTypeId(OrangeMushroom[i]) == 'h00S' or GetUnitTypeId(OrangeMushroom[i]) == 'h00T') and CinematicMode == false and GetUnitTypeId(OrangeMushroom[i]) != 'orai' then
                 if LeftArrow[i] == true and MushroomMoving_RectCondition(i, x, y, gravity[i], "LeftHeight") then
                     call MushmomJumpEffect(i)
                     if GravityChanger_State == false then

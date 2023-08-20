@@ -40,7 +40,7 @@ library Calculation
         set b = b or types == 'n000' or types == 'h003' or types == 'n007' or types == 'o003' or types == 'o002' or types == 'n008'
         set b = b or types == 'ehpr' or types == 'echm' or types == 'edot' or types == 'edoc' or types == 'emtg' or types == 'efdr'  or types == 'nnsw' 
         set b = b or types == 'h00O' or types == 'h00N' or types == 'h00M' or types == 'h00J' or types == 'h00L' or types == 'h00K'  
-        return b or types == 'h00F' or types == 'h00G'
+        return b or types == 'h00F' or types == 'h00G' or types == 'h00Q' or types == 'h00R'
     endfunction
 
     function AngleBetween takes real x1, real y1, real x2, real y2 returns real // [x1,y2] 와 [x2,y2] 의 각도

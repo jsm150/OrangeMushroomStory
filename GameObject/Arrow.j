@@ -77,7 +77,7 @@ library Arrow initializer init needs Calculation
         local integer j = PLAYER_MAXINUM+1
         local integer types = GetUnitTypeId(GetTriggerUnit())
         
-        if Stage_Loading == false and GravityChanger_Loading == false and (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'ocat' or types == 'ohun' or types == 'o000') then
+        if Stage_Loading == false and GravityChanger_Loading == false and (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'ocat' or types == 'ohun' or types == 'o000' or types == 'h00S' or types == 'h00T') then
             if i > PLAYER_MAXINUM then 
                 loop
                 exitwhen OrangeMushroom[j] == GetTriggerUnit() or Stage_BoxsCount < j-PLAYER_MAXINUM
@@ -353,6 +353,7 @@ library Arrow initializer init needs Calculation
         call SetInputRect(t, gg_rct_Arrow247, 150)
         call SetInputRect(t, gg_rct_Arrow248, 0)
         call SetInputRect(t, gg_rct_Arrow249, 0)
+        call SetInputRect(t, gg_rct_Arrow250, 0)
 
 
         call TriggerAddAction( t, function Main )
