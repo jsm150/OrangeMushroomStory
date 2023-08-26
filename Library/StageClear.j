@@ -26,7 +26,7 @@ library Stage initializer init
         local integer i = 1
         local integer j = 1
         local integer sum = 0
-        local integer worldCount = 13
+        local integer worldCount = 14
         
         loop
             exitwhen i > worldCount
@@ -1004,7 +1004,7 @@ library Stage initializer init
     
     private function CanCaveOpen takes nothing returns nothing
         local boolean b = HiddenPortalCount[1] == 1 and HiddenPortalCount[2] == 0 and HiddenPortalCount[3] == 1 and HiddenPortalCount[4] == 3
-        set b = b and HiddenPortalCount[5] == 0 and HiddenPortalCount[6] == 0 and HiddenPortalCount[7] == 0 and HiddenPortalCount[8] == 0 and HiddenPortalCount[9] == 0 and HiddenPortalCount[11] == 0
+        set b = b and HiddenPortalCount[5] == 0 and HiddenPortalCount[6] == 0 and HiddenPortalCount[7] == 0 and HiddenPortalCount[8] == 0 and HiddenPortalCount[9] == 0 and HiddenPortalCount[11] == 0 and HiddenPortalCount[13] == 0
 
         if b then
              call CaveHiddenEvent_CaveOpen()
@@ -1042,6 +1042,8 @@ library Stage initializer init
                 call Status.SetLevel(12, 9)
             elseif HiddenPortalState() == 12 then
                 call Status.SetLevel(13, 9)
+            elseif HiddenPortalState() == 13 then
+                call Status.SetLevel(14, 9)
             else
                 if Stage_WorldSkip then
                     call Status.SetLevel(2, 8)
@@ -1071,6 +1073,7 @@ library Stage initializer init
         set HiddenPortalCount[10] = 0
         set HiddenPortalCount[11] = 0
         set HiddenPortalCount[12] = 0
+        set HiddenPortalCount[13] = 0
         set GravityChanger_SentinelTime = 0
         set GravityChanger_SentinelTime2 = 0
         call PauseTimer(SentinelTimer)
@@ -1170,6 +1173,7 @@ library Stage initializer init
         call Key_keyMap.ResetBlocks(Status.World, Status.Level)
         call GravityChanger_Init()
         call MorphStone_Init()
+        call DragonStone_Restore.evaluate(Status.World, Status.Level)
         call MovePortal_ResetCanMove.execute(Status.World, Status.Level)
         call StoneStatue_ResetBlocks.execute(Status.World, Status.Level)
         call Frame_LaserBlockHistory.Clear()
@@ -1282,6 +1286,8 @@ library Stage initializer init
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 깊은 산속" )
             elseif HiddenPortalState() == 12 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지 II" )
+            elseif HiddenPortalState() == 13 then
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 리프레" )
             else
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World: 핑크 핑크" )
             endif
@@ -1321,8 +1327,8 @@ library Stage initializer init
                     if Status.World == 1 and Status.Level == 0 then
                         call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
                         if TESTMODE == true then
-                            call Status.SetLevel(13, 8)
-                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지 2" )
+                            call Status.SetLevel(14, 8)
+                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 리프레" )
                             call tk.start(3.0, false, function WorldTimer)
                         else
                             call tk.start(1.0, false, function WorldTimer)

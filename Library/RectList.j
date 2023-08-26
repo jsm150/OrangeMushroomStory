@@ -11,6 +11,7 @@ library Rect initializer init
         public region RandomPortal
         public region SecretPortal
         public region Cave
+        public region DragonEgg
         public region NoEntry
         public region MissileZone
         public region Unlimited
@@ -29,6 +30,7 @@ library Rect initializer init
         set RandomPortal = CreateRegion()
         set SecretPortal = CreateRegion()
         set Cave = CreateRegion()
+        set DragonEgg = CreateRegion()
         
         set NoEntry = CreateRegion()
         set MissileZone = CreateRegion()
@@ -46,6 +48,7 @@ library Rect initializer init
         call RegionAddRect( RandomPortal, gg_rct_RandomPortal )
         call RegionAddRect( SecretPortal, gg_rct_SecretPortal )
         call RegionAddRect( Cave, gg_rct_Cave )
+        call RegionAddRect( DragonEgg, gg_rct_DragonEgg )
         call RegionAddRect( Portal, gg_rct_Portal001 )
         call RegionAddRect( Portal, gg_rct_Portal002 )
         call RegionAddRect( Portal, gg_rct_Portal003 )
@@ -177,6 +180,7 @@ library Rect initializer init
         call RegionAddRect( Portal, gg_rct_RandomPortal )
         call RegionAddRect( Portal, gg_rct_SecretPortal )
         call RegionAddRect( Portal, gg_rct_Cave )
+        call RegionAddRect( Portal, gg_rct_DragonEgg )
     endfunction
     
     private function init takes nothing returns nothing

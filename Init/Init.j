@@ -68,6 +68,18 @@ scope initialize initializer init
     
     private function Quest takes nothing returns nothing
         local string s
+        set s = "12.2\n"
+        set s = s + "- 일부 아이템의 기능 및 가격이 수정됩니다\n"
+        set s = s + "\n"
+        set s = s + "12.3\n"
+        set s = s + "- 엘린 숲 5스테이지가 일부 수정됩니다.\n"
+        set s = s + "- 스테이지를 넘어가는 순간에 하드 랜덤 티켓을 구매할 수 없도록 변경됩니다.\n"
+        set s = s + "- 게임 엔딩에서, 획득한 골드리프를 안내하는 문구가 추가됩니다.\n"
+        set s = s + "- 기존 월드 클리어 보상으로 새로운 스킨이 추가됩니다.\n"
+        set s = s + "- 도깨비 오브젝트를 상호작용할 때의 버그를 수정했습니다.\n"
+        set s = s + "- 특정 스킨의 화질을 높혔습니다.\n"
+        set s = s + "- 단축키 설명이 누락된 부분을 정정했습니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.2~12.3", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "11.8\n"
         set s = s + "- 새로운 스킨이 추가되었습니다.\n"
         set s = s + "- 심판 자리에서의 관전 버튼이 추가되었습니다.\n"
@@ -464,7 +476,7 @@ scope initialize initializer init
         set s = s + "-모든 컨티뉴를 소모하면 패배합니다.\n"
         set s = s + "-컨티뉴는 한 월드를 클리어하면 20으로 초기화됩니다.\n"
         set s = s + "\n"
-        set s = s + "제작: 2p4p, JungHun\n"
+        set s = s + "제작: 2p4p, JungHun, Orangemush\n"
         set s = s + "원작자: z1z1z1"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "게임 설명", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "● 방장 명령어\n"
@@ -523,6 +535,8 @@ scope initialize initializer init
         set s = s + "- 다시 입력하면 관전이 해제됩니다.\n\n"
         set s = s + "● I\n"
         set s = s + "- 인벤토리를 열고 닫습니다.\n\n"
+        set s = s + "● O\n"
+        set s = s + "- 상점을 열고 닫습니다.\n\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "단축키", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "● 상자\n"
         set s = s + "-밟고 올라가거나 밀어서 옮길 수 있습니다.\n"

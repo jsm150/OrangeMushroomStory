@@ -93,7 +93,6 @@ library MushroomMoving initializer init
                 set value = -40
             endif
             return BackGroundsCheck(x, y+value) and BackGroundsCheck(x-distance, y+value) and BackGroundsCheck(x+distance, y+value)
-            //return CollisionCheck(i, x, y+40) and CollisionCheck(i, x-distance, y+40) and CollisionCheck(i, x+distance, y+40)
         elseif s == "LeftHeight" then
             return  BackGroundsCheck(x-48, y) and BackGroundsCheck(x-48, y-distance) and BackGroundsCheck(x-48, y+distance)
         elseif s == "RightHeight" then

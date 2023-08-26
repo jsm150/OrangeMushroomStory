@@ -195,9 +195,12 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPe
         endif
         if User_UserList[id].GetClearCountByWorldId(10) >= 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[30]).Clone())
+            call skinList.add(SkinInfo(SkinAnimationList[51]).Clone())
+            call skinList.add(SkinInfo(SkinAnimationList[52]).Clone())
         endif
         if User_UserList[id].GetClearCountByWorldId(12) >= 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[31]).Clone())
+            call skinList.add(SkinInfo(SkinAnimationList[53]).Clone())
         endif
         if User_UserList[id].GetClearCountByWorldId(13) >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 32", "i <= 34")
@@ -232,7 +235,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPe
             //! runtextmacro for_end("set i = i + 1")
         endif
 
-        if User_UserList[id].SpiritPendant == 1 then
+        if User_UserList[id].SpiritPendant == 1 or DEBUG_MODE then
             call skinList.add(ConsumptionItem(SkinAnimationList[50]).Clone())
         endif
 
@@ -1072,6 +1075,9 @@ endmethod
     private struct SpiritPendant
         //! runtextmacro 아이템_사용_이벤트_등록("SpiritPendant_ItemUseEventKey")
 
+        private static integer array usedWorld[PLAYER_MAXINUM]
+        private static integer array usedStage[PLAYER_MAXINUM]
+
         private static method DelayExecution takes integer i returns nothing
             set Stage_Loading = true
             call SetSoundVolume(BackgroundMusic, 80)
@@ -1096,11 +1102,12 @@ endmethod
             endif
 
             if SpiritPendant_Ready(i) then
-                if SpiritPendant_Check(i) then
+                if SpiritPendant_Check(i) and Status.Continues > 0 then
+                    call Status.SetContinues(Status.Continues-1)
                     call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant.blp")
                     call WindowOff(i)
                     call ClearTextMessages()
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트가 시간을 되돌립니다." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트가 컨티뉴를 소모하여 시간을 되돌립니다." )
                     call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 100, 100, 100, 100, 0 )
                     call thistype.DelayExecution.execute(i)
                 else
@@ -1113,13 +1120,21 @@ endmethod
                     endif
                     call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 깃든 신비로운 힘이 사라집니다.")
                 endif
-            else 
+            elseif not(usedWorld[i] == Status.World and usedStage[i] == Status.Level) then
+                set usedWorld[i] = Status.World
+                set usedStage[i] = Status.Level
                 call SpiritPendant_Record(i)
                 call ConsumptionItem(ev.Item).ReplaceImg("SpiritPendant_Red.blp")
                 call WindowOff(i)
                 call ClearTextMessages()
                 call CinematicFilterGenericBJ( 0.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100, 100, 100, 50, 0, 0, 0, 100 )
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 신비로운 힘이 깃듭니다." )
+            else
+                call WindowOff(i)
+                if GetLocalPlayer() == Player(i) then
+                    call ClearTextMessages()
+                endif
+                call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, "|cffFFFC00※ 레벨당 한번만 사용할 수 있습니다.|r")
             endif
         endmethod
     endstruct
@@ -1566,6 +1581,27 @@ endmethod
 
         //====================================================
         set skin = ConsumptionItem.create("SpiritPendant", "SpiritPendant.blp", 0.044, SpiritPendant_ItemUseEventKey)
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "BDesertRabbit", 'h00Q', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("BDesertRabbit001.blp")
+        call skin.AddMotion("BDesertRabbit002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "WDesertRabbit", 'h00R', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("WDesertRabbit001.blp")
+        call skin.AddMotion("WDesertRabbit002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0, "Snowflake", 'h00U', 0.044, 0, 0, Decorate_Aura, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("Snowflake.blp")
         call SkinAnimationList.add(skin)
     endfunction
 

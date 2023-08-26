@@ -4,6 +4,26 @@ library Calculation
         local real dy = y2 - y1
         return SquareRoot(dx * dx + dy * dy)
     endfunction
+
+    function HasUnit takes region r, real x, real y, integer i returns boolean
+        local boolean con = IsPointInRegion(r, x, y)
+
+        if GravityChanger_State == false then
+            set con = con or IsPointInRegion(r, x, y-40)
+            set con = con or IsPointInRegion(r, x-8, y-40)
+            set con = con or IsPointInRegion(r, x+40, y-40)
+        else
+            set con = con or IsPointInRegion(r, x, y+40)
+            set con = con or IsPointInRegion(r, x-8, y+40)
+            set con = con or IsPointInRegion(r, x+40, y+40)
+        endif
+        set con = con or IsPointInRegion(r, x-8, y)
+        set con = con or IsPointInRegion(r, x-8, y-gravity[i])
+        set con = con or IsPointInRegion(r, x-8, y+gravity[i])
+        set con = con or IsPointInRegion(r, x+40, y)
+        set con = con or IsPointInRegion(r, x+40, y-gravity[i])
+        return con or IsPointInRegion(r, x+40, y+gravity[i])
+    endfunction
     
     function PlayersPlayMusic takes nothing returns nothing
         local integer i = GetPlayerId(GetEnumPlayer())+1
@@ -20,7 +40,7 @@ library Calculation
         set b = b or types == 'n000' or types == 'h003' or types == 'n007' or types == 'o003' or types == 'o002' or types == 'n008'
         set b = b or types == 'ehpr' or types == 'echm' or types == 'edot' or types == 'edoc' or types == 'emtg' or types == 'efdr'  or types == 'nnsw' 
         set b = b or types == 'h00O' or types == 'h00N' or types == 'h00M' or types == 'h00J' or types == 'h00L' or types == 'h00K'  
-        return b or types == 'h00F' or types == 'h00G'
+        return b or types == 'h00F' or types == 'h00G' or types == 'h00Q' or types == 'h00R'
     endfunction
 
     function AngleBetween takes real x1, real y1, real x2, real y2 returns real // [x1,y2] 와 [x2,y2] 의 각도

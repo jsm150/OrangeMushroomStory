@@ -3,9 +3,15 @@ scope User initializer Init
         constant string secretKey = "3b1e2c80-db90-462a-9835-a0ddb80752b1"
         constant string mapId = "OM150"
         constant string clearListName = "ClearList"
-        string mapVersion = "v12.1"
+        string mapVersion = "v12.2"
         public key GoldLeafChangedEvent
     endglobals
+
+    function PrivateLogging takes integer playerId, string log, string logType returns nothing
+        if GetLocalPlayer() == Player(playerId) then
+            call JNMapServerLogUseType(mapId, secretKey, mapVersion, log, logType)
+        endif
+    endfunction
 
     private struct worldCount
         integer CaptainJack = 0
@@ -275,12 +281,16 @@ scope User initializer Init
 
         call User_UserList[playerId].Deposit(playerId, amount.ToInt())
         call JNObjectCharacterSetInt(name, "GoldLeaf", User_UserList[playerId].GoldLeaf.ToInt())
+        call PrivateLogging(playerId, GetPlayerName(Player(playerId)) + "님이 골드리프 " + amount.ToString() + "을 획득했습니다. 잔액은 " /*
+                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafGetLog")
         call IncWorldClearCount(name, world)
 
         if GetLocalPlayer() == Player(playerId) then
             if JNObjectCharacterServerConnectCheck() then
                 call JNObjectCharacterSave(mapId, name, secretKey, clearListName)
                 call JNPublicMapServerLog(mapId, secretKey, mapVersion, name + "님이 " + world + " 월드를 클리어 했습니다.")
+                call BJDebugMsg("             " + TeamColor[playerId + 1] + GetPlayerName(GetLocalPlayer()) + "|r 님이 골드리프 " + amount.ToString() + "을 획득했습니다. 잔액은 " /*
+                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.")
                 call BJDebugMsg("　　　　　　|cffFFFC00※ 서버에 코드가 저장되었습니다! ※|r")
             else
                 call BJDebugMsg("　　　　　　|cffFF0202※ 서버에 저장하는데 실패하였습니다. ※|r")
@@ -393,12 +403,6 @@ scope User initializer Init
             else
                 call BJDebugMsg("|cffFFFC00※ 이미 서버와 연결중입니다.|r")
             endif
-        endif
-    endfunction
-
-    function PrivateLogging takes integer playerId, string log, string logType returns nothing
-        if GetLocalPlayer() == Player(playerId) then
-            call JNMapServerLogUseType(mapId, secretKey, mapVersion, log, logType)
         endif
     endfunction
 

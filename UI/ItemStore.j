@@ -19,7 +19,7 @@ library ItemStore initializer Init needs RandomStage
         
         private stub method Check takes integer playerId returns boolean
             return true
-        endmethod 
+        endmethod
 
         private stub method GiveItem takes integer playerId returns nothing
         endmethod
@@ -76,7 +76,7 @@ library ItemStore initializer Init needs RandomStage
     // 하드 랜덤 월드로 바꾸는 아이템
     private struct HardRandomTicketItem extends Item
         private stub method Check takes integer playerId returns boolean
-            return (Status.World == 2 and Status.Level == 8) and RandomStage_isHard == false
+            return (Status.World == 2 and Status.Level == 8) and RandomStage_isHard == false and Stage_Loading == false
         endmethod 
 
         private stub method GiveItem takes integer playerId returns nothing
@@ -307,7 +307,7 @@ library ItemStore initializer Init needs RandomStage
         public method Redisplay takes nothing returns nothing
             local string money = User_UserList[this.playerId].GoldLeaf.ToString()
 
-            if this.playerId == Events.GetEventArgs(User_GoldLeafChangedEvent) and GetLocalPlayer() == Player(this.playerId) then
+            if this.isOpen and this.playerId == Events.GetEventArgs(User_GoldLeafChangedEvent) and GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.goldLeafLetter, false)
                 call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + money + "        ")
                 call DzFrameShow(this.goldLeafLetter, true)
@@ -404,7 +404,7 @@ library ItemStore initializer Init needs RandomStage
         local ItemUIList uiList = ItemUIList.create()
         call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", ContinueAddItem.create(Money.create(300), 1)))
         call uiList.Add(ItemUI.create("HardRandomTicketSlot.blp", HardRandomTicketItem.create(Money.create(50), 1)))
-        call uiList.Add(ItemUI.create("SpiritPendantItemSlot.blp", SpiritPendantItem.create(Money.create(99900), 1)))
+        call uiList.Add(ItemUI.create("SpiritPendantItemSlot.blp", SpiritPendantItem.create(Money.create(11900), 1)))
         return uiList
     endfunction
 

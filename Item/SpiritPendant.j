@@ -215,12 +215,11 @@ library SpiritPendant needs Stage
         public static method create takes nothing returns thistype
             local thistype this = thistype.allocate()
             local integer i = 0
-            local integer j = 0
             local string move
 
             //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
                 if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                    if Observer_State[i + 1] then
+                    if LevelClearState[i + 1] then
                         set this.clearList[i] = true
                     else
                         if LeftArrow[i + 1] then
