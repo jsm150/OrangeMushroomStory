@@ -195,9 +195,12 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPe
         endif
         if User_UserList[id].GetClearCountByWorldId(10) >= 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[30]).Clone())
+            call skinList.add(SkinInfo(SkinAnimationList[51]).Clone())
+            call skinList.add(SkinInfo(SkinAnimationList[52]).Clone())
         endif
         if User_UserList[id].GetClearCountByWorldId(12) >= 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[31]).Clone())
+            call skinList.add(SkinInfo(SkinAnimationList[53]).Clone())
         endif
         if User_UserList[id].GetClearCountByWorldId(13) >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 32", "i <= 34")
@@ -232,7 +235,7 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPe
             //! runtextmacro for_end("set i = i + 1")
         endif
 
-        if User_UserList[id].SpiritPendant == 1 then
+        if User_UserList[id].SpiritPendant == 1 or DEBUG_MODE then
             call skinList.add(ConsumptionItem(SkinAnimationList[50]).Clone())
         endif
 
@@ -1578,6 +1581,27 @@ endmethod
 
         //====================================================
         set skin = ConsumptionItem.create("SpiritPendant", "SpiritPendant.blp", 0.044, SpiritPendant_ItemUseEventKey)
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "BDesertRabbit", 'h00Q', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("BDesertRabbit001.blp")
+        call skin.AddMotion("BDesertRabbit002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = SkinInfo.create(0.250, "WDesertRabbit", 'h00R', 0.044, characterSkinChangeKey)
+        call skin.AddMotion("WDesertRabbit001.blp")
+        call skin.AddMotion("WDesertRabbit002.blp")
+        call SkinAnimationList.add(skin)
+
+        //====================================================
+
+        set skin = DecorateSkinInfo.create(0, "Snowflake", 'h00U', 0.044, 0, 0, Decorate_Aura, /*
+            */ SkinSelectWindow.CharacterPriority + 1, decorateSkinChangeKey)
+        call skin.AddMotion("Snowflake.blp")
         call SkinAnimationList.add(skin)
     endfunction
 
