@@ -95,26 +95,54 @@ library DragonStone initializer Init needs Key
         endif
     endfunction
 
-    private function Register takes real x, real y, integer block, rect r, integer world, integer stage returns nothing
-        local Object a = LoadInteger(list, world, stage)
+    globals
+        private rect rRect
+        private integer rWorld
+        private integer rStage
+    endglobals
+
+    private function RegisterSetting takes rect r, integer world, integer stage returns nothing
+        set rRect = r
+        set rWorld = world
+        set rStage = stage
+    endfunction
+
+    private function Register takes real x, real y, integer block returns nothing
+        local Object a = LoadInteger(list, rWorld, rStage)
 
         if a == 0 then
-            set a = Object.create(r)
+            set a = Object.create(rRect)
         endif
 
 
         call a.Add(Block.create(x, y, block))
-        call SaveInteger(list, world, stage, a)
+        call SaveInteger(list, rWorld, rStage, a)
     endfunction
 
     private function Init takes nothing returns nothing
-        // 15 - 1
-        call Register(-16512, 13440, RefreStageTerrain, gg_rct_DragonStone15_1_001, 15, 1)
-        call Register(-16640, 14080, RefreStageTerrain, gg_rct_DragonStone15_1_001, 15, 1)
-        call Register(-16768, 14464, RefreStageTerrain, gg_rct_DragonStone15_1_001, 15, 1)
-        call Register(-16768, 14464 + 128, RefreStageTerrain, gg_rct_DragonStone15_1_001, 15, 1)
-        call Register(-14336, 14208, RefreStageTerrain, gg_rct_DragonStone15_1_001, 15, 1)
-        call Register(-14208, 13824, RefreStageTerrain, gg_rct_DragonStone15_1_001, 15, 1)
-        call Register(-14848, 13568, RefreStageTerrain, gg_rct_DragonStone15_1_001, 15, 1)
+        local integer i = 0
+
+        //15 - 1
+        call RegisterSetting(gg_rct_DragonStone15_1_001, 15, 1)
+        call Register(-9216, 26624, RefreStageTerrain)
+        call Register(-11136, 25600, RefreStageTerrain)
+        call Register(-11136 + 128, 25600, RefreStageTerrain)
+        call Register(-10368, 26112, RefreStageTerrain)
+        call Register(-10368, 26112 + 128, RefreStageTerrain)
+        call Register(-10368, 26112 + 384, RefreStageTerrain)
+        call Register(-10368, 26112 + 512, RefreStageTerrain)
+        call Register(-10880, 26368, RefreStageTerrain)
+        call Register(-10880 + 128, 26368, RefreStageTerrain)
+        call Register(-10624, 27264, RefreStageTerrain)
+        call Register(-10624 + 128, 27264, RefreStageTerrain)
+        //! runtextmacro for("set i = 0", "i < 3")
+            call Register(-12160, 26368 + (128 * i), RefreStageTerrain)
+            call Register(-9344, 26752 + (128 * i), RefreStageTerrain)
+            call Register(-10240, 27008 + (128 * i), RefreStageTerrain)
+            call Register(-10624, 27392 + (128 * i), RefreStageTerrain)
+            call Register(-12032 + (128 * i), 27008, RefreStageTerrain)
+            call Register(-11264 + (128 * i), 27008, RefreStageTerrain)
+        //! runtextmacro for_end("set i = i + 1")
+
     endfunction
 endlibrary

@@ -934,6 +934,17 @@ library Stage initializer init
                 call CreateObject(5, gg_rct_Propelly13_Minus1_002, "FlyLeft")
                 set BoxsCount = 5
             endif
+        elseif Status.World == 15 then
+            if Status.Level == 1 then
+                call CreateObject(1, gg_rct_Box15_1_001, "null")
+                call CreateObject(2, gg_rct_Box15_1_002, "null")
+                call CreateObject(3, gg_rct_Box15_1_003, "null")
+                call CreateObject(4, gg_rct_Box15_1_004, "null")
+                call CreateObject(5, gg_rct_Bloctopus15_1_001, "Right")
+                call CreateObject(6, gg_rct_Bloctopus15_1_002, "Right")
+                call CreateObject(7, gg_rct_Bloctopus15_1_003, "Left")
+                set BoxsCount = 7
+            endif
         endif
     endfunction
     
@@ -1122,6 +1133,8 @@ library Stage initializer init
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 진동을 끌수 있습니다. 자세한건 F9를 참고해주세요." )
                 elseif Status.World == 13 and Status.Level == 1 then
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 보름달에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                elseif Status.World == 15 and Status.Level == 1 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 용 비석에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
                 endif
             endif
         endif
