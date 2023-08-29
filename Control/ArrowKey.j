@@ -167,6 +167,7 @@ scope ArrowKey initializer init
         local integer i = GetPlayerId(GetTriggerPlayer())+1
         local real x = GetUnitX(OrangeMushroom[i])
         local real y = GetUnitY(OrangeMushroom[i])
+        local integer types
         local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
 
         set DownArrow[i] = true
@@ -282,10 +283,13 @@ scope ArrowKey initializer init
                 else
                     set Frame_MainPlayerY = 0
                     call MushroomMoving_RectCondition(i, x, y, 40, "DownWidthOM")
-                    if GetUnitTypeId(OrangeMushroom[Frame_MainPlayerY]) == 'o000' and IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false then
+                    set types = GetUnitTypeId(OrangeMushroom[Frame_MainPlayerY])
+                    if types == 'o000' and IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false then
                         call BlinChange(Frame_MainPlayerY, 'o001')
-                    elseif GetUnitTypeId(OrangeMushroom[Frame_MainPlayerY]) == 'o001' and IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false then
+                    elseif types == 'o001' and IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false then
                         call BlinChange(Frame_MainPlayerY, 'o000')
+                    elseif (types == 'h00T' or types == 'h00S') and IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false then
+                        call RashChange(Frame_MainPlayerY)
                     else
                         if LeftArrow[i] == false and RightArrow[i] == false and GravityChanger_Loading == false then
                             if Direction[i] == "Left" then

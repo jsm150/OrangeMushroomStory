@@ -147,6 +147,62 @@ library Calculation
             call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, -128, false )
         endif
     endfunction
+
+    function RashChange takes integer i returns nothing
+        local real x = GetUnitX(OrangeMushroom[i])
+        local real y = GetUnitY(OrangeMushroom[i])
+        local integer types
+        
+        if GetUnitTypeId(OrangeMushroom[i]) == 'h00T' then
+            set types = 'h00S'
+        else 
+            set types = 'h00T'
+        endif
+
+        set gravity[i] = 0.00
+        call StopSound(gg_snd_Morph001, false, false)
+        call StartSound( gg_snd_Morph001 )
+        call DestroyEffect(AddSpecialEffect("war3mapImported\\Morph.mdl", x, y ))
+        call RemoveUnit(OrangeMushroom[i])
+
+        if types == 'h00T' then
+            set LeftArrow[i] = false
+            set RightArrow[i] = false
+        elseif Direction[i] == "Left" then
+            set LeftArrow[i] = true
+        else
+            set RightArrow[i] = true
+        endif
+
+        if GravityChanger_State == false then
+            set OrangeMushroom[i] = CreateUnit(Player(i-1), types, x, y, 270 )
+        else
+            set OrangeMushroom[i] = CreateUnit(Player(i-1), types, x, y, 90 )
+        endif
+            
+        if Direction[i] == "Left" then
+            if GravityChanger_State == false then
+                call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
+            else
+                call SetUnitAnimation( OrangeMushroom[i], "Stand Second" )
+            endif
+        else
+            if GravityChanger_State == false then
+                call SetUnitAnimation( OrangeMushroom[i], "Stand Second" )
+            else
+                call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
+            endif
+        endif
+        call SetUnitBlendTime(OrangeMushroom[i], 0.00)
+        
+        if GravityChanger_State == false then
+            call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, 128, false )
+        else
+            call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, -128, false )
+        endif
+
+
+    endfunction
     
     function PlayerSentinelAttack takes nothing returns nothing
         local integer i = LoadInteger(Hash, GetHandleId(GetExpiredTimer()), 0)

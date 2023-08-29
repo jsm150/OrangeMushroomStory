@@ -201,6 +201,46 @@ library Stage initializer init
             else
                 call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell Second" )
             endif
+        elseif angle == "DarkRashRight" then
+            set Direction[PLAYER_MAXINUM+i] = "Right"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'h00T', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if (gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false) then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk Second" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell Second" )
+            endif
+        elseif angle == "DarkRashLeft" then
+            set Direction[PLAYER_MAXINUM+i] = "Left"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'h00T', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk First" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell First" )
+            endif
+        elseif angle == "RashRight" then
+            set LeftArrow[PLAYER_MAXINUM+i] = false
+            set RightArrow[PLAYER_MAXINUM+i] = true
+            set Direction[PLAYER_MAXINUM+i] = "Right"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'h00S', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk Second" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell Second" )
+            endif
+        elseif angle == "RashLeft" then
+            set LeftArrow[PLAYER_MAXINUM+i] = true
+            set RightArrow[PLAYER_MAXINUM+i] = false
+            set Direction[PLAYER_MAXINUM+i] = "Left"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'h00S', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk First" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell First" )
+            endif
         elseif angle == "SentinelLeft" then
             call RegionAddRect( Rect_NoEntry, r )
             call RegionAddRect( Rect_MissileZone, r )
@@ -1599,7 +1639,7 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 14, 4, gg_rct_StartRect108)
         call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect109)
 
-        call SaveRectHandle(StartRectList, 15, 1, gg_rct_StartRect113)
+        call SaveRectHandle(StartRectList, 15, 1, gg_rct_StartRect114)
         
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub109)
