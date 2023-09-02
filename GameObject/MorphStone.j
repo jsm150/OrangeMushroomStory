@@ -264,6 +264,7 @@ library MorphStone initializer init
         call SetRect(t, Unit.Sentinel, gg_rct_MorphStone078)
         call SetRect(t, Unit.OrangeMushroom, gg_rct_MorphStone079)
         call SetRect(t, Unit.Bloctopus, gg_rct_MorphStone080)
+        call SetRect(t, Unit.Propelly, gg_rct_MorphStone081)
 
 
         call TriggerAddAction( t, function Main )

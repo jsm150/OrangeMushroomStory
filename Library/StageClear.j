@@ -984,6 +984,10 @@ library Stage initializer init
                 call CreateObject(6, gg_rct_Bloctopus15_1_002, "Right")
                 call CreateObject(7, gg_rct_Bloctopus15_1_003, "Left")
                 set BoxsCount = 7
+            elseif Status.Level == 2 then
+                call CreateObject(1, gg_rct_DarkRash15_2_001, "DarkRashRight")
+                call CreateObject(2, gg_rct_DarkRash15_2_002, "DarkRashLeft")
+                set BoxsCount = 2
             endif
         endif
     endfunction
@@ -1640,6 +1644,7 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect109)
 
         call SaveRectHandle(StartRectList, 15, 1, gg_rct_StartRect114)
+        call SaveRectHandle(StartRectList, 15, 2, gg_rct_StartRect115)
         
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub109)
