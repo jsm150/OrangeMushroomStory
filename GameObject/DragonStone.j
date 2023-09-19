@@ -79,11 +79,7 @@ library DragonStone initializer Init needs Key
         local Object a = LoadInteger(list, world, stage)
 
         if a > 0 then
-            if world == 15 and stage == 1 then
-                call a.Change()
-            else
-                call a.Reset()
-            endif
+            call a.Reset()
         endif
     endfunction
 
@@ -99,9 +95,15 @@ library DragonStone initializer Init needs Key
         private rect rRect
         private integer rWorld
         private integer rStage
+        private region Region
     endglobals
 
+    public function InUnit takes unit u returns boolean
+        return IsUnitInRegion(Region, u)
+    endfunction
+
     private function RegisterSetting takes rect r, integer world, integer stage returns nothing
+        call RegionAddRect( Region, r )
         set rRect = r
         set rWorld = world
         set rStage = stage
@@ -121,6 +123,7 @@ library DragonStone initializer Init needs Key
 
     private function Init takes nothing returns nothing
         local integer i = 0
+        set Region = CreateRegion()
 
         //15 - 1
         call RegisterSetting(gg_rct_DragonStone15_1_001, 15, 1)

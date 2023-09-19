@@ -284,29 +284,32 @@ scope ArrowKey initializer init
                     set Frame_MainPlayerY = 0
                     call MushroomMoving_RectCondition(i, x, y, 40, "DownWidthOM")
                     set types = GetUnitTypeId(OrangeMushroom[Frame_MainPlayerY])
-                    if types == 'o000' and IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false then
-                        call BlinChange(Frame_MainPlayerY, 'o001')
-                    elseif types == 'o001' and IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false then
-                        call BlinChange(Frame_MainPlayerY, 'o000')
-                    elseif (types == 'h00T' or types == 'h00S') and IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false then
-                        call RashChange(Frame_MainPlayerY)
-                    else
-                        if LeftArrow[i] == false and RightArrow[i] == false and GravityChanger_Loading == false then
-                            if Direction[i] == "Left" then
-                                call KeyAnimation( OrangeMushroom[i], "Stand Ready", "First" )
-                                if pet != 0 then
-                                    call KeyAnimation( pet.Unit, "Stand Ready", "First" )
-                                endif
-                            elseif Direction[i] == "Right" then
-                                call KeyAnimation( OrangeMushroom[i], "Stand Ready", "Second" )
-                                if pet != 0 then
-                                    call KeyAnimation( pet.Unit, "Stand Ready", "Second" )
-                                endif
-                            endif
-                            call SpecialDownStateStart(i)
-                            call HiddenWord_Main(i)
+                    if IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false and DragonStone_InUnit(OrangeMushroom[i]) == false then
+                        if types == 'o000' then
+                            call BlinChange(Frame_MainPlayerY, 'o001')
+                        elseif types == 'o001' then
+                            call BlinChange(Frame_MainPlayerY, 'o000')
+                        elseif types == 'h00T' or types == 'h00S' then
+                            call RashChange(Frame_MainPlayerY)
                         endif
                     endif
+                    
+                    if LeftArrow[i] == false and RightArrow[i] == false and GravityChanger_Loading == false then
+                        if Direction[i] == "Left" then
+                            call KeyAnimation( OrangeMushroom[i], "Stand Ready", "First" )
+                            if pet != 0 then
+                                call KeyAnimation( pet.Unit, "Stand Ready", "First" )
+                            endif
+                        elseif Direction[i] == "Right" then
+                            call KeyAnimation( OrangeMushroom[i], "Stand Ready", "Second" )
+                            if pet != 0 then
+                                call KeyAnimation( pet.Unit, "Stand Ready", "Second" )
+                            endif
+                        endif
+                        call SpecialDownStateStart(i)
+                        call HiddenWord_Main(i)
+                    endif
+                    
                 endif
                 call DragonStone_Main(i, Status.World, Status.Level)
             elseif GetUnitTypeId(OrangeMushroom[i]) == 'orai' then
