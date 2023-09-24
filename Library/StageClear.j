@@ -1231,6 +1231,10 @@ library Stage initializer init
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 보름달에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
                 elseif Status.World == 15 and Status.Level == 1 then
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 용 비석에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                elseif Status.World == 15 and Status.Level == 2 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 뮤테에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                elseif Status.World == 15 and Status.Level == 3 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 레쉬와 다크 레쉬에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
                 endif
             endif
         endif
