@@ -159,7 +159,6 @@ library Calculation
             set types = 'h00T'
         endif
 
-        set gravity[i] = 0.00
         call StopSound(gg_snd_Morph001, false, false)
         call StartSound( gg_snd_Morph001 )
         call DestroyEffect(AddSpecialEffect("war3mapImported\\Morph.mdl", x, y ))
@@ -295,6 +294,8 @@ library Calculation
                 call SetUnitAnimationByIndex( u, 7 )
             elseif tp == 'orai' then
                 call SetUnitAnimation( u, "Stand Second" )
+            elseif tp == 'h00S' or tp == 'h00T' then
+                call SetUnitAnimationByIndex( u, 4 )
             else
                 call SetUnitAnimationByIndex( u, 5 )
             endif
