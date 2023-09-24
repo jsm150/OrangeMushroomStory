@@ -78,8 +78,13 @@ scope initialize initializer init
         set s = s + "- 기존 월드 클리어 보상으로 새로운 스킨이 추가됩니다.\n"
         set s = s + "- 도깨비 오브젝트를 상호작용할 때의 버그를 수정했습니다.\n"
         set s = s + "- 특정 스킨의 화질을 높혔습니다.\n"
-        set s = s + "- 단축키 설명이 누락된 부분을 정정했습니다."
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.2~12.3", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 단축키 설명이 누락된 부분을 정정했습니다.\n"
+        set s = s + "\n"
+        set s = s + "12.4\n"
+        set s = s + "- 특정 스킨의 모션 버그를 수정했습니다.\n"
+        set s = s + "- 새로운 월드가 추가되었습니다.\n"
+        set s = s + "- 얼음 동굴 엔딩에서 맵을 이탈할 수 있던 버그를 수정했습니다.\n"
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.2~12.4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "11.8\n"
         set s = s + "- 새로운 스킨이 추가되었습니다.\n"
         set s = s + "- 심판 자리에서의 관전 버튼이 추가되었습니다.\n"
@@ -654,6 +659,7 @@ scope initialize initializer init
         set s = s + "얼음동굴 : 700\n"
         set s = s + "아랫마을 : 800\n"
         set s = s + "월드 첼린지II : 800\n"
+        set s = s + "리프레 : 1000\n"
         set s = s + "랜덤 : 150~300\n"
         set s = s + "랜덤(하드) : 350~650\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "골드리프?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
