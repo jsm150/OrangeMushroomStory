@@ -1446,7 +1446,7 @@ library Stage initializer init
                         else
                             call tk.start(1.0, false, function WorldTimer)
                         endif
-                    elseif Status.World == 3 or Status.World == 4 or Status.World == 9 or Status.World == 13 then
+                    elseif Status.World == 3 or Status.World == 4 or Status.World == 9 or Status.World == 13 or Status.World == 15 then
                         call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
                         call TriggerExecute( Ending_Trigger )
                     elseif Status.World == 5 then
