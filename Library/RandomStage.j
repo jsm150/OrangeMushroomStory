@@ -269,6 +269,15 @@ library RandomStage initializer Init
         call randomPickMachine.Add(Map.create(14, 4, LevelUnit.VeryHard))
         call randomPickMachine.Add(Map.create(14, 5, LevelUnit.VeryHard))
 
+        call randomPickMachine.Add(Map.create(15, 1, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(15, 2, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(15, 3, LevelUnit.Hard))
+        call randomPickMachine.Add(Map.create(15, 4, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(15, 5, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(15, 6, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(15, 7, LevelUnit.VeryHard))
+        call randomPickMachine.Add(Map.create(15, 8, LevelUnit.Hard))
+
         call randomPickMachine.PickUp()
     endfunction
 endlibrary

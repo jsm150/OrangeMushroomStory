@@ -149,5 +149,15 @@ library TeleportMoon initializer init needs Water
         call SetRect(gg_rct_TeleportMoon034, 34, 33, "Red")
         call SetRect(gg_rct_TeleportMoon035, 35, 36, "Red")
         call SetRect(gg_rct_TeleportMoon036, 36, 35, "Red")
+        call SetRect(gg_rct_TeleportMoon037, 37, 38, "Red")
+        call SetRect(gg_rct_TeleportMoon038, 38, 37, "Red")
+        call SetRect(gg_rct_TeleportMoon039, 39, 40, "Yellow")
+        call SetRect(gg_rct_TeleportMoon040, 40, 39, "Yellow")
+        call SetRect(gg_rct_TeleportMoon041, 41, 42, "Red")
+        call SetRect(gg_rct_TeleportMoon042, 42, 41, "Red")
+        call SetRect(gg_rct_TeleportMoon043, 43, 44, "Yellow")
+        call SetRect(gg_rct_TeleportMoon044, 44, 43, "Yellow")
+        call SetRect(gg_rct_TeleportMoon045, 45, 46, "Red")
+        call SetRect(gg_rct_TeleportMoon046, 46, 45, "Red")
     endfunction
 endlibrary

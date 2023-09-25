@@ -26,6 +26,7 @@ scope User initializer Init
         integer IceCave = 0
         integer DownTown = 0
         integer WorldChallenge2 = 0
+        integer Refre = 0
         integer Random = 0
         integer HardRandom = 0
     endstruct
@@ -126,6 +127,8 @@ scope User initializer Init
                 return this.ClearList.DownTown
             elseif worldId == 14 then
                 return this.ClearList.WorldChallenge2
+            elseif worldId == 15 then
+                return this.ClearList.Refre
             else
                 return 0
             endif
@@ -277,6 +280,8 @@ scope User initializer Init
             set amount = Money.create(GetRandomInt(150, 300))
         elseif world == "HardRandom" then
             set amount = Money.create(GetRandomInt(350, 650))
+        elseif world == "Refre" then
+            set amount = Money.create(1000)
         endif
 
         call User_UserList[playerId].Deposit(playerId, amount.ToInt())
@@ -326,6 +331,7 @@ scope User initializer Init
     //! runtextmacro MakeFuncToDataLoadSync("IceCave", "UserList[idx].ClearList.IceCave", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("DownTown", "UserList[idx].ClearList.DownTown", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("WorldChallenge2", "UserList[idx].ClearList.WorldChallenge2", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
+    //! runtextmacro MakeFuncToDataLoadSync("Refre", "UserList[idx].ClearList.Refre", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("Random", "UserList[idx].ClearList.Random", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
     //! runtextmacro MakeFuncToDataLoadSync("HardRandom", "UserList[idx].ClearList.HardRandom", "S2I", "string name, string keyword", "I2S(JNObjectCharacterGetInt(name, keyword))")
 
@@ -359,6 +365,7 @@ scope User initializer Init
             call DataLoadSyncToIceCave(playerId, name, "IceCave")
             call DataLoadSyncToDownTown(playerId, name, "DownTown")
             call DataLoadSyncToWorldChallenge2(playerId, name, "WorldChallenge2")
+            call DataLoadSyncToRefre(playerId, name, "Refre")
             call DataLoadSyncToRandom(playerId, name, "Random")
             call DataLoadSyncToHardRandom(playerId, name, "HardRandom")
             call DataLoadSyncToPinkBeanDesignation(playerId, name, "PinkBean Designation")

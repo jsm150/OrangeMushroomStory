@@ -23,7 +23,7 @@ scope PracticeCommand initializer Init
         if SubString(s, 0, 2) == "-n" then
             set world = S2I(JNStringSplit(s, " ", 1))
             set stage = S2I(JNStringSplit(s, " ", 2))
-            if world <= 0 or world > 14 or stage <= 0 or stage > 8 then
+            if world <= 0 or world > 15 or stage <= 0 or stage > 8 then
                 return
             endif
 
@@ -122,6 +122,7 @@ scope PracticeCommand initializer Init
         set s = s + "  얼음 동굴 : 12\n"
         set s = s + "  깊은 산속 : 13\n"
         set s = s + "  월드 첼린지II : 14\n"
+        set s = s + "  리프레 : 15\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "|cffFF0202월드 번호|r", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
     endfunction
 

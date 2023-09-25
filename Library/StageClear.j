@@ -201,6 +201,46 @@ library Stage initializer init
             else
                 call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell Second" )
             endif
+        elseif angle == "DarkRashRight" then
+            set Direction[PLAYER_MAXINUM+i] = "Right"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'h00T', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if (gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false) then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk Second" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell Second" )
+            endif
+        elseif angle == "DarkRashLeft" then
+            set Direction[PLAYER_MAXINUM+i] = "Left"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'h00T', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk First" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell First" )
+            endif
+        elseif angle == "RashRight" then
+            set LeftArrow[PLAYER_MAXINUM+i] = false
+            set RightArrow[PLAYER_MAXINUM+i] = true
+            set Direction[PLAYER_MAXINUM+i] = "Right"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'h00S', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk Second" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell Second" )
+            endif
+        elseif angle == "RashLeft" then
+            set LeftArrow[PLAYER_MAXINUM+i] = true
+            set RightArrow[PLAYER_MAXINUM+i] = false
+            set Direction[PLAYER_MAXINUM+i] = "Left"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'h00S', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk First" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell First" )
+            endif
         elseif angle == "SentinelLeft" then
             call RegionAddRect( Rect_NoEntry, r )
             call RegionAddRect( Rect_MissileZone, r )
@@ -366,6 +406,13 @@ library Stage initializer init
             call SetTerrainType(20352, 28288 - 256, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(20352, 28288 - 384, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(24704, 25344, SENTINEL_TERRAIN, -1, 1, 0)
+        elseif i == 16 then
+            call SetTerrainType(-17536, 18816, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-17536+128, 18816, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-17536+128+128, 18816, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-17152, 18304, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-17152+128, 18304, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-17152+128+128, 18304, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
@@ -934,6 +981,66 @@ library Stage initializer init
                 call CreateObject(5, gg_rct_Propelly13_Minus1_002, "FlyLeft")
                 set BoxsCount = 5
             endif
+        elseif Status.World == 15 then
+            if Status.Level == 1 then
+                call CreateObject(1, gg_rct_Box15_1_001, "null")
+                call CreateObject(2, gg_rct_Box15_1_002, "null")
+                call CreateObject(3, gg_rct_Box15_1_003, "null")
+                call CreateObject(4, gg_rct_Box15_1_004, "null")
+                call CreateObject(5, gg_rct_Bloctopus15_1_001, "Right")
+                call CreateObject(6, gg_rct_Bloctopus15_1_002, "Right")
+                call CreateObject(7, gg_rct_Bloctopus15_1_003, "Left")
+                set BoxsCount = 7
+            elseif Status.Level == 2 then
+                call CreateObject(1, gg_rct_Bloctopus15_2_001, "Left")
+                call CreateObject(2, gg_rct_KingBloctopus15_2_001, "AutoLeft")
+                set BoxsCount = 2
+            elseif Status.Level == 3 then
+                call CreateObject(1, gg_rct_DarkRash15_3_001, "DarkRashRight")
+                call CreateObject(2, gg_rct_DarkRash15_3_002, "DarkRashLeft")
+                set BoxsCount = 2
+            elseif Status.Level == 4 then
+                call CreateObject(1, gg_rct_DarkRash15_4_001, "DarkRashRight")
+                call CreateObject(2, gg_rct_Bloctopus15_4_001, "Left")
+                call CreateObject(3, gg_rct_Bloctopus15_4_002, "Left")
+                call CreateObject(4, gg_rct_Bloctopus15_4_003, "Left")
+                call CreateObject(5, gg_rct_KingBloctopus15_4_001, "AutoRight")
+                call CreateObject(6, gg_rct_Box15_4_001, "null")
+                call CreateObject(7, gg_rct_Box15_4_002, "null")
+                call CreateObject(8, gg_rct_CokeMushroom15_4_001, "CokeMushroomLeft")
+                call CreateObject(9, gg_rct_CokeMushroom15_4_002, "CokeMushroomLeft")
+                set BoxsCount = 9
+            elseif Status.Level == 5 then
+                call CreateObject(1, gg_rct_Bloctopus15_5_001, "Left")
+                call CreateObject(2, gg_rct_Box15_5_001, "null")
+                call CreateObject(3, gg_rct_Box15_5_002, "null")
+                call CreateObject(4, gg_rct_Box15_5_003, "null")
+                set BoxsCount = 4
+            elseif Status.Level == 6 then
+                call SentinelChangeTerrain(16)
+                call CreateObject(0, gg_rct_Sentinel15_6_001, "SentinelLeft")
+                call CreateObject(0, gg_rct_Sentinel15_6_002, "SentinelRight")
+                call CreateObject(1, gg_rct_Bloctopus15_6_001, "Left")
+                call CreateObject(2, gg_rct_Bloctopus15_6_002, "Right")
+                call CreateObject(3, gg_rct_Bloctopus15_6_003, "Left")
+                call CreateObject(4, gg_rct_KingBloctopus15_6_001, "AutoLeft")
+                call CreateObject(5, gg_rct_KingBloctopus15_6_002, "AutoRight")
+                call CreateObject(6, gg_rct_Box15_6_001, "null")
+                call CreateObject(7, gg_rct_Box15_6_002, "null")
+                set BoxsCount = 7
+            elseif Status.Level == 7 then
+                call CreateObject(1, gg_rct_Box15_7_001, "null")
+                call CreateObject(2, gg_rct_Box15_7_002, "null")
+                call CreateObject(3, gg_rct_Box15_7_003, "null")
+                call CreateObject(4, gg_rct_DarkRash15_7_001, "DarkRashLeft")
+                call CreateObject(5, gg_rct_KingBloctopus15_7_001, "AutoRight")
+                set BoxsCount = 5
+            elseif Status.Level == 8 then
+                call CreateObject(1, gg_rct_Bloctopus15_8_001, "Right")
+                call CreateObject(2, gg_rct_DarkRash15_8_001, "DarkRashRight")
+                call CreateObject(3, gg_rct_DarkRash15_8_002, "DarkRashLeft")
+                set BoxsCount = 3
+            endif
         endif
     endfunction
     
@@ -1122,6 +1229,12 @@ library Stage initializer init
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 진동을 끌수 있습니다. 자세한건 F9를 참고해주세요." )
                 elseif Status.World == 13 and Status.Level == 1 then
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 보름달에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                elseif Status.World == 15 and Status.Level == 1 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 용 비석에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                elseif Status.World == 15 and Status.Level == 2 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 뮤테에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                elseif Status.World == 15 and Status.Level == 3 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 레쉬와 다크 레쉬에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
                 endif
             endif
         endif
@@ -1333,7 +1446,7 @@ library Stage initializer init
                         else
                             call tk.start(1.0, false, function WorldTimer)
                         endif
-                    elseif Status.World == 3 or Status.World == 4 or Status.World == 9 or Status.World == 13 then
+                    elseif Status.World == 3 or Status.World == 4 or Status.World == 9 or Status.World == 13 or Status.World == 15 then
                         call SetFilter(2.00, 0, 0, 0, 100, 100, 100, 100, 0 )
                         call TriggerExecute( Ending_Trigger )
                     elseif Status.World == 5 then
@@ -1586,8 +1699,16 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 14, 4, gg_rct_StartRect108)
         call SaveRectHandle(StartRectList, 14, 5, gg_rct_StartRect109)
 
-        call SaveRectHandle(StartRectList, 15, 1, gg_rct_StartRect113)
-        
+        call SaveRectHandle(StartRectList, 15, 1, gg_rct_StartRect114)
+        call SaveRectHandle(StartRectList, 15, 2, gg_rct_StartRect115)
+        call SaveRectHandle(StartRectList, 15, 3, gg_rct_StartRect116)
+        call SaveRectHandle(StartRectList, 15, 4, gg_rct_StartRect117)
+        call SaveRectHandle(StartRectList, 15, 5, gg_rct_StartRect118)
+        call SaveRectHandle(StartRectList, 15, 6, gg_rct_StartRect119)
+        call SaveRectHandle(StartRectList, 15, 7, gg_rct_StartRect120)
+        call SaveRectHandle(StartRectList, 15, 8, gg_rct_StartRect121)
+    
+
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub109)
         call SaveRectHandle(StartRectList, -13, 1, gg_rct_StartRectSub097)

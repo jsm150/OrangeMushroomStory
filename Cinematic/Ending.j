@@ -427,6 +427,8 @@ library Ending initializer init needs Cinematic, EndingSkip
                         call User_GameClearDataUpload.evaluate(i - 1, name, "Cafe")
                     elseif Status.World == 13 then
                         call User_GameClearDataUpload.evaluate(i - 1, name, "DownTown")
+                    elseif Status.World == 15 then
+                        call User_GameClearDataUpload.evaluate(i - 1, name, "Refre")
                     endif
                 endif
             set i = i + 1

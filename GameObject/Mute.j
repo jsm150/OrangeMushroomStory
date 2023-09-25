@@ -73,6 +73,20 @@ library Mute initializer Init
     endfunction
 
     private function Init takes nothing returns nothing 
+        call Add(gg_rct_Mute001, gg_rct_Mute002, 15, 3)
+        call Add(gg_rct_Mute005, gg_rct_Mute006, 15, 2)
+        call Add(gg_rct_Mute007, gg_rct_Mute008, 15, 2)
+        call Add(gg_rct_Mute003, gg_rct_Mute004, 15, 4)
+        call Add(gg_rct_Mute009, gg_rct_Mute010, 15, 5)
+        call Add(gg_rct_Mute011, gg_rct_Mute012, 15, 5)
+        call Add(gg_rct_Mute013, gg_rct_Mute014, 15, 5)
+        call Add(gg_rct_Mute015, gg_rct_Mute016, 15, 6)
+        call Add(gg_rct_Mute017, gg_rct_Mute018, 15, 7)
+        call Add(gg_rct_Mute019, gg_rct_Mute020, 15, 7)
+        call Add(gg_rct_Mute021, gg_rct_Mute022, 15, 7)
+        call Add(gg_rct_Mute023, gg_rct_Mute024, 15, 8)
+        call Add(gg_rct_Mute025, gg_rct_Mute026, 15, 8)
+        call Add(gg_rct_Mute027, gg_rct_Mute028, 15, 8)
 
     endfunction
 endlibrary
