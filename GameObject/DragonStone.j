@@ -61,10 +61,14 @@ library DragonStone initializer Init needs Key
         public method Action takes nothing returns nothing
             if this.isChange then
                 call this.Reset()
-                else 
+            else 
                 call this.Change()
             endif
             call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\StaffOfPurification\\PurificationCaster.mdl", GetRectCenterX(this.r), GetRectCenterY(this.r) ))
+        endmethod
+
+        public method IsActivation takes nothing returns boolean
+            return this.isChange
         endmethod
 
         public static method create takes rect r returns thistype
@@ -83,11 +87,24 @@ library DragonStone initializer Init needs Key
         endif
     endfunction
 
+    public function IsOn takes integer world, integer stage returns boolean
+        local Object a = LoadInteger(list, world, stage)
+        if a == 0 then
+            return false
+        endif
+        return a.IsActivation()
+    endfunction
+
+    public function Execute takes integer world, integer stage returns nothing
+        local Object a = LoadInteger(list, world, stage)
+        call a.Action()
+    endfunction
+
     public function Main takes integer playerId, integer world, integer stage returns nothing
         local Object a = LoadInteger(list, world, stage)
 
         if a > 0 and a.Check(OrangeMushroom[playerId]) then
-            call a.Action()
+            call Execute(world, stage)
         endif
     endfunction
 

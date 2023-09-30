@@ -46,6 +46,7 @@ library SpiritPendant needs Stage
         private integer blockHistoryCount
         private integer world
         private integer stage
+        private boolean dragonStoneState
         private boolean array clearList[PLAYER_MAXINUM]
         private Unit array userList[PLAYER_MAXINUM]
         private aList object
@@ -179,7 +180,11 @@ library SpiritPendant needs Stage
             //! runtextmacro for_end("set i = i + 1")
         endmethod
 
-        
+        private method DragonStoneSetting takes nothing returns nothing
+            if this.dragonStoneState then
+                call DragonStone_Execute(this.world, this.stage)
+            endif
+        endmethod
 
         private method DestroyLaserBlock takes nothing returns nothing
             local integer i = 0
@@ -203,6 +208,7 @@ library SpiritPendant needs Stage
             call this.RestoreObjectUnit()
             call this.UseConsumableItem()
             call this.DestroyLaserBlock()
+            call this.DragonStoneSetting()
             call this.UseKey()
 
             if this.gravityState then
@@ -299,6 +305,7 @@ library SpiritPendant needs Stage
             set this.world = Status.World
             set this.stage = Status.Level
             set this.gravityState = GravityChanger_State
+            set this.dragonStoneState = DragonStone_IsOn(Status.World, Status.Level)
 
             return this
         endmethod
