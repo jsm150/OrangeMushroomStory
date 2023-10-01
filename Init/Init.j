@@ -84,7 +84,15 @@ scope initialize initializer init
         set s = s + "- 특정 스킨의 모션 버그를 수정했습니다.\n"
         set s = s + "- 새로운 월드가 추가되었습니다.\n"
         set s = s + "- 얼음 동굴 엔딩에서 맵을 이탈할 수 있던 버그를 수정했습니다.\n"
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.2~12.4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "\n"
+        set s = s + "12.5\n"
+        set s = s + "- 리프레의 모든 스테이지들이 수정되었습니다.\n"
+        set s = s + "- 아래 맵들의 난이도가 하향 조정됐습니다.\n"
+        set s = s + "  리프레: 3-2, 3-4, 3-6\n"
+        set s = s + "- 리프레 3-4, 3-6의 랙을 최적화 하였습니다.\n"
+        set s = s + "- 연습모드 에서는 펜던트 사용 횟수 제한이 제거됩니다.\n"
+        set s = s + "- 펜던트가 용 비석을 되돌리지 못하던 버그가 수정되었습니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.2~12.5", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "11.8\n"
         set s = s + "- 새로운 스킨이 추가되었습니다.\n"
         set s = s + "- 심판 자리에서의 관전 버튼이 추가되었습니다.\n"

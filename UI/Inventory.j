@@ -1120,7 +1120,7 @@ endmethod
                     endif
                     call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, TeamColor[i + 1] + GetPlayerName(Player(i)) + "|r 님의 정령의 펜던트에 깃든 신비로운 힘이 사라집니다.")
                 endif
-            elseif not(usedWorld[i] == Status.World and usedStage[i] == Status.Level) then
+            elseif not(usedWorld[i] == Status.World and usedStage[i] == Status.Level) or PracticeMode then
                 set usedWorld[i] = Status.World
                 set usedStage[i] = Status.Level
                 call SpiritPendant_Record(i)
