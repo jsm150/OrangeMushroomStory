@@ -406,13 +406,6 @@ library Stage initializer init
             call SetTerrainType(20352, 28288 - 256, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(20352, 28288 - 384, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(24704, 25344, SENTINEL_TERRAIN, -1, 1, 0)
-        elseif i == 16 then
-            call SetTerrainType(-17536, 18816, SENTINEL_TERRAIN, -1, 1, 0)
-            call SetTerrainType(-17536+128, 18816, SENTINEL_TERRAIN, -1, 1, 0)
-            call SetTerrainType(-17536+128+128, 18816, SENTINEL_TERRAIN, -1, 1, 0)
-            call SetTerrainType(-17152, 18304, SENTINEL_TERRAIN, -1, 1, 0)
-            call SetTerrainType(-17152+128, 18304, SENTINEL_TERRAIN, -1, 1, 0)
-            call SetTerrainType(-17152+128+128, 18304, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
@@ -1004,12 +997,8 @@ library Stage initializer init
                 call CreateObject(2, gg_rct_Bloctopus15_4_001, "Left")
                 call CreateObject(3, gg_rct_Bloctopus15_4_002, "Left")
                 call CreateObject(4, gg_rct_Bloctopus15_4_003, "Left")
-                call CreateObject(5, gg_rct_KingBloctopus15_4_001, "AutoRight")
-                call CreateObject(6, gg_rct_Box15_4_001, "null")
-                call CreateObject(7, gg_rct_Box15_4_002, "null")
-                call CreateObject(8, gg_rct_CokeMushroom15_4_001, "CokeMushroomLeft")
-                call CreateObject(9, gg_rct_CokeMushroom15_4_002, "CokeMushroomLeft")
-                set BoxsCount = 9
+                call CreateObject(5, gg_rct_Box15_4_001, "null")
+                set BoxsCount = 5
             elseif Status.Level == 5 then
                 call CreateObject(1, gg_rct_Bloctopus15_5_001, "Left")
                 call CreateObject(2, gg_rct_Box15_5_001, "null")
@@ -1017,17 +1006,11 @@ library Stage initializer init
                 call CreateObject(4, gg_rct_Box15_5_003, "null")
                 set BoxsCount = 4
             elseif Status.Level == 6 then
-                call SentinelChangeTerrain(16)
-                call CreateObject(0, gg_rct_Sentinel15_6_001, "SentinelLeft")
-                call CreateObject(0, gg_rct_Sentinel15_6_002, "SentinelRight")
-                call CreateObject(1, gg_rct_Bloctopus15_6_001, "Left")
-                call CreateObject(2, gg_rct_Bloctopus15_6_002, "Right")
-                call CreateObject(3, gg_rct_Bloctopus15_6_003, "Left")
-                call CreateObject(4, gg_rct_KingBloctopus15_6_001, "AutoLeft")
-                call CreateObject(5, gg_rct_KingBloctopus15_6_002, "AutoRight")
-                call CreateObject(6, gg_rct_Box15_6_001, "null")
-                call CreateObject(7, gg_rct_Box15_6_002, "null")
-                set BoxsCount = 7
+                call CreateObject(1, gg_rct_Bloctopus15_6_001, "Right")
+                call CreateObject(2, gg_rct_Bloctopus15_6_002, "Left")
+                call CreateObject(3, gg_rct_KingBloctopus15_6_001, "AutoLeft")
+                call CreateObject(4, gg_rct_Box15_6_001, "null")
+                set BoxsCount = 4
             elseif Status.Level == 7 then
                 call CreateObject(1, gg_rct_Box15_7_001, "null")
                 call CreateObject(2, gg_rct_Box15_7_002, "null")

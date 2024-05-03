@@ -87,6 +87,7 @@ library Mute initializer Init
         call Add(gg_rct_Mute023, gg_rct_Mute024, 15, 8)
         call Add(gg_rct_Mute025, gg_rct_Mute026, 15, 8)
         call Add(gg_rct_Mute027, gg_rct_Mute028, 15, 8)
+        call Add(gg_rct_Mute029, gg_rct_Mute030, 15, 4)
 
     endfunction
 endlibrary

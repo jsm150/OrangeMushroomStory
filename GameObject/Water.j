@@ -164,6 +164,7 @@ library Water initializer init
         call RegionAddRect( Rects, gg_rct_Water061 )
         call RegionAddRect( Rects, gg_rct_Water062 )
         call RegionAddRect( Rects, gg_rct_Water063 )
+        call RegionAddRect( Rects, gg_rct_Water064 )
         
         call TriggerRegisterEnterRegion(t, Rects, null)
         call TriggerAddAction( t, function WaterIn )
