@@ -1366,13 +1366,13 @@ library Stage initializer init
             elseif HiddenPortalState() == 2 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 3): 발렌타인 데이" )
             elseif HiddenPortalState() == 3 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 4): 해변" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 6): 해변" )
             elseif HiddenPortalState() == 4 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 펩시" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 4): 펩시" )
             elseif HiddenPortalState() == 5 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지" )
             elseif HiddenPortalState() == 7 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 6): 사막" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 사막" )
             elseif HiddenPortalState() == 8 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 엘린 숲" )
             elseif HiddenPortalState() == 9 then
@@ -1386,9 +1386,9 @@ library Stage initializer init
             elseif HiddenPortalState() == 12 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지 II" )
             elseif HiddenPortalState() == 13 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 리프레" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 8): 리프레" )
             elseif HiddenPortalState() == 14 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 항구" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 항구" )
             else
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World: 핑크 핑크" )
             endif
