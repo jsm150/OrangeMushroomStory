@@ -297,6 +297,8 @@ scope ArrowKey initializer init
                             call BlinChange(Frame_MainPlayerY, 'o000')
                         elseif types == 'h00T' or types == 'h00S' then
                             call RashChange(Frame_MainPlayerY)
+                        elseif types == 'o006' then
+                            call Stage_BlockBoom.Action(OrangeMushroom[Frame_MainPlayerY], Frame_MainPlayerY)
                         endif
                     endif
                     

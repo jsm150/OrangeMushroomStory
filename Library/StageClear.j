@@ -18,6 +18,58 @@ library Stage initializer init
         public group SentinelGroup = CreateGroup()
     endglobals
     
+    public struct BlockBoom
+        private static real array blockX
+        private static real array blockY
+        private static integer array blockType
+        private static integer count = 0
+
+        public static method Action takes unit bomb, integer id returns nothing
+            local real posX = GetUnitX(bomb)
+            local real posY = GetUnitY(bomb)
+            local integer i = 0
+
+            if GetTerrainType(posX - 128, posY - 128) != UnTerrain then
+                set blockX[count] = posX - 128
+                set blockY[count] = posY - 128
+                set blockType[count] = GetTerrainType(posX - 128, posY - 128)
+                set count = count + 1
+            endif
+
+            if GetTerrainType(posX, posY - 128) != UnTerrain then
+                set blockX[count] = posX
+                set blockY[count] = posY - 128
+                set blockType[count] = GetTerrainType(posX, posY - 128)
+                set count = count + 1
+            endif
+
+            if GetTerrainType(posX + 128, posY - 128) != UnTerrain then
+                set blockX[count] = posX + 128
+                set blockY[count] = posY - 128
+                set blockType[count] = GetTerrainType(posX + 128, posY - 128)
+                set count = count + 1
+            endif
+
+            call SetTerrainType(posX - 128, posY - 128, UnTerrain, -1, 1, 0)
+            call SetTerrainType(posX, posY - 128, UnTerrain, -1, 1, 0)
+            call SetTerrainType(posX + 128, posY - 128, UnTerrain, -1, 1, 0)
+
+            call RemoveUnit(bomb)
+            //! runtextmacro for("set i = id", "i < PLAYER_MAXINUM + BoxsCount")
+                set OrangeMushroom[i] = OrangeMushroom[i + 1]
+            //! runtextmacro for_end("set i = i + 1")
+            set BoxsCount = BoxsCount - 1
+        endmethod
+
+        public static method Reset takes nothing returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < count")
+                call SetTerrainType(blockX[i], blockY[i], blockType[i], -1, 1, 0)
+            //! runtextmacro for_end("set i = i + 1")
+            set count = 0
+        endmethod
+    endstruct
+    
     public function SetRestartMode takes nothing returns nothing
         set tk = tick.create(0)
     endfunction
@@ -273,6 +325,8 @@ library Stage initializer init
             call SetUnitAnimation(u, "Stand Second")
             call GroupAddUnit(SentinelGroup, u)
             call SetUnitUserData( u, 3 )
+        elseif angle == "Bomb" then
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'o006', x, y, 270 )
         else
             set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'opeo', x, y, 270 )
         endif
@@ -1264,6 +1318,7 @@ library Stage initializer init
         call tk.destroy()
         call Status.SetEscapers(0)
         call RemoveBox()
+        call BlockBoom.Reset()
         call ForGroup(SentinelGroup, function RemoveSentinel)
         call ForGroup(Frame_SentinelMissile, function RemoveSentinelMissile)
         call GroupClear( SentinelGroup )
