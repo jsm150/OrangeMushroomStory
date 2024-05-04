@@ -685,25 +685,7 @@ scope Frame initializer init
         endif
     endfunction
     
-    private function PlayersGroup takes nothing returns nothing
-        local integer i = 1
-        
-        if GravityChanger_Loading == false then
-        set BoxState = false
-        loop
-        exitwhen i > PLAYER_MAXINUM
-            if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                set OldX[i] = GetUnitX(OrangeMushroom[i])
-                set OldY[i] = GetUnitY(OrangeMushroom[i])
-            endif
-        set i = i + 1
-        endloop
-        set i = 1
-        loop
-        // + 4는 관전자 숫자이다.
-        exitwhen i > PLAYER_MAXINUM + Stage_BoxsCount + 4
-            if i <= PLAYER_MAXINUM + 4 then
-                if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING or i > PLAYER_MAXINUM then
+    private function ViewSetting takes integer i returns nothing
                     if CinematicMode == false then
                         if Observer_ViewNumber[i] == 0 then
                             if GravityChanger_State == false then
@@ -719,6 +701,27 @@ scope Frame initializer init
                             endif
                         endif
                     endif
+    endfunction
+    
+    private function PlayersGroup takes nothing returns nothing
+        local integer i = 1
+        
+        if GravityChanger_Loading == false then
+        set BoxState = false
+        loop
+        exitwhen i > PLAYER_MAXINUM
+            if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
+                set OldX[i] = GetUnitX(OrangeMushroom[i])
+                set OldY[i] = GetUnitY(OrangeMushroom[i])
+            endif
+        set i = i + 1
+        endloop
+        set i = 1
+        loop
+            exitwhen i > PLAYER_MAXINUM + Stage_BoxsCount
+            if i <= PLAYER_MAXINUM then
+                if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
+                    call ViewSetting(i)
                     call SquaresMoving(i)
                 endif
             else
@@ -727,6 +730,13 @@ scope Frame initializer init
             endif
         set i = i + 1
         endloop
+        
+        
+        // + 4는 관전자 숫자이다.
+        //! runtextmacro for("set i = PLAYER_MAXINUM + 1", "i <= PLAYER_MAXINUM + 4")
+            call ViewSetting(i)
+        //! runtextmacro for_end("set i = i + 1")
+
         
         set BoxState = false
         set i = 1
