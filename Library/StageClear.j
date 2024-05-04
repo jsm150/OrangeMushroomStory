@@ -26,7 +26,7 @@ library Stage initializer init
         local integer i = 1
         local integer j = 1
         local integer sum = 0
-        local integer worldCount = 14
+        local integer worldCount = 15
         
         loop
             exitwhen i > worldCount
@@ -1134,6 +1134,8 @@ library Stage initializer init
                 call Status.SetLevel(13, 9)
             elseif HiddenPortalState() == 13 then
                 call Status.SetLevel(14, 9)
+            elseif HiddenPortalState() == 14 then
+                call Status.SetLevel(15, 9)
             else
                 if Stage_WorldSkip then
                     call Status.SetLevel(2, 8)
@@ -1164,6 +1166,7 @@ library Stage initializer init
         set HiddenPortalCount[11] = 0
         set HiddenPortalCount[12] = 0
         set HiddenPortalCount[13] = 0
+        set HiddenPortalCount[14] = 0
         set GravityChanger_SentinelTime = 0
         set GravityChanger_SentinelTime2 = 0
         call PauseTimer(SentinelTimer)
@@ -1384,6 +1387,8 @@ library Stage initializer init
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지 II" )
             elseif HiddenPortalState() == 13 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 리프레" )
+            elseif HiddenPortalState() == 14 then
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 항구" )
             else
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World: 핑크 핑크" )
             endif
@@ -1690,6 +1695,9 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 15, 6, gg_rct_StartRect119)
         call SaveRectHandle(StartRectList, 15, 7, gg_rct_StartRect120)
         call SaveRectHandle(StartRectList, 15, 8, gg_rct_StartRect121)
+
+        call SaveRectHandle(StartRectList, 16, 1, gg_rct_StartRect122)
+
     
 
         // 2번째 소환위치

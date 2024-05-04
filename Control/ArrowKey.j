@@ -232,6 +232,12 @@ scope ArrowKey initializer init
                             call CreateUnit(Player(i-1), 'hrif', x, y-60, 90 )
                             call Observer_Start(i)
                         endif
+                    elseif IsUnitInRegion(Rect_Harbor, OrangeMushroom[i]) == true then
+                        if HiddenCode[13] == true then
+                            set Stage_HiddenPortalCount[14] = Stage_HiddenPortalCount[14] + 1
+                            call CreateUnit(Player(i-1), 'hrif', x, y-60, 90 )
+                            call Observer_Start(i)
+                        endif
                     elseif IsUnitInRegion(Rect_Pyramid, OrangeMushroom[i]) == true then
                         if HiddenCode[6] == true then
                             set Stage_HiddenPortalCount[7] = Stage_HiddenPortalCount[7] + 1
