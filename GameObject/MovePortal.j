@@ -1,6 +1,6 @@
 library MovePortal initializer Init needs MushroomMoving, Water 
 
-    //! runtextmacro Make_Container("tick", "15")
+    //! runtextmacro Make_Container("tick", "20")
 
     globals
         private tickContainer Ticks
@@ -9,7 +9,7 @@ library MovePortal initializer Init needs MushroomMoving, Water
     private struct Object
         public region Region
         public rect Rect
-        public boolean array CanMove[15]
+        public boolean array CanMove[20]
         public Object Next
 
         public static method create takes rect r returns thistype
@@ -32,7 +32,7 @@ library MovePortal initializer Init needs MushroomMoving, Water
             set t = null
 
             loop
-                exitwhen i >= 15
+                exitwhen i >= 20
                 set this.CanMove[i] = true
                 set i = i + 1
             endloop
@@ -168,7 +168,7 @@ library MovePortal initializer Init needs MushroomMoving, Water
                 exitwhen i >= 6
                 if Item[i] != 0 then
                     loop
-                        exitwhen j >= 15
+                        exitwhen j >= 20
                         set Item[i].CanMove[j] = true
                         set j = j + 1
                     endloop
