@@ -51,10 +51,16 @@ library Stage initializer init
             endif
 
             call SetTerrainType(posX - 128, posY - 128, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX - 128, posY - 128 ))
+            
             call SetTerrainType(posX, posY - 128, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX, posY - 128 ))
+
             call SetTerrainType(posX + 128, posY - 128, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX + 128, posY - 128 ))
 
             call RemoveUnit(bomb)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX, posY ))
             //! runtextmacro for("set i = id", "i < PLAYER_MAXINUM + BoxsCount")
                 set OrangeMushroom[i] = OrangeMushroom[i + 1]
             //! runtextmacro for_end("set i = i + 1")
