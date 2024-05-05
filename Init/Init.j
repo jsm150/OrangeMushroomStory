@@ -848,6 +848,23 @@ scope initialize initializer init
         call SetDoodadAnimation(27584, -29504, 128.00, 'D00A', false, "Death", false)
     endfunction
 
+    function SetOpLimit takes integer opLimit returns nothing
+        local integer pGameDll = JNGetModuleHandle("game.dll")
+        call JNMemorySetInteger(pGameDll + 0x2100B9, opLimit)
+        call JNMemorySetInteger(pGameDll + 0x239C1F, opLimit)
+        call JNMemorySetInteger(pGameDll + 0x23F941, opLimit)
+        call JNMemorySetInteger(pGameDll + 0x24255A, opLimit)
+        call JNMemorySetInteger(pGameDll + 0x8D0303, opLimit)
+        call JNMemorySetInteger(pGameDll + 0x8D133A, opLimit)
+        call JNMemorySetInteger(pGameDll + 0x970A85, opLimit)
+        call JNMemorySetInteger(pGameDll + 0x970A95, opLimit)
+        call JNMemorySetInteger(pGameDll + 0x972134, opLimit)
+//        call JNMemorySetInteger(pGameDll + 0x94CB58, opLimit)  // OpLimit인지 불확실
+//        call JNMemorySetInteger(pGameDll + 0x9A1F3C, opLimit)  // OpLimit인지 불확실
+//        call JNMemorySetInteger(pGameDll + 0x9A218E, opLimit)  // OpLimit인지 불확실
+//        call JNMemorySetInteger(pGameDll + 0x9A282E, opLimit)  // OpLimit인지 불확실
+    endfunction
+
     private function Main takes nothing returns nothing
         call PauseGame(true)
         call PauseGame(false)
@@ -875,6 +892,7 @@ scope initialize initializer init
         call Quest()
         call GameSaveDisable()
         call JNSetSyncDelay(15)
+        call SetOpLimit(1000000)
         
         call Multiboard_CreateMenu()
         call Stage_Clear(1)
