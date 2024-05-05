@@ -1263,18 +1263,20 @@ library Stage initializer init
                     call DisplayTimedTextToForce(GetPlayersAll(), 10.00, "※ 이동하면서 아래키를 눌러보세요!" )
                     call DisplayTimedTextToForce(GetPlayersAll(), 10.00, "|cffeeff55※ 해당 월드는 3-5 까지 있습니다.|r")
                 elseif Status.World == 12 and Status.Level == 1 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 블랙홀에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 블랙홀에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명2'를 참고해주세요." )
                 elseif Status.World == 12 and Status.Level == 3 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 석상에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 석상에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명2'를 참고해주세요." )
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 진동을 끌수 있습니다. 자세한건 F9를 참고해주세요." )
                 elseif Status.World == 13 and Status.Level == 1 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 보름달에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 보름달에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명2'를 참고해주세요." )
                 elseif Status.World == 15 and Status.Level == 1 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 용 비석에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 용 비석에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명3'을 참고해주세요." )
                 elseif Status.World == 15 and Status.Level == 2 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 뮤테에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 뮤테에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명3'을 참고해주세요." )
                 elseif Status.World == 15 and Status.Level == 3 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 레쉬와 다크 레쉬에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 레쉬와 다크 레쉬에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명3'을 참고해주세요." )
+                elseif Status.World == 16 and Status.Level == 1 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 폭탄에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명3'을 참고해주세요." )
                 endif
             endif
         endif
