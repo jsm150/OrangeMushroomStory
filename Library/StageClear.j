@@ -1230,13 +1230,13 @@ library Stage initializer init
                 call Inventory_ShowSkinInventoryButton.evaluate(true)
                 call CinematicModeBJ( false, GetPlayersAll() )
             elseif RandomStage_isRandom == false then
-                if Status.World >= 8 and Status.Level > 1 then
+                if Status.World >= 8 and Status.Level > 1 and Status.World != 16 then
                     call Status.SetContinues(Status.Continues + 1)
                 endif
                 if Status.Level == 1 then
                     call Inventory_ShowSkinInventoryButton.evaluate(true)
                     call CinematicModeBJ( false, GetPlayersAll() )
-                    if Status.World >= 8 then
+                    if Status.World >= 8 and Status.World != 16 then
                         call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 해당 월드는 클리어마다 컨티뉴가 1씩 추가됩니다." )
                     endif
                 endif
