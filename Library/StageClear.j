@@ -27,40 +27,48 @@ library Stage initializer init
         public static method Action takes unit bomb, integer id returns nothing
             local real posX = GetUnitX(bomb)
             local real posY = GetUnitY(bomb)
+            local real targetY = posY
             local integer i = 0
 
-            if GetTerrainType(posX - 128, posY - 128) != UnTerrain then
+            if GravityChanger_State then
+                set targetY = targetY + 128
+            else 
+                set targetY = targetY - 128
+            endif
+
+            if GetTerrainType(posX - 128, targetY) != UnTerrain then
                 set blockX[count] = posX - 128
-                set blockY[count] = posY - 128
-                set blockType[count] = GetTerrainType(posX - 128, posY - 128)
+                set blockY[count] = targetY
+                set blockType[count] = GetTerrainType(posX - 128, targetY)
                 set count = count + 1
             endif
 
-            if GetTerrainType(posX, posY - 128) != UnTerrain then
+            if GetTerrainType(posX, targetY) != UnTerrain then
                 set blockX[count] = posX
-                set blockY[count] = posY - 128
-                set blockType[count] = GetTerrainType(posX, posY - 128)
+                set blockY[count] = targetY
+                set blockType[count] = GetTerrainType(posX, targetY)
                 set count = count + 1
             endif
 
-            if GetTerrainType(posX + 128, posY - 128) != UnTerrain then
+            if GetTerrainType(posX + 128, targetY) != UnTerrain then
                 set blockX[count] = posX + 128
-                set blockY[count] = posY - 128
-                set blockType[count] = GetTerrainType(posX + 128, posY - 128)
+                set blockY[count] = targetY
+                set blockType[count] = GetTerrainType(posX + 128, targetY)
                 set count = count + 1
             endif
 
-            call SetTerrainType(posX - 128, posY - 128, UnTerrain, -1, 1, 0)
-            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX - 128, posY - 128 ))
-            
-            call SetTerrainType(posX, posY - 128, UnTerrain, -1, 1, 0)
-            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX, posY - 128 ))
+            call StartSound( gg_snd_Boom )
 
-            call SetTerrainType(posX + 128, posY - 128, UnTerrain, -1, 1, 0)
-            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX + 128, posY - 128 ))
+            call SetTerrainType(posX - 128, targetY, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX - 128, targetY ))
+            
+            call SetTerrainType(posX, targetY, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX, targetY ))
+
+            call SetTerrainType(posX + 128, targetY, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX + 128, targetY ))
 
             call RemoveUnit(bomb)
-            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX, posY ))
             //! runtextmacro for("set i = id", "i < PLAYER_MAXINUM + BoxsCount")
                 set OrangeMushroom[i] = OrangeMushroom[i + 1]
             //! runtextmacro for_end("set i = i + 1")
