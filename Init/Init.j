@@ -865,6 +865,17 @@ scope initialize initializer init
 //        call JNMemorySetInteger(pGameDll + 0x9A282E, opLimit)  // OpLimit인지 불확실
     endfunction
 
+    private function AllianceSetting takes nothing returns nothing
+        local integer i = 0
+        local integer j = 0
+
+        //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM - 1")
+        //! runtextmacro for("set j = i + 1", "j < PLAYER_MAXINUM")
+            call SetPlayerAllianceStateBJ(Player(i), Player(j), bj_ALLIANCE_ALLIED)
+        //! runtextmacro for_end("set j = j + 1")
+        //! runtextmacro for_end("set i = i + 1")
+    endfunction
+
     private function Main takes nothing returns nothing
         call PauseGame(true)
         call PauseGame(false)
@@ -872,6 +883,7 @@ scope initialize initializer init
         call PauseGame(false)
         call PauseGame(true)
         call PauseGame(false)
+        call AllianceSetting()
         call DzFrameHideInterface()
         call DzFrameEditBlackBorders(0, 0)
         call DzFrameSetAbsolutePoint(DzFrameGetChatMessage(), JN_FRAMEPOINT_LEFT, 0.02, 0.4)
