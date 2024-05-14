@@ -62,7 +62,7 @@ library Arrow initializer init needs Calculation
                     set Acceleration[i] = -40
                 endif
                 
-                if GetLocalPlayer() == Player(i-1) then 
+                if i <= PLAYER_MAXINUM and GetLocalPlayer() == Player(i-1) then 
                     call StartSound( gg_snd_FlashJump )
                     call CinematicFilterGenericBJ( 0.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 100, 100.00, 0.00, 0.00, 100.00, 100, 0, 100.00 )
                 endif
