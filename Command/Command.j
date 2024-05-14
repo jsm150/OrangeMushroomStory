@@ -320,9 +320,7 @@ scope Command initializer init
         endif
     endfunction
 
-    private function SoundSetting takes nothing returns nothing
-        local integer i = GetPlayerId(GetTriggerPlayer())+1
-        
+    public function SoundSetting takes integer i returns nothing
         if SoundState[i] == false then
             if Player(i-1) == GetLocalPlayer() then
                 call StopSound( BackgroundMusic, false, true )
@@ -444,7 +442,7 @@ scope Command initializer init
         elseif SubString(s, 0, 13) == "-진동켜기" then
             call StoneStatue_cameraControler.ShakeOn(GetPlayerId(GetTriggerPlayer()))
         elseif SubString(s, 0, 7) == "-음악" or SubString(s, 0, 6) == "-music" then
-            call SoundSetting()
+            call SoundSetting(i)
         elseif SubString(s, 0, 7) == "-강퇴" or SubString(s, 0, 5) == "-kick" then
             call KickMain()
         elseif s == "-관전" or s == "-obs" or s == "-observe" then
