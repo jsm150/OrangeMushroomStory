@@ -73,6 +73,7 @@ library Stage initializer init
                 set OrangeMushroom[i] = OrangeMushroom[i + 1]
             //! runtextmacro for_end("set i = i + 1")
             set BoxsCount = BoxsCount - 1
+            call MouseTeleportUI_Setting()
         endmethod
 
         public static method Reset takes nothing returns nothing
@@ -1340,6 +1341,7 @@ library Stage initializer init
         call GroupClear( SentinelGroup )
         call GroupClear( Frame_SentinelMissile )
         call SetObject()
+        call MouseTeleportUI_Setting()
         call Key_keyMap.ResetBlocks(Status.World, Status.Level)
         call GravityChanger_Init()
         call MorphStone_Init()

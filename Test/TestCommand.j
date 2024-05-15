@@ -66,6 +66,12 @@ library Test initializer Init
                     set MouseTeleport_State[i] = not(MouseTeleport_State[i])
                     set i = i + 1
                 endloop
+                
+                if MouseTeleport_State[1] then
+                    call MouseTeleportUI_On()
+                else
+                    call MouseTeleportUI_Off()
+                endif
             else
                 set MouseTeleport_State[S2I(SubString(s, 2, 3))] = not(MouseTeleport_State[S2I(SubString(s, 2, 3))])
             endif
