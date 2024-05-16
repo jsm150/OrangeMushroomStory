@@ -152,16 +152,19 @@ library MouseTeleportUI initializer Init
         set MouseTeleport_Number = 0
     endfunction
 
-    public function On takes nothing returns nothing
+    public function OnOff takes nothing returns nothing
+        local integer i = 0
         call Setting()
-        call DzFrameShow(backdrop, true)
-        call BJDebugMsg("On")
+
+        //! runtextmacro for("set i = 1", "i <= PLAYER_MAXINUM")
+            if MouseTeleport_State[i] and GetLocalPlayer() == Player(i - 1) then
+                call DzFrameShow(backdrop, true)
+            elseif GetLocalPlayer() == Player(i - 1) then
+                call DzFrameShow(backdrop, false)
+            endif
+        //! runtextmacro for_end("set i = i + 1")
     endfunction
 
-    public function Off takes nothing returns nothing
-        call DzFrameShow(backdrop, false)
-        call BJDebugMsg("Off")
-    endfunction
 
     public function TopLeft takes nothing returns location
         return Location(uiLeft, uiTop)
