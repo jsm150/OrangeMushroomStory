@@ -1540,8 +1540,8 @@ library Stage initializer init
                     if Status.World == 1 and Status.Level == 0 then
                         call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
                         if TESTMODE == true then
-                            call Status.SetLevel(14, 8)
-                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 리프레" )
+                            call Status.SetLevel(15, 8)
+                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 항구" )
                             call tk.start(3.0, false, function WorldTimer)
                         else
                             call tk.start(1.0, false, function WorldTimer)
