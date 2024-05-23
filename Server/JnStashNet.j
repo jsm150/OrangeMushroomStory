@@ -826,3 +826,16 @@ library JNStashNet initializer onInit requires Stash
     endfunction
 
 endlibrary
+/* 
+    불러온 Stash랑 다른 Stash를 저장할 경우
+    서버에 데이터 전체가 교체되는 것이 아닌,
+    저장한 Stash의 데이터만 덮어씌운다.
+    
+    ex) 
+    서버에 Stash.0 : "키1/데이터1", Stash.1 : "키2/데이터2", Stash.size : 2 가 있다고 가정할 때, 
+    새로운 Stash에 Stash.0 : "키20/데이터20", Stash.size : 1 이 있다고 하면,
+    새로운 Stash를 저장 했을 때, 서버에 있는 데이터가 완전 교체되는 것이 아닌,
+    새로운 Stash에는 없는 Stash.1은 그대로 서버에 남게된다.
+    하지만, 새로운 Stash에 있는 Stash.size : 1이 저장 되기 때문에,
+    로드 할때는 Stash.0만 불러오게 되서, 기존 데이터가 남아 있어도 상관없다.
+*/
