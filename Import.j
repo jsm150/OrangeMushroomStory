@@ -88,8 +88,10 @@
 //! import "Library\World.j"
 
 // Server
-//! import "Server\User.j"
 //! import "Server\ConnectCheck.j"
+//! import "Server\JnStashNet.j"
+//! import "Server\Stash.j"
+//! import "Server\User.j"
 
 // Textmacro
 //! import "Textmacro\STL.j"
