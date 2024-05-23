@@ -17,7 +17,7 @@ library Stage initializer init
         private tick tk
         public group SentinelGroup = CreateGroup()
     endglobals
-    
+
     public struct BlockBoom
         private static real array blockX
         private static real array blockY
@@ -346,7 +346,7 @@ library Stage initializer init
             set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'opeo', x, y, 270 )
         endif
         call SetUnitPosition(OrangeMushroom[PLAYER_MAXINUM+i], x, y)
-        
+
         set u = null
     endfunction
 
@@ -475,6 +475,13 @@ library Stage initializer init
             call SetTerrainType(20352, 28288 - 256, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(20352, 28288 - 384, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(24704, 25344, SENTINEL_TERRAIN, -1, 1, 0)
+        elseif i == 16 then
+            call SetTerrainType(-11392, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-11392 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-10208, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-10208 + 128, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-10208 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-10208 + 384, 9728, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
@@ -1092,6 +1099,38 @@ library Stage initializer init
                 call CreateObject(2, gg_rct_DarkRash15_8_001, "DarkRashRight")
                 call CreateObject(3, gg_rct_DarkRash15_8_002, "DarkRashLeft")
                 set BoxsCount = 3
+            endif
+        elseif Status.World == 16 then
+            if Status.Level == 1 then
+                call CreateObject(1, gg_rct_Bomb16_1_001, "Bomb")
+                call CreateObject(2, gg_rct_Bomb16_1_002, "Bomb")
+                call CreateObject(3, gg_rct_Bomb16_1_003, "Bomb")
+                set BoxsCount = 3
+            elseif Status.Level == 2 then
+                call CreateObject(1, gg_rct_Bomb16_2_001, "Bomb")
+                call CreateObject(2, gg_rct_Bomb16_2_002, "Bomb")
+                call CreateObject(3, gg_rct_Bomb16_2_003, "Bomb")
+                call CreateObject(4, gg_rct_Box16_2_001, "null")
+                set BoxsCount = 4
+            elseif Status.Level == 3 then
+                call SentinelChangeTerrain(16)
+                call CreateObject(0, gg_rct_Sentinel16_3_001, "SentinelRight")
+                call CreateObject(1, gg_rct_KingBloctopus16_3_001, "AutoRight")
+                call CreateObject(2, gg_rct_Propelly16_3_001, "FlyRight")
+                call CreateObject(3, gg_rct_Bomb16_3_001, "Bomb")
+                call CreateObject(4, gg_rct_Bomb16_3_002, "Bomb")
+                call CreateObject(5, gg_rct_Bomb16_3_003, "Bomb")
+                call CreateObject(6, gg_rct_Bomb16_3_004, "Bomb")
+                set BoxsCount = 6
+            elseif Status.Level == 4 then
+                call CreateObject(1, gg_rct_KingBloctopus16_4_001, "AutoRight")
+                call CreateObject(2, gg_rct_KingBloctopus16_4_002, "AutoRight")
+                call CreateObject(3, gg_rct_Bomb16_4_001, "Bomb")
+                call CreateObject(4, gg_rct_Bomb16_4_002, "Bomb")
+                call CreateObject(5, gg_rct_Bomb16_4_003, "Bomb")
+                call CreateObject(6, gg_rct_Bomb16_4_004, "Bomb")
+                call CreateObject(7, gg_rct_Bomb16_4_005, "Bomb")
+                set BoxsCount = 7
             endif
         endif
     endfunction
@@ -1770,6 +1809,9 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 15, 8, gg_rct_StartRect121)
 
         call SaveRectHandle(StartRectList, 16, 1, gg_rct_StartRect122)
+        call SaveRectHandle(StartRectList, 16, 2, gg_rct_StartRect123)
+        call SaveRectHandle(StartRectList, 16, 3, gg_rct_StartRect124)
+        call SaveRectHandle(StartRectList, 16, 4, gg_rct_StartRect125)
 
     
 

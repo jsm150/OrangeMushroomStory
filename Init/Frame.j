@@ -347,6 +347,7 @@ scope Frame initializer init
         set b = b or (Status.World == 10 and (Status.Level == 4 or Status.Level == 6 or Status.Level == 7))
         set b = b or (Status.World == 13 and (Status.Level == 4))
         set b = b or (Status.World == 14 and (Status.Level == 1 or Status.Level == 4))
+        set b = b or (Status.World == 16 and (Status.Level == 4))
         return b
     endfunction
                     
