@@ -6,6 +6,7 @@ library TestMode initializer Init
         elseif GetPlayerName(Player(0)) == "junghun" then
             call DestroyTrigger( GetTriggeringTrigger() )
         elseif GetPlayerName(Player(0)) == "orangemush" then
+            call DestroyTrigger( GetTriggeringTrigger() )
         else
             loop
             exitwhen i > PLAYER_MAXINUM
