@@ -1212,6 +1212,7 @@ library Stage initializer init
     public function ResetStage takes nothing returns nothing
         local integer i = 1
         local integer playerCount = 0
+        local boolean change = false
         
         set Loading = false
         if tk.data > 0 then
@@ -1279,6 +1280,58 @@ library Stage initializer init
         set GravityChanger_SentinelTime2 = 0
         call PauseTimer(SentinelTimer)
         call PauseTimer(SentinelTimer2)
+
+        //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+            set change = false
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and /*
+            */ tk.data > 0 and RandomStage_isRandom == false and PracticeMode == false and TESTMODE == false and DEBUG_MODE == false then
+            
+                if Status.World == 3 and User_UserDataList[i].CaptainJackMax < Status.Level then
+                    set User_UserDataList[i].CaptainJackMax = Status.Level
+                    set change = true
+                elseif Status.World == 4 and User_UserDataList[i].SubwayMax < Status.Level then
+                    set User_UserDataList[i].SubwayMax = Status.Level
+                    set change = true
+                elseif Status.World == 5 and User_UserDataList[i].ValentineMax < Status.Level then
+                    set User_UserDataList[i].ValentineMax = Status.Level
+                    set change = true
+                elseif Status.World == 6 and User_UserDataList[i].BeachMax < Status.Level then
+                    set User_UserDataList[i].BeachMax = Status.Level
+                    set change = true
+                elseif Status.World == 7 and User_UserDataList[i].CokeMax < Status.Level then
+                    set User_UserDataList[i].CokeMax = Status.Level
+                    set change = true
+                elseif Status.World == 8 and User_UserDataList[i].WorldChallengeMax < Status.Level then
+                    set User_UserDataList[i].WorldChallengeMax = Status.Level
+                    set change = true
+                elseif Status.World == 9 and User_UserDataList[i].CafeMax < Status.Level then
+                    set User_UserDataList[i].CafeMax = Status.Level
+                    set change = true
+                elseif Status.World == 10 and User_UserDataList[i].DesertMax < Status.Level then
+                    set User_UserDataList[i].DesertMax = Status.Level
+                    set change = true
+                elseif Status.World == 11 and User_UserDataList[i].ForestMax < Status.Level then
+                    set User_UserDataList[i].ForestMax = Status.Level
+                    set change = true
+                elseif Status.World == 12 and User_UserDataList[i].IceCaveMax < Status.Level then
+                    set User_UserDataList[i].IceCaveMax = Status.Level
+                    set change = true
+                elseif Status.World == 13 and User_UserDataList[i].DownTownMax < Status.Level then
+                    set User_UserDataList[i].DownTownMax = Status.Level
+                    set change = true
+                elseif Status.World == 14 and User_UserDataList[i].WorldChallenge2Max < Status.Level then
+                    set User_UserDataList[i].WorldChallenge2Max = Status.Level
+                    set change = true
+                elseif Status.World == 15 and User_UserDataList[i].RefreMax < Status.Level then
+                    set User_UserDataList[i].RefreMax = Status.Level
+                    set change = true
+                endif
+            endif
+            if change then
+                call User_UserDataList[i].Upload(i)
+            endif
+        //! runtextmacro for_end("set i = i + 1")
+
         if tk.data > 0 then
             if RandomStage_isRandom == true and RandomStage_state == 1 then
                 call Inventory_ShowSkinInventoryButton.evaluate(true)
@@ -1393,6 +1446,8 @@ library Stage initializer init
             call TimerStart(SentinelTimer, 1.5, false, function SentinelAttack)
         endif
         call TriggerExecute( Water_Trigger )
+
+        set i = 1
         loop
         exitwhen i > PLAYER_MAXINUM
             if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
