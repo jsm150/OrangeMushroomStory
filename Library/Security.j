@@ -41,10 +41,9 @@ library Security
             local integer i = 0
 
             set this.Key = ""
-            //! runtextmacro for("set i = 0", "i < 10")
+            //! runtextmacro for("set i = 0", "i < 32")
                 set this.Key = this.Key + JNStringSub(s, GetRandomInt(0, 35), 1)
             //! runtextmacro for_end("set i = i + 1")
-            set this.Key = this.Key + "a0ddb80752b13b1e2c80Bs"
 
             debug call JNWriteLog("  Security key: " + Key)
         endmethod
