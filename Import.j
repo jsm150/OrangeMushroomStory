@@ -1,4 +1,5 @@
 // JN
+//! import "JN\DzAPIFrameHandle.j"
 //! import "JN\DzAPIHardware.j"
 //! import "JN\DzAPIPlus.j"
 //! import "JN\DzAPISync.j"
@@ -90,6 +91,7 @@
 // Server
 //! import "Server\ConnectCheck.j"
 //! import "Server\JnStashNet.j"
+//! import "Server\Notice.j"
 //! import "Server\Stash.j"
 //! import "Server\User.j"
 
