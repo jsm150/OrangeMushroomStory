@@ -4,7 +4,39 @@ scope PracticeCommand initializer Init
     endglobals
 
     private function IsWorldClearBy takes integer i returns boolean
-        return User_UserList[i].GetClearCountByWorldId(Status.World) >= 1
+        local integer worldId = Status.World
+
+        if worldId >= 1 and worldId <= 2 then
+            return true
+        elseif worldId == 3 then
+            return User_UserDataList[i].CaptainJackCount >= 1
+        elseif worldId == 4 then
+            return User_UserDataList[i].SubwayCount >= 1
+        elseif worldId == 5 then
+            return User_UserDataList[i].ValentineCount >= 1
+        elseif worldId == 6 then
+            return User_UserDataList[i].BeachCount >= 1
+        elseif worldId == 7 then
+            return User_UserDataList[i].CokeCount >= 1
+        elseif worldId == 8 then
+            return User_UserDataList[i].WorldChallengeCount >= 1
+        elseif worldId == 9 then
+            return User_UserDataList[i].CafeCount >= 1
+        elseif worldId == 10 then
+            return User_UserDataList[i].DesertCount >= 1
+        elseif worldId == 11 then
+            return User_UserDataList[i].ForestCount >= 1
+        elseif worldId == 12 then
+            return User_UserDataList[i].IceCaveCount >= 1
+        elseif worldId == 13 then
+            return User_UserDataList[i].DownTownCount >= 1
+        elseif worldId == 14 then
+            return User_UserDataList[i].WorldChallenge2Count >= 1
+        elseif worldId == 15 then
+            return User_UserDataList[i].RefreCount >= 1
+        else
+            return false
+        endif
     endfunction
 
     private function Action takes nothing returns nothing

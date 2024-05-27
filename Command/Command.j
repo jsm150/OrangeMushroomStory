@@ -462,7 +462,7 @@ scope Command initializer init
         elseif s == "-연습모드" then
             call PracticeCommand_Execute.execute(i)
         elseif s == "-재연결" or s == "-rec" then
-            call User_Reconnecting.evaluate(i - 1)
+            call User_Reconnecting.execute(i - 1)
         elseif s == "-상점" or s == "-shop" then
             call ItemStore_ItemStoreUIList[i - 1].Show()
         elseif SubString(s, 0, 2) == "-p" and (GetPlayerName(GetTriggerPlayer()) == "2p4p" or StringCase(GetPlayerName(GetTriggerPlayer()), false) == "junghun" or StringCase(GetPlayerName(GetTriggerPlayer()), false) == "orangemush") then
