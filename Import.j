@@ -100,9 +100,10 @@
 //! import "Textmacro\Syntax.j"
 
 // UI
-//! import "UI\ItemStore.j"
-//! import "UI\ObserverUI.j"
 //! import "UI\Inventory.j"
+//! import "UI\ItemStore.j"
+//! import "UI\MouseTeleportUI.j"
+//! import "UI\ObserverUI.j"
 //! import "UI\WaitingRoom.j"
 
 // Test
