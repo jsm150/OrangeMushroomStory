@@ -68,6 +68,16 @@ scope initialize initializer init
     
     private function Quest takes nothing returns nothing
         local string s
+        set s = "12.6\n"
+        set s = s + "- 리프레 월드의 보상이 800리프로 하향 조정되었습니다.\n"
+        set s = s + "- 3챕터 입구 위치가 변경되었습니다.\n"
+        set s = s + "- 플레이어 이동 로직을 최적화 했습니다.\n"
+        set s = s + "- 심판 자리에서 음악 on/off 기능을 추가했습니다.\n"
+        set s = s + "- 심판 자리에서 오브젝트'화살'의 이펙트인 '배경이 번쩍이는 효과'를 제거했습니다.\n"
+        set s = s + "- 기본 채팅 상태가 [모두]로 변경됩니다.\n"
+        set s = s + "- 서버 저장 방식이 변경됩니다.\n"
+        set s = s + "- 아이템 '정령의 펜던트' 가격이 9,900리프로 인하됩니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.6", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "12.2\n"
         set s = s + "- 일부 아이템의 기능 및 가격이 수정됩니다\n"
         set s = s + "\n"
@@ -641,7 +651,7 @@ scope initialize initializer init
         set s = s + "-보라 문어와 동일하나, 레쉬 위에서 방향키(↓)를 누르면 다크 레쉬로 변신합니다.\n"
         set s = s + "\n"
         set s = s + "● 다크 레쉬\n"
-        set s = s + "-상자와 동일하나, 레쉬 위에서 방향키(↓)를 누르면 레쉬로 변신합니다.\n"
+        set s = s + "-상자와 동일하나, 다크 레쉬 위에서 방향키(↓)를 누르면 레쉬로 변신합니다.\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "오브젝트 설명4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "2-8에 분기점 입구가 있습니다.\n"
         set s = s + "이 곳에 입장하기 위해선 호스트가 비밀 코드를 입력하셔야 합니다.\n"
@@ -667,7 +677,7 @@ scope initialize initializer init
         set s = s + "얼음동굴 : 700\n"
         set s = s + "아랫마을 : 800\n"
         set s = s + "월드 첼린지II : 800\n"
-        set s = s + "리프레 : 1000\n"
+        set s = s + "리프레 : 800\n"
         set s = s + "랜덤 : 150~300\n"
         set s = s + "랜덤(하드) : 350~650\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "골드리프?", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
