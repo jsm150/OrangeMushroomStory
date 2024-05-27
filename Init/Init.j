@@ -848,7 +848,7 @@ scope initialize initializer init
         call SetDoodadAnimation(27584, -29504, 128.00, 'D00A', false, "Death", false)
     endfunction
 
-    function SetOpLimit takes integer opLimit returns nothing
+    private function SetOpLimit takes integer opLimit returns nothing
         local integer pGameDll = JNGetModuleHandle("game.dll")
         call JNMemorySetInteger(pGameDll + 0x2100B9, opLimit)
         call JNMemorySetInteger(pGameDll + 0x239C1F, opLimit)
