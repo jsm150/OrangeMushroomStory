@@ -2015,7 +2015,7 @@ library Key initializer Init
         call posList.AddFirst(blockLocation.create(-10240, 9856))
         call posList.AddFirst(blockLocation.create(-10240, 9856 + 128))
         call posList.AddFirst(blockLocation.create(-10240, 9856 + 256))
-        call posList.AddFirst(blockLocation.create(-12288, 9728))
+        call posList.AddFirst(blockLocation.create(-12544, 9728))
         call keyMapManager.AddAction(posList, "Remove")
         call keyMapManager.SaveEvent()
 
@@ -2057,6 +2057,8 @@ library Key initializer Init
         call posList.AddFirst(blockLocation.create(-19456, 9856))
         call posList.AddFirst(blockLocation.create(-19456, 9856 + 128))
         call posList.AddFirst(blockLocation.create(-19456, 9856 + 256))
+        call posList.AddFirst(blockLocation.create(-17152, 9472))
+        call posList.AddFirst(blockLocation.create(-17152 + 128, 9472))
         call keyMapManager.AddAction(posList, "Remove")
         call keyMapManager.SaveEvent()
 

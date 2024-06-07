@@ -482,6 +482,8 @@ library Stage initializer init
             call SetTerrainType(-10208 + 128, 9728, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(-10208 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(-10208 + 384, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-12416, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-12416 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
