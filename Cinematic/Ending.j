@@ -33,7 +33,8 @@ library Ending initializer init needs Cinematic, EndingSkip
         call tk.start(4.0, false, function CMTTick)
         if tk.data == 0 then
             call CinematicFilterGenericBJ( 1.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 0, 0, 0, 0 )
-            call EndingSkip_Ready(tk, 87)
+            call BJDebugMsg("　　　　　　엔딩을 스킵하려면 호스트 플레이어가 ESC를 5번 눌러주세요!" )
+            call EndingSkip_Ready(tk, 87, "엔딩을 스킵합니다!")
             call tk.start(5.5, false, function CMTTick)
         elseif tk.data == 1 then
             call EndingSkip_Disable()

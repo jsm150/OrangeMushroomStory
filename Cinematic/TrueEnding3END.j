@@ -73,7 +73,10 @@ library TrueEnding3END initializer init needs Cinematic
             call Inventory_ShowSkinInventoryButton.evaluate(false)
             call CinematicModeBJ( true, GetPlayersAll() )
             call CinematicFilterGenericBJ( 1.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 100.00, 100, 100, 100, 0 )
+            call BJDebugMsg("　　　　　　엔딩을 스킵하려면 호스트 플레이어가 ESC를 5번 눌러주세요!" )
+            call EndingSkip_Ready(tk, 40, "엔딩을 스킵합니다!")
         elseif tk.data == 1 then
+            call EndingSkip_Disable()
             call Cinematic_Start(5)
             set GameAllOver = true
             call CinematicFilterGenericBJ( 1.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 0, 0, 0, 0 )
@@ -203,6 +206,7 @@ library TrueEnding3END initializer init needs Cinematic
             call StartSound(gg_snd_FucX)
             call StartSound(gg_snd_GunSoundEffect001)
         elseif tk.data == 40 then
+            set GameAllOver = true
             call EndingMsgPrint("제작: z1z1z1")
         elseif tk.data == 41 then
             call EndingMsgPrint("엔딩중 사용된 BGM: Kirby's Epic Yarn - Rainbow Falls")

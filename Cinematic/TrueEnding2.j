@@ -72,8 +72,11 @@ library TrueEnding2 initializer init needs Cinematic
         call tk.start(4.0, false, function CMTTick)
         if tk.data == 0 then
             call CinematicFilterGenericBJ( 3.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 0, 0, 0, 0 )
+            call BJDebugMsg("　　　　　　인트로를 스킵하려면 호스트 플레이어가 ESC를 5번 눌러주세요!" )
+            call EndingSkip_Ready(tk, 41, "인트로를 스킵합니다!")
             call tk.start(4.0, false, function CMTTick)
         elseif tk.data == 1 then
+            call EndingSkip_Disable()
             call StartSound(gg_snd_KirbysEpicYarn)
             call PanCameraToTimed(13888, py, 0)
             call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2500.0, 0)
@@ -433,8 +436,12 @@ library TrueEnding2 initializer init needs Cinematic
         call tk.start(4.0, false, function CMTTick2)
         if tk.data == 0 then
             call CinematicFilterGenericBJ( 1.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 100, 0, 0, 0, 0 )
+            call BJDebugMsg("|cffeeff55엔딩을 스킵하려면 호스트 플레이어가 ESC를 5번 눌러주세요!|r" )
+            call EndingSkip_Ready(tk, 60, "엔딩을 스킵합니다!")
+            call tk.start(4.0, false, function CMTTick2)
         elseif tk.data == 1 then
             set Stage_Loading = true
+            call EndingSkip_Disable()
             call CinematicFilterGenericBJ( 2.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 100 )
             loop
             exitwhen i > PLAYER_MAXINUM
@@ -631,6 +638,7 @@ library TrueEnding2 initializer init needs Cinematic
             call StopSound(gg_snd_OM_GayBar, false, false)
             call tk.start(5.0, false, function CMTTick2)
         elseif tk.data == 60 then
+            call StopSound( BackgroundMusic, false, false )
             call StartSound(gg_snd_OM_EndingSound3)
             call EndingMsgPrint("제작: z1z1z1")
         elseif tk.data == 61 then
