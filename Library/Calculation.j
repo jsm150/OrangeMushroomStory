@@ -284,7 +284,7 @@ library Calculation
                 call SetUnitAnimationByIndex( u, 1 )
             endif
         elseif aniName == "Walk Second" then
-            if tp == 'ogru' or tp == 'uabo' or tp == 'otau'  or tp == 'umtw' or tp == 'h00N' or tp == 'h00J' or tp == 'h00O' or tp == 'h00M' or tp == 'h00L' or tp == 'h00K' then
+            if tp == 'ogru' or tp == 'uabo' or tp == 'otau' or tp == 'o005' or tp == 'umtw' or tp == 'h00N' or tp == 'h00J' or tp == 'h00O' or tp == 'h00M' or tp == 'h00L' or tp == 'h00K' then
                 call SetUnitAnimationByIndex( u, 4 )
             elseif tp == 'uobs' then
                 call SetUnitAnimationByIndex( u, 1 )

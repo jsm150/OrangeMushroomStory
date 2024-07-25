@@ -61,7 +61,7 @@ library Water initializer init
         local integer j = PLAYER_MAXINUM+1
         local integer types = GetUnitTypeId(GetTriggerUnit())
         
-        if (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'ohun' or types == 'ocat' or types == 'o006') then
+        if (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'ohun' or types == 'ocat' or types == 'o006' or types == 'o005') then
             if i > PLAYER_MAXINUM then 
                 loop
                 exitwhen OrangeMushroom[j] == GetTriggerUnit() or Stage_BoxsCount < j-PLAYER_MAXINUM
@@ -81,7 +81,7 @@ library Water initializer init
         local integer j = PLAYER_MAXINUM+1
         local integer types = GetUnitTypeId(GetTriggerUnit())
         
-        if (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'o006') then
+        if (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'o006' or types == 'o005') then
             if i > PLAYER_MAXINUM then 
                 loop
                 exitwhen OrangeMushroom[j] == GetTriggerUnit() or Stage_BoxsCount < j-PLAYER_MAXINUM
