@@ -65,6 +65,7 @@
 //! import "EasterEgg\CaveHiddenRectHint.j"
 //! import "EasterEgg\HiddenEvent.j"
 //! import "EasterEgg\HiddenWord.j"
+//! import "EasterEgg\Lever.j"
 //! import "EasterEgg\Maze.j"
 
 // Library
@@ -111,6 +112,6 @@
 // Test
 // //! import "Test\CodePrint.j"
 // //! import "Test\HandleProfiler.j"
-// //! import "Test\MouseTeleport.j"
+//! import "Test\MouseTeleport.j"
 // //! import "Test\TestCommand.j"
 // //! import "Test\TestMode.j"
