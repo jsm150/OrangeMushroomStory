@@ -37,6 +37,13 @@ library StoneStatue initializer Init needs Key
     
             call TimerStart(thistype.tk, time, false, function thistype.CameraShakeOff)
         endmethod
+
+        private static method onInit takes nothing returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+                set thistype.IsShakeOffForPlayer[i] = true
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
     endstruct
 
     private struct abstractBlock
