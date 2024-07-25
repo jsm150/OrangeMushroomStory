@@ -1119,11 +1119,12 @@ library Stage initializer init
                 call CreateObject(0, gg_rct_Sentinel16_3_001, "SentinelRight")
                 call CreateObject(1, gg_rct_KingBloctopus16_3_001, "AutoRight")
                 call CreateObject(2, gg_rct_Propelly16_3_001, "FlyRight")
-                call CreateObject(3, gg_rct_Bomb16_3_001, "Bomb")
-                call CreateObject(4, gg_rct_Bomb16_3_002, "Bomb")
-                call CreateObject(5, gg_rct_Bomb16_3_003, "Bomb")
-                call CreateObject(6, gg_rct_Bomb16_3_004, "Bomb")
-                set BoxsCount = 6
+                call CreateObject(3, gg_rct_Propelly16_3_002, "FlyRight")
+                call CreateObject(4, gg_rct_Bomb16_3_001, "Bomb")
+                call CreateObject(5, gg_rct_Bomb16_3_002, "Bomb")
+                call CreateObject(6, gg_rct_Bomb16_3_003, "Bomb")
+                call CreateObject(7, gg_rct_Bomb16_3_004, "Bomb")
+                set BoxsCount = 7
             elseif Status.Level == 4 then
                 call CreateObject(1, gg_rct_KingBloctopus16_4_001, "AutoRight")
                 call CreateObject(2, gg_rct_KingBloctopus16_4_002, "AutoRight")
