@@ -1,4 +1,4 @@
-library Test initializer Init
+library Test initializer Init needs Stage
     private function Trig_TestCommand_Actions takes nothing returns nothing    
         local integer ii = 1
         local integer i = 1

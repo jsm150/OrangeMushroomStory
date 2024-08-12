@@ -12,6 +12,7 @@
 
 // GameObject
 //! import "GameObject\Arrow.j"
+//! import "GameObject\Cart.j"
 //! import "GameObject\DragonStone.j"
 //! import "GameObject\GravityChanger.j"
 //! import "GameObject\Jumper.j"

@@ -72,6 +72,13 @@ scope Frame initializer init
                 set SpeedX = 0
             elseif pushNum != 0 then
                 // 좌측에 플레이어가 존재할 시
+
+                if pushNum > PLAYER_MAXINUM and GetUnitTypeId(OrangeMushroom[pushNum]) != 'o005' and GetUnitTypeId(OrangeMushroom[i]) == 'o005' and Cart_CanTakeOut(OrangeMushroom[i]) == false then
+                    // 카트가 유닛이랑 부딧혔을 때
+                    call Cart_Bump(OrangeMushroom[i], OrangeMushroom[pushNum], pushNum)
+                    return
+                endif
+                
                 if Acceleration[i] != 0 then
                     if Acceleration[pushNum] > 0 then
                         set Acceleration[pushNum] = -(Acceleration[pushNum]/2)
@@ -105,6 +112,13 @@ scope Frame initializer init
                 set SpeedX = 0
             elseif pushNum != 0 then
                 // 우측에 플레이어가 존재할 시
+
+                if pushNum > PLAYER_MAXINUM and GetUnitTypeId(OrangeMushroom[pushNum]) != 'o005' and GetUnitTypeId(OrangeMushroom[i]) == 'o005' and Cart_CanTakeOut(OrangeMushroom[i]) == false then
+                    // 카트가 유닛이랑 부딧혔을 때
+                    call Cart_Bump(OrangeMushroom[i], OrangeMushroom[pushNum], pushNum)
+                    return
+                endif
+
                 if Acceleration[i] != 0 then
                     if Acceleration[pushNum] < 0 then
                         set Acceleration[pushNum] = -(Acceleration[pushNum]/2)
@@ -687,21 +701,21 @@ scope Frame initializer init
     endfunction
     
     private function ViewSetting takes integer i returns nothing
-                    if CinematicMode == false then
-                        if Observer_ViewNumber[i] == 0 then
-                            if GravityChanger_State == false then
-                                call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, 128, false )
-                            else
-                                call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, -128, false )
-                            endif
-                        else
-                            if GravityChanger_State == false then
-                                call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[Observer_ViewNumber[i]], 0, 128, false )
-                            else
-                                call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[Observer_ViewNumber[i]], 0, -128, false )
-                            endif
-                        endif
-                    endif
+        if CinematicMode == false then
+            if Observer_ViewNumber[i] == 0 then
+                if GravityChanger_State == false then
+                    call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, 128, false )
+                else
+                    call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, -128, false )
+                endif
+            else
+                if GravityChanger_State == false then
+                    call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[Observer_ViewNumber[i]], 0, 128, false )
+                else
+                    call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[Observer_ViewNumber[i]], 0, -128, false )
+                endif
+            endif
+        endif
     endfunction
     
     private function PlayersGroup takes nothing returns nothing

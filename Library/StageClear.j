@@ -1,4 +1,4 @@
-library Stage initializer init
+library Stage initializer init needs Cart
     globals
         constant integer SENTINEL_TERRAIN = 'Xblm'
         
@@ -18,6 +18,25 @@ library Stage initializer init
         public group SentinelGroup = CreateGroup()
     endglobals
 
+    public function DeleteUnit takes integer which returns nothing
+        local integer i = 0
+
+        call RemoveUnit(OrangeMushroom[which])
+
+        //! runtextmacro for("set i = which", "i < PLAYER_MAXINUM + BoxsCount")
+            set OrangeMushroom[i] = OrangeMushroom[i + 1]
+
+            set gravity[i] = gravity[i + 1]
+            set LeftArrow[i] = LeftArrow[i + 1]
+            set RightArrow[i] = RightArrow[i + 1]
+            set Direction[i] = Direction[i + 1]
+            set Acceleration[i] = Acceleration[i + 1]
+        //! runtextmacro for_end("set i = i + 1")
+
+        set BoxsCount = BoxsCount - 1
+        call MouseTeleportUI_Setting()
+    endfunction
+
     public struct BlockBoom
         private static real array blockX
         private static real array blockY
@@ -28,7 +47,6 @@ library Stage initializer init
             local real posX = GetUnitX(bomb)
             local real posY = GetUnitY(bomb)
             local real targetY = posY
-            local integer i = 0
 
             if GravityChanger_State then
                 set targetY = targetY + 128
@@ -68,12 +86,7 @@ library Stage initializer init
             call SetTerrainType(posX + 128, targetY, UnTerrain, -1, 1, 0)
             call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX + 128, targetY ))
 
-            call RemoveUnit(bomb)
-            //! runtextmacro for("set i = id", "i < PLAYER_MAXINUM + BoxsCount")
-                set OrangeMushroom[i] = OrangeMushroom[i + 1]
-            //! runtextmacro for_end("set i = i + 1")
-            set BoxsCount = BoxsCount - 1
-            call MouseTeleportUI_Setting()
+            call DeleteUnit(id)
         endmethod
 
         public static method Reset takes nothing returns nothing
@@ -84,7 +97,7 @@ library Stage initializer init
             set count = 0
         endmethod
     endstruct
-    
+
     public function SetRestartMode takes nothing returns nothing
         set tk = tick.create(0)
     endfunction
@@ -207,6 +220,7 @@ library Stage initializer init
             set RightArrow[PLAYER_MAXINUM+i] = false
             set Direction[PLAYER_MAXINUM+i] = "Left"
             set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'o005', x, y, 270 )
+            call Cart_Add(OrangeMushroom[PLAYER_MAXINUM+i])
             call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
             if gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false then
                 call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk First" )
@@ -218,6 +232,7 @@ library Stage initializer init
             set RightArrow[PLAYER_MAXINUM+i] = true
             set Direction[PLAYER_MAXINUM+i] = "Right"
             set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'o005', x, y, 270 )
+            call Cart_Add(OrangeMushroom[PLAYER_MAXINUM+i])
             call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
             if (gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false) then
                 call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk Second" )
@@ -1453,6 +1468,7 @@ library Stage initializer init
         call Status.SetEscapers(0)
         call RemoveBox()
         call BlockBoom.Reset()
+        call Cart_Reset()
         call ForGroup(SentinelGroup, function RemoveSentinel)
         call ForGroup(Frame_SentinelMissile, function RemoveSentinelMissile)
         call GroupClear( SentinelGroup )

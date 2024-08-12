@@ -299,6 +299,8 @@ scope ArrowKey initializer init
                             call RashChange(Frame_MainPlayerY)
                         elseif types == 'o006' then
                             call Stage_BlockBoom.Action(OrangeMushroom[Frame_MainPlayerY], Frame_MainPlayerY)
+                        elseif types == 'o005' and Cart_CanTakeOut(OrangeMushroom[Frame_MainPlayerY]) then
+                            call Cart_TakeOut(OrangeMushroom[Frame_MainPlayerY], Frame_MainPlayerY)
                         endif
                     endif
                     
