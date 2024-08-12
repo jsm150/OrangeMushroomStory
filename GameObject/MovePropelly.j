@@ -124,6 +124,8 @@ scope Propelly initializer init
         call SetRect(t, 53, gg_rct_PropellyMove053, 0, "Right")
         call SetRect(t, 54, gg_rct_PropellyMove054, 0, "Left")
         call SetRect(t, 55, gg_rct_PropellyMove055, 0, "Left")
+        call SetRect(t, 56, gg_rct_PropellyMove056, 0, "Right")
+        call SetRect(t, 57, gg_rct_PropellyMove057, 0, "Left")
         call TriggerAddAction( t, function Main )
         
         set t = null

@@ -17,6 +17,73 @@ library Stage initializer init
         private tick tk
         public group SentinelGroup = CreateGroup()
     endglobals
+
+    public struct BlockBoom
+        private static real array blockX
+        private static real array blockY
+        private static integer array blockType
+        private static integer count = 0
+
+        public static method Action takes unit bomb, integer id returns nothing
+            local real posX = GetUnitX(bomb)
+            local real posY = GetUnitY(bomb)
+            local real targetY = posY
+            local integer i = 0
+
+            if GravityChanger_State then
+                set targetY = targetY + 128
+            else 
+                set targetY = targetY - 128
+            endif
+
+            if GetTerrainType(posX - 128, targetY) != UnTerrain then
+                set blockX[count] = posX - 128
+                set blockY[count] = targetY
+                set blockType[count] = GetTerrainType(posX - 128, targetY)
+                set count = count + 1
+            endif
+
+            if GetTerrainType(posX, targetY) != UnTerrain then
+                set blockX[count] = posX
+                set blockY[count] = targetY
+                set blockType[count] = GetTerrainType(posX, targetY)
+                set count = count + 1
+            endif
+
+            if GetTerrainType(posX + 128, targetY) != UnTerrain then
+                set blockX[count] = posX + 128
+                set blockY[count] = targetY
+                set blockType[count] = GetTerrainType(posX + 128, targetY)
+                set count = count + 1
+            endif
+
+            call StartSound( gg_snd_Boom )
+
+            call SetTerrainType(posX - 128, targetY, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX - 128, targetY ))
+            
+            call SetTerrainType(posX, targetY, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX, targetY ))
+
+            call SetTerrainType(posX + 128, targetY, UnTerrain, -1, 1, 0)
+            call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX + 128, targetY ))
+
+            call RemoveUnit(bomb)
+            //! runtextmacro for("set i = id", "i < PLAYER_MAXINUM + BoxsCount")
+                set OrangeMushroom[i] = OrangeMushroom[i + 1]
+            //! runtextmacro for_end("set i = i + 1")
+            set BoxsCount = BoxsCount - 1
+            call MouseTeleportUI_Setting()
+        endmethod
+
+        public static method Reset takes nothing returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < count")
+                call SetTerrainType(blockX[i], blockY[i], blockType[i], -1, 1, 0)
+            //! runtextmacro for_end("set i = i + 1")
+            set count = 0
+        endmethod
+    endstruct
     
     public function SetRestartMode takes nothing returns nothing
         set tk = tick.create(0)
@@ -26,7 +93,7 @@ library Stage initializer init
         local integer i = 1
         local integer j = 1
         local integer sum = 0
-        local integer worldCount = 14
+        local integer worldCount = 15
         
         loop
             exitwhen i > worldCount
@@ -273,11 +340,13 @@ library Stage initializer init
             call SetUnitAnimation(u, "Stand Second")
             call GroupAddUnit(SentinelGroup, u)
             call SetUnitUserData( u, 3 )
+        elseif angle == "Bomb" then
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'o006', x, y, 270 )
         else
             set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'opeo', x, y, 270 )
         endif
         call SetUnitPosition(OrangeMushroom[PLAYER_MAXINUM+i], x, y)
-        
+
         set u = null
     endfunction
 
@@ -406,6 +475,13 @@ library Stage initializer init
             call SetTerrainType(20352, 28288 - 256, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(20352, 28288 - 384, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(24704, 25344, SENTINEL_TERRAIN, -1, 1, 0)
+        elseif i == 16 then
+            call SetTerrainType(-11392, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-11392 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-10208, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-10208 + 128, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-10208 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-10208 + 384, 9728, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
@@ -1024,6 +1100,38 @@ library Stage initializer init
                 call CreateObject(3, gg_rct_DarkRash15_8_002, "DarkRashLeft")
                 set BoxsCount = 3
             endif
+        elseif Status.World == 16 then
+            if Status.Level == 1 then
+                call CreateObject(1, gg_rct_Bomb16_1_001, "Bomb")
+                call CreateObject(2, gg_rct_Bomb16_1_002, "Bomb")
+                call CreateObject(3, gg_rct_Bomb16_1_003, "Bomb")
+                set BoxsCount = 3
+            elseif Status.Level == 2 then
+                call CreateObject(1, gg_rct_Bomb16_2_001, "Bomb")
+                call CreateObject(2, gg_rct_Bomb16_2_002, "Bomb")
+                call CreateObject(3, gg_rct_Bomb16_2_003, "Bomb")
+                call CreateObject(4, gg_rct_Box16_2_001, "null")
+                set BoxsCount = 4
+            elseif Status.Level == 3 then
+                call SentinelChangeTerrain(16)
+                call CreateObject(0, gg_rct_Sentinel16_3_001, "SentinelRight")
+                call CreateObject(1, gg_rct_KingBloctopus16_3_001, "AutoRight")
+                call CreateObject(2, gg_rct_Propelly16_3_001, "FlyRight")
+                call CreateObject(3, gg_rct_Bomb16_3_001, "Bomb")
+                call CreateObject(4, gg_rct_Bomb16_3_002, "Bomb")
+                call CreateObject(5, gg_rct_Bomb16_3_003, "Bomb")
+                call CreateObject(6, gg_rct_Bomb16_3_004, "Bomb")
+                set BoxsCount = 6
+            elseif Status.Level == 4 then
+                call CreateObject(1, gg_rct_KingBloctopus16_4_001, "AutoRight")
+                call CreateObject(2, gg_rct_KingBloctopus16_4_002, "AutoRight")
+                call CreateObject(3, gg_rct_Bomb16_4_001, "Bomb")
+                call CreateObject(4, gg_rct_Bomb16_4_002, "Bomb")
+                call CreateObject(5, gg_rct_Bomb16_4_003, "Bomb")
+                call CreateObject(6, gg_rct_Bomb16_4_004, "Bomb")
+                call CreateObject(7, gg_rct_Bomb16_4_005, "Bomb")
+                set BoxsCount = 7
+            endif
         endif
     endfunction
     
@@ -1104,6 +1212,7 @@ library Stage initializer init
     public function ResetStage takes nothing returns nothing
         local integer i = 1
         local integer playerCount = 0
+        local boolean change = false
         
         set Loading = false
         if tk.data > 0 then
@@ -1134,6 +1243,8 @@ library Stage initializer init
                 call Status.SetLevel(13, 9)
             elseif HiddenPortalState() == 13 then
                 call Status.SetLevel(14, 9)
+            elseif HiddenPortalState() == 14 then
+                call Status.SetLevel(15, 9)
             else
                 if Stage_WorldSkip then
                     call Status.SetLevel(2, 8)
@@ -1164,22 +1275,75 @@ library Stage initializer init
         set HiddenPortalCount[11] = 0
         set HiddenPortalCount[12] = 0
         set HiddenPortalCount[13] = 0
+        set HiddenPortalCount[14] = 0
         set GravityChanger_SentinelTime = 0
         set GravityChanger_SentinelTime2 = 0
         call PauseTimer(SentinelTimer)
         call PauseTimer(SentinelTimer2)
+
+        //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+            set change = false
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and /*
+            */ tk.data > 0 and RandomStage_isRandom == false and PracticeMode == false and TESTMODE == false and DEBUG_MODE == false then
+            
+                if Status.World == 3 and User_UserDataList[i].CaptainJackMax < Status.Level then
+                    set User_UserDataList[i].CaptainJackMax = Status.Level
+                    set change = true
+                elseif Status.World == 4 and User_UserDataList[i].SubwayMax < Status.Level then
+                    set User_UserDataList[i].SubwayMax = Status.Level
+                    set change = true
+                elseif Status.World == 5 and User_UserDataList[i].ValentineMax < Status.Level then
+                    set User_UserDataList[i].ValentineMax = Status.Level
+                    set change = true
+                elseif Status.World == 6 and User_UserDataList[i].BeachMax < Status.Level then
+                    set User_UserDataList[i].BeachMax = Status.Level
+                    set change = true
+                elseif Status.World == 7 and User_UserDataList[i].CokeMax < Status.Level then
+                    set User_UserDataList[i].CokeMax = Status.Level
+                    set change = true
+                elseif Status.World == 8 and User_UserDataList[i].WorldChallengeMax < Status.Level then
+                    set User_UserDataList[i].WorldChallengeMax = Status.Level
+                    set change = true
+                elseif Status.World == 9 and User_UserDataList[i].CafeMax < Status.Level then
+                    set User_UserDataList[i].CafeMax = Status.Level
+                    set change = true
+                elseif Status.World == 10 and User_UserDataList[i].DesertMax < Status.Level then
+                    set User_UserDataList[i].DesertMax = Status.Level
+                    set change = true
+                elseif Status.World == 11 and User_UserDataList[i].ForestMax < Status.Level then
+                    set User_UserDataList[i].ForestMax = Status.Level
+                    set change = true
+                elseif Status.World == 12 and User_UserDataList[i].IceCaveMax < Status.Level then
+                    set User_UserDataList[i].IceCaveMax = Status.Level
+                    set change = true
+                elseif Status.World == 13 and User_UserDataList[i].DownTownMax < Status.Level then
+                    set User_UserDataList[i].DownTownMax = Status.Level
+                    set change = true
+                elseif Status.World == 14 and User_UserDataList[i].WorldChallenge2Max < Status.Level then
+                    set User_UserDataList[i].WorldChallenge2Max = Status.Level
+                    set change = true
+                elseif Status.World == 15 and User_UserDataList[i].RefreMax < Status.Level then
+                    set User_UserDataList[i].RefreMax = Status.Level
+                    set change = true
+                endif
+            endif
+            if change then
+                call User_UserDataList[i].Upload(i)
+            endif
+        //! runtextmacro for_end("set i = i + 1")
+
         if tk.data > 0 then
             if RandomStage_isRandom == true and RandomStage_state == 1 then
                 call Inventory_ShowSkinInventoryButton.evaluate(true)
                 call CinematicModeBJ( false, GetPlayersAll() )
             elseif RandomStage_isRandom == false then
-                if Status.World >= 8 and Status.Level > 1 then
+                if Status.World >= 8 and Status.Level > 1 and Status.World != 16 then
                     call Status.SetContinues(Status.Continues + 1)
                 endif
                 if Status.Level == 1 then
                     call Inventory_ShowSkinInventoryButton.evaluate(true)
                     call CinematicModeBJ( false, GetPlayersAll() )
-                    if Status.World >= 8 then
+                    if Status.World >= 8 and Status.World != 16 then
                         call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 해당 월드는 클리어마다 컨티뉴가 1씩 추가됩니다." )
                     endif
                 endif
@@ -1206,18 +1370,20 @@ library Stage initializer init
                     call DisplayTimedTextToForce(GetPlayersAll(), 10.00, "※ 이동하면서 아래키를 눌러보세요!" )
                     call DisplayTimedTextToForce(GetPlayersAll(), 10.00, "|cffeeff55※ 해당 월드는 3-5 까지 있습니다.|r")
                 elseif Status.World == 12 and Status.Level == 1 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 블랙홀에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 블랙홀에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명3'를 참고해주세요." )
                 elseif Status.World == 12 and Status.Level == 3 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 석상에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 석상에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명3'를 참고해주세요." )
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 진동을 끌수 있습니다. 자세한건 F9를 참고해주세요." )
                 elseif Status.World == 13 and Status.Level == 1 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 보름달에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 보름달에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명3'를 참고해주세요." )
                 elseif Status.World == 15 and Status.Level == 1 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 용 비석에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 용 비석에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명4'을 참고해주세요." )
                 elseif Status.World == 15 and Status.Level == 2 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 뮤테에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 뮤테에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명4'을 참고해주세요." )
                 elseif Status.World == 15 and Status.Level == 3 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 레쉬와 다크 레쉬에 대해 자세히 알고 싶다면 F9를 참고해주세요." )
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 레쉬와 다크 레쉬에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명4'을 참고해주세요." )
+                elseif Status.World == 16 and Status.Level == 1 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 폭탄에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명4'을 참고해주세요." )
                 endif
             endif
         endif
@@ -1261,11 +1427,13 @@ library Stage initializer init
         call tk.destroy()
         call Status.SetEscapers(0)
         call RemoveBox()
+        call BlockBoom.Reset()
         call ForGroup(SentinelGroup, function RemoveSentinel)
         call ForGroup(Frame_SentinelMissile, function RemoveSentinelMissile)
         call GroupClear( SentinelGroup )
         call GroupClear( Frame_SentinelMissile )
         call SetObject()
+        call MouseTeleportUI_Setting()
         call Key_keyMap.ResetBlocks(Status.World, Status.Level)
         call GravityChanger_Init()
         call MorphStone_Init()
@@ -1278,6 +1446,8 @@ library Stage initializer init
             call TimerStart(SentinelTimer, 1.5, false, function SentinelAttack)
         endif
         call TriggerExecute( Water_Trigger )
+
+        set i = 1
         loop
         exitwhen i > PLAYER_MAXINUM
             if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
@@ -1363,13 +1533,13 @@ library Stage initializer init
             elseif HiddenPortalState() == 2 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 3): 발렌타인 데이" )
             elseif HiddenPortalState() == 3 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 4): 해변" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 6): 해변" )
             elseif HiddenPortalState() == 4 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 펩시" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 4): 펩시" )
             elseif HiddenPortalState() == 5 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지" )
             elseif HiddenPortalState() == 7 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 6): 사막" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 사막" )
             elseif HiddenPortalState() == 8 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 엘린 숲" )
             elseif HiddenPortalState() == 9 then
@@ -1383,7 +1553,9 @@ library Stage initializer init
             elseif HiddenPortalState() == 12 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 월드 첼린지 II" )
             elseif HiddenPortalState() == 13 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 리프레" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 8): 리프레" )
+            elseif HiddenPortalState() == 14 then
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 항구" )
             else
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World: 핑크 핑크" )
             endif
@@ -1423,8 +1595,8 @@ library Stage initializer init
                     if Status.World == 1 and Status.Level == 0 then
                         call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
                         if TESTMODE == true then
-                            call Status.SetLevel(14, 8)
-                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 7): 리프레" )
+                            call Status.SetLevel(15, 8)
+                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 항구" )
                             call tk.start(3.0, false, function WorldTimer)
                         else
                             call tk.start(1.0, false, function WorldTimer)
@@ -1690,6 +1862,12 @@ library Stage initializer init
         call SaveRectHandle(StartRectList, 15, 6, gg_rct_StartRect119)
         call SaveRectHandle(StartRectList, 15, 7, gg_rct_StartRect120)
         call SaveRectHandle(StartRectList, 15, 8, gg_rct_StartRect121)
+
+        call SaveRectHandle(StartRectList, 16, 1, gg_rct_StartRect122)
+        call SaveRectHandle(StartRectList, 16, 2, gg_rct_StartRect123)
+        call SaveRectHandle(StartRectList, 16, 3, gg_rct_StartRect124)
+        call SaveRectHandle(StartRectList, 16, 4, gg_rct_StartRect125)
+
     
 
         // 2번째 소환위치

@@ -33,7 +33,6 @@ library MemoryLibEnd
 endlibrary
 
 // source: src/MemoryLibCommandButton.j
-//! import "DzAPIFrameHandle.j"
 
 library MemoryLibCommandButton requires MemoryLibBase, MemoryLibPrimitiveType, MemoryLibCommandButtonData, DzAPIFrameHandle
 

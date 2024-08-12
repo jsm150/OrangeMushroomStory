@@ -25,21 +25,27 @@ library ItemStore initializer Init needs RandomStage
         endmethod
 
         public method Purchase takes integer playerId returns nothing
-            if this.quantity == 0 or User_UserList[playerId].Balance() < this.price.ToInt() then
+            local Money now = User_UserDataList[playerId].Balance()
+            if this.quantity == 0 or now.ToInt() < this.price.ToInt() then
+                debug call JNWriteLog("  구매 실패!: 갸격 부족 or 갯수 0")
+                call now.destroy()
                 return
             endif
+            call now.destroy()
 
             if not(this.Check(playerId)) then
                 return
             endif
 
-            call User_UserList[playerId].Withdraw(playerId, this.price.ToInt())
-            call User_UserList[playerId].GoldLeafUpload(playerId)
+            call User_UserDataList[playerId].Withdraw(playerId, this.price)
+            set now = User_UserDataList[playerId].Balance()
             call PrivateLogging.evaluate(playerId, GetPlayerName(Player(playerId)) + "님이 골드리프 " + this.price.ToString() + "을 사용했습니다. 잔액은 " /*
-                */ + User_UserList[playerId].GoldLeaf.ToString() + "입니다.", "GoldLeafUseLog")
-
+            */ + now.ToString() + "입니다.", "GoldLeafUseLog")
+            
             set this.quantity = this.quantity - 1
             call this.GiveItem(playerId)
+            call User_UserDataList[playerId].Upload(playerId)
+            call now.destroy()
         endmethod
 
         public method PriceTag takes nothing returns string
@@ -90,12 +96,11 @@ library ItemStore initializer Init needs RandomStage
     // 정령의 펜던트
     private struct SpiritPendantItem extends Item
         private stub method Check takes integer playerId returns boolean
-            return User_UserList[playerId].SpiritPendant == 0
+            return User_UserDataList[playerId].SpiritPendant == 0
         endmethod 
 
         private stub method GiveItem takes integer playerId returns nothing
-            set User_UserList[playerId].SpiritPendant = 1
-            call User_UserList[playerId].InventoryUpload(playerId)
+            set User_UserDataList[playerId].SpiritPendant = 1
             call Events.Raise(StorageItemsBuyEventKey, StorageItemsBuyEvent.create(playerId))
         endmethod
     endstruct
@@ -249,7 +254,8 @@ library ItemStore initializer Init needs RandomStage
         endmethod
 
         public method Show takes nothing returns nothing
-            local string money = User_UserList[this.playerId].GoldLeaf.ToString()
+            local Money now = User_UserDataList[this.playerId].Balance()
+            local string money = now.ToString()
 
             set this.isOpen = true
             if GetLocalPlayer() == Player(this.playerId) then
@@ -264,6 +270,7 @@ library ItemStore initializer Init needs RandomStage
                 call DzFrameShow(this.goldLeafLetter, true)
             endif
             call this.itemList.Show(this.playerId, thistype.menuFrame)
+            call now.destroy()
         endmethod
 
         public method Hide takes nothing returns nothing
@@ -305,13 +312,15 @@ library ItemStore initializer Init needs RandomStage
         endmethod
 
         public method Redisplay takes nothing returns nothing
-            local string money = User_UserList[this.playerId].GoldLeaf.ToString()
+            local Money now = User_UserDataList[this.playerId].Balance()
+            local string money = now.ToString()
 
             if this.isOpen and this.playerId == Events.GetEventArgs(User_GoldLeafChangedEvent) and GetLocalPlayer() == Player(this.playerId) then
                 call DzFrameShow(this.goldLeafLetter, false)
                 call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + money + "        ")
                 call DzFrameShow(this.goldLeafLetter, true)
             endif
+            call now.destroy()
         endmethod
 
         public static method create takes integer playerId, ItemUIList itemList returns thistype
@@ -404,7 +413,7 @@ library ItemStore initializer Init needs RandomStage
         local ItemUIList uiList = ItemUIList.create()
         call uiList.Add(ItemUI.create("ContinueAddItemSlot.blp", ContinueAddItem.create(Money.create(300), 1)))
         call uiList.Add(ItemUI.create("HardRandomTicketSlot.blp", HardRandomTicketItem.create(Money.create(50), 1)))
-        call uiList.Add(ItemUI.create("SpiritPendantItemSlot.blp", SpiritPendantItem.create(Money.create(11900), 1)))
+        call uiList.Add(ItemUI.create("SpiritPendantItemSlot.blp", SpiritPendantItem.create(Money.create(9900), 1)))
         return uiList
     endfunction
 

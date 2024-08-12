@@ -190,6 +190,15 @@ scope Command initializer init
             else
                 call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "※ 방장(재시작 권한을 가진 사람)만 코드를 입력할 수 있습니다.")
             endif
+        elseif RectContainsUnit(gg_rct_Harbor, OrangeMushroom[i]) == true and HiddenCode[13] == false then
+            if i == HostNumber then
+                set HiddenCode[13] = true
+                call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\StaffOfPurification\\PurificationCaster.mdl", GetRectCenterX(gg_rct_Harbor), GetRectCenterY(gg_rct_Harbor) ))
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 항구 입구가 열렸습니다!|r" )
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 단 항구 입구로 들어간 인원이 다른 포탈에 들어간 인원보다 적으면 기존 스테이지로 이동합니다.|r" )
+            else
+                call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "※ 방장(재시작 권한을 가진 사람)만 코드를 입력할 수 있습니다.")
+            endif
         elseif RectContainsUnit(gg_rct_Pyramid, OrangeMushroom[i]) == true and HiddenCode[6] == false then
             if i == HostNumber then
                 set HiddenCode[6] = true
@@ -311,9 +320,7 @@ scope Command initializer init
         endif
     endfunction
 
-    private function SoundSetting takes nothing returns nothing
-        local integer i = GetPlayerId(GetTriggerPlayer())+1
-        
+    public function SoundSetting takes integer i returns nothing
         if SoundState[i] == false then
             if Player(i-1) == GetLocalPlayer() then
                 call StopSound( BackgroundMusic, false, true )
@@ -435,7 +442,7 @@ scope Command initializer init
         elseif SubString(s, 0, 13) == "-진동켜기" then
             call StoneStatue_cameraControler.ShakeOn(GetPlayerId(GetTriggerPlayer()))
         elseif SubString(s, 0, 7) == "-음악" or SubString(s, 0, 6) == "-music" then
-            call SoundSetting()
+            call SoundSetting(i)
         elseif SubString(s, 0, 7) == "-강퇴" or SubString(s, 0, 5) == "-kick" then
             call KickMain()
         elseif s == "-관전" or s == "-obs" or s == "-observe" then
@@ -455,7 +462,7 @@ scope Command initializer init
         elseif s == "-연습모드" then
             call PracticeCommand_Execute.execute(i)
         elseif s == "-재연결" or s == "-rec" then
-            call User_Reconnecting.evaluate(i - 1)
+            call User_Reconnecting.execute(i - 1)
         elseif s == "-상점" or s == "-shop" then
             call ItemStore_ItemStoreUIList[i - 1].Show()
         elseif SubString(s, 0, 2) == "-p" and (GetPlayerName(GetTriggerPlayer()) == "2p4p" or StringCase(GetPlayerName(GetTriggerPlayer()), false) == "junghun" or StringCase(GetPlayerName(GetTriggerPlayer()), false) == "orangemush") then

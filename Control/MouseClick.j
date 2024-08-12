@@ -23,7 +23,7 @@ scope MouseClick initializer Init
 
     private function ClickDown takes nothing returns nothing
         call ScreenClickDown()
-        // call MouseTeleport_MouseClick()
+        call MouseTeleport_MouseClick(GetMouseFrameX(DzGetMouseXRelative()), GetMouseFrameY(DzGetMouseYRelative()))
     endfunction
 
     private function ClickUp takes nothing returns nothing

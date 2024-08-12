@@ -173,69 +173,69 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPe
         // 주황 버섯
         call skinList.add(SkinInfo(SkinAnimationList[0]).Clone())
 
-        if User_UserList[id].GetClearCountByWorldId(5) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].ValentineCount >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 1", "i <= 7")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-        if User_UserList[id].GetClearCountByWorldId(6) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].BeachCount >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 8", "i <= 14")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-        if User_UserList[id].GetClearCountByWorldId(7) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].CokeCount >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 15", "i <= 21")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-        if User_UserList[id].GetClearCountByWorldId(8) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].WorldChallengeCount >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 22", "i <= 29")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-        if User_UserList[id].GetClearCountByWorldId(10) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].DesertCount >= 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[30]).Clone())
             call skinList.add(SkinInfo(SkinAnimationList[51]).Clone())
             call skinList.add(SkinInfo(SkinAnimationList[52]).Clone())
         endif
-        if User_UserList[id].GetClearCountByWorldId(12) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].IceCaveCount >= 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[31]).Clone())
             call skinList.add(SkinInfo(SkinAnimationList[53]).Clone())
         endif
-        if User_UserList[id].GetClearCountByWorldId(13) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].DownTownCount >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 32", "i <= 34")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-        if User_UserList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
+        if User_UserDataList[id].PinkBeanDesignation == 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[35]).Clone())
         endif
-        if User_UserList[id].GetClearCountByWorldId(11) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].ForestCount >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 36", "i <= 39")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
-        if User_UserList[id].GetClearCountByWorldId(9) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].CafeCount >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 40", "i <= 41")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
 
-        if User_UserList[id].BellaPet == 1 or DEBUG_MODE then
+        if User_UserDataList[id].BellaPet == 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[42]).Clone())
         endif
 
-        if User_UserList[id].LucidSoul == 1 or DEBUG_MODE then
+        if User_UserDataList[id].LucidSoul == 1 or DEBUG_MODE then
             call skinList.add(SkinInfo(SkinAnimationList[43]).Clone())
         endif
 
-        if User_UserList[id].GetClearCountByWorldId(14) >= 1 or DEBUG_MODE then
+        if User_UserDataList[id].WorldChallenge2Count >= 1 or DEBUG_MODE then
             //! runtextmacro for("set i = 44", "i <= 49")
                 call skinList.add(SkinInfo(SkinAnimationList[i]).Clone())
             //! runtextmacro for_end("set i = i + 1")
         endif
 
-        if User_UserList[id].SpiritPendant == 1 or DEBUG_MODE then
+        if User_UserDataList[id].SpiritPendant == 1 or DEBUG_MODE then
             call skinList.add(ConsumptionItem(SkinAnimationList[50]).Clone())
         endif
 
@@ -447,7 +447,8 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPe
             local integer skinIdx
             local integer frameIdx
             local integer max = thistype.size * this.page
-            local string money = User_UserList[this.playerId].GoldLeaf.ToString()
+            local Money now = User_UserDataList[this.playerId].Balance()
+            local string money = now.ToString()
 
             if max > this.skinList.size then
                 set max = this.skinList.size
@@ -468,6 +469,8 @@ library Inventory initializer Init needs TeamColor, TriggerSleepAction, SpiritPe
                 call DzFrameSetText(this.goldLeafLetter, "|cffffffff" + money + "        ")
                 call DzFrameShow(this.goldLeafLetter, true)
             endif
+
+            call now.destroy()
         endmethod
 
         public method Hide takes nothing returns nothing

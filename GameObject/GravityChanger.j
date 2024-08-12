@@ -43,7 +43,7 @@ library GravityChanger initializer init
     
     private function TypeCondition takes nothing returns boolean
         local integer kind = GetUnitTypeId(GetTriggerUnit())
-        return MushroomType(kind) or kind == 'opeo' or kind == 'ogru' or kind == 'otau' or kind == 'ocat' or kind == 'ohun' or kind == 'o000' or kind == 'o001' or kind == 'h00S' or kind == 'h00T'
+        return MushroomType(kind) or kind == 'opeo' or kind == 'ogru' or kind == 'otau' or kind == 'ocat' or kind == 'ohun' or kind == 'o000' or kind == 'o001' or kind == 'h00S' or kind == 'h00T' or kind == 'o006'
     endfunction
     
     public function ChangeTimerAction takes nothing returns nothing
@@ -325,6 +325,10 @@ library GravityChanger initializer init
         call SetRect(t, gg_rct_GravityChanger051)
         call SetRect(t, gg_rct_GravityChanger052)
         call SetRect(t, gg_rct_GravityChanger053)
+        call SetRect(t, gg_rct_GravityChanger054)
+        call SetRect(t, gg_rct_GravityChanger055)
+        call SetRect(t, gg_rct_GravityChanger056)
+        call SetRect(t, gg_rct_GravityChanger057)
 
         call TriggerAddAction( t, function Main )
         

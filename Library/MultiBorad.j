@@ -77,6 +77,10 @@ library Multiboard// initializer init
             set BackgroundMusic = gg_snd_LeafreBgm
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h00P')
+        elseif world == 16 then
+            set BackgroundMusic = gg_snd_Vacation_Beach
+            call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
+            call BackGroundChange('h00W')
         endif
     endfunction
 

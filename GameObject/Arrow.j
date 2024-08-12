@@ -62,7 +62,7 @@ library Arrow initializer init needs Calculation
                     set Acceleration[i] = -40
                 endif
                 
-                if GetLocalPlayer() == Player(i-1) then 
+                if i <= PLAYER_MAXINUM and GetLocalPlayer() == Player(i-1) then 
                     call StartSound( gg_snd_FlashJump )
                     call CinematicFilterGenericBJ( 0.50, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 100, 100.00, 0.00, 0.00, 100.00, 100, 0, 100.00 )
                 endif
@@ -77,7 +77,7 @@ library Arrow initializer init needs Calculation
         local integer j = PLAYER_MAXINUM+1
         local integer types = GetUnitTypeId(GetTriggerUnit())
         
-        if Stage_Loading == false and GravityChanger_Loading == false and (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'ocat' or types == 'ohun' or types == 'o000' or types == 'h00S' or types == 'h00T') then
+        if Stage_Loading == false and GravityChanger_Loading == false and (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'ocat' or types == 'ohun' or types == 'o000' or types == 'h00S' or types == 'h00T' or types == 'o006') then
             if i > PLAYER_MAXINUM then 
                 loop
                 exitwhen OrangeMushroom[j] == GetTriggerUnit() or Stage_BoxsCount < j-PLAYER_MAXINUM

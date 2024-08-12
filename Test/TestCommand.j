@@ -69,8 +69,7 @@ library Test initializer Init
             else
                 set MouseTeleport_State[S2I(SubString(s, 2, 3))] = not(MouseTeleport_State[S2I(SubString(s, 2, 3))])
             endif
-        elseif SubString(s, 0, 2) == "-o" then
-            set MouseTeleport_Number = S2I(SubString(s, 2, 3))
+            call MouseTeleportUI_OnOff()
         elseif SubString(s, 0, 2) == "-n" then
             call Stage_Clear(S2I(SubString(s, 2, 5)))
         elseif SubString(s, 0, 2) == "-c" and JNStringContains(s, "-code") == false then
@@ -78,7 +77,7 @@ library Test initializer Init
         elseif SubString(s, 0, 2) == "-a" then
             call SetUnitAnimationByIndex( OrangeMushroom[i], S2I(SubString(s, 2, 3)) )
         elseif SubString(s, 0, 2) == "-g" then
-            call User_UserList[0].Deposit(0, S2I(SubString(s, 2, 6)))
+            set User_UserDataList[0].GoldLeaf = S2I(SubString(s, 2, 8))
         endif
     endfunction
 

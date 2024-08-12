@@ -61,7 +61,7 @@ library Water initializer init
         local integer j = PLAYER_MAXINUM+1
         local integer types = GetUnitTypeId(GetTriggerUnit())
         
-        if (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'ohun' or types == 'ocat') then
+        if (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'ohun' or types == 'ocat' or types == 'o006') then
             if i > PLAYER_MAXINUM then 
                 loop
                 exitwhen OrangeMushroom[j] == GetTriggerUnit() or Stage_BoxsCount < j-PLAYER_MAXINUM
@@ -81,7 +81,7 @@ library Water initializer init
         local integer j = PLAYER_MAXINUM+1
         local integer types = GetUnitTypeId(GetTriggerUnit())
         
-        if (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau') then
+        if (MushroomType(types) or types == 'opeo' or types == 'ogru' or types == 'otau' or types == 'o006') then
             if i > PLAYER_MAXINUM then 
                 loop
                 exitwhen OrangeMushroom[j] == GetTriggerUnit() or Stage_BoxsCount < j-PLAYER_MAXINUM
@@ -165,6 +165,7 @@ library Water initializer init
         call RegionAddRect( Rects, gg_rct_Water062 )
         call RegionAddRect( Rects, gg_rct_Water063 )
         call RegionAddRect( Rects, gg_rct_Water064 )
+        call RegionAddRect( Rects, gg_rct_Water065 )
         
         call TriggerRegisterEnterRegion(t, Rects, null)
         call TriggerAddAction( t, function WaterIn )

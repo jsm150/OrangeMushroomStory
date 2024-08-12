@@ -12,6 +12,7 @@ library Rect initializer init
         public region SecretPortal
         public region Cave
         public region DragonEgg
+        public region Harbor
         public region NoEntry
         public region MissileZone
         public region Unlimited
@@ -31,12 +32,14 @@ library Rect initializer init
         set SecretPortal = CreateRegion()
         set Cave = CreateRegion()
         set DragonEgg = CreateRegion()
+        set Harbor = CreateRegion()
         
         set NoEntry = CreateRegion()
         set MissileZone = CreateRegion()
         set Unlimited = CreateRegion()
         call RegionAddRect(Unlimited, gg_rct_Unlimited001)
         call RegionAddRect(Unlimited, gg_rct_Unlimited002)
+        call RegionAddRect(Unlimited, gg_rct_Unlimited003)
         
         call RegionAddRect( Subway, gg_rct_Subway )
         call RegionAddRect( WitchTower, gg_rct_WitchTower )
@@ -49,6 +52,7 @@ library Rect initializer init
         call RegionAddRect( SecretPortal, gg_rct_SecretPortal )
         call RegionAddRect( Cave, gg_rct_Cave )
         call RegionAddRect( DragonEgg, gg_rct_DragonEgg )
+        call RegionAddRect( Harbor, gg_rct_Harbor )
         call RegionAddRect( Portal, gg_rct_Portal001 )
         call RegionAddRect( Portal, gg_rct_Portal002 )
         call RegionAddRect( Portal, gg_rct_Portal003 )
@@ -168,6 +172,12 @@ library Rect initializer init
         call RegionAddRect( Portal, gg_rct_Portal120 )
         call RegionAddRect( Portal, gg_rct_Portal121 )
 
+        // world 16
+        call RegionAddRect( Portal, gg_rct_Portal122 )
+        call RegionAddRect( Portal, gg_rct_Portal123 )
+        call RegionAddRect( Portal, gg_rct_Portal124 )
+        call RegionAddRect( Portal, gg_rct_Portal125 )
+
         call RegionAddRect( Portal, gg_rct_PortalSub097 )
         call RegionAddRect( Portal, gg_rct_PortalSub098 )
         call RegionAddRect( Portal, gg_rct_PortalSub099 )
@@ -190,6 +200,7 @@ library Rect initializer init
         call RegionAddRect( Portal, gg_rct_SecretPortal )
         call RegionAddRect( Portal, gg_rct_Cave )
         call RegionAddRect( Portal, gg_rct_DragonEgg )
+        call RegionAddRect( Portal, gg_rct_Harbor )
     endfunction
     
     private function init takes nothing returns nothing

@@ -7,11 +7,13 @@ library Mute initializer Init
         private region r1
         private region r2
 
-        private method Jumping takes region r returns nothing
+        private method Jumping takes region r, integer playerId returns nothing
             local integer i = 1
+            local boolean action = false
 
             //! runtextmacro for("set i = 1", "i <= PLAYER_MAXINUM")
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and HasUnit(r, GetUnitX(OrangeMushroom[i]), GetUnitY(OrangeMushroom[i]), i) then
+                    set action = true
                     call Jumper_Jumping(i, GetUnitX(OrangeMushroom[i]), GetUnitY(OrangeMushroom[i]))
                 endif
             //! runtextmacro for_end("set i = i + 1")
@@ -19,15 +21,20 @@ library Mute initializer Init
             //! runtextmacro for("set i = PLAYER_MAXINUM + 1", "i <= PLAYER_MAXINUM + Stage_BoxsCount")
                 if HasUnit(r, GetUnitX(OrangeMushroom[i]), GetUnitY(OrangeMushroom[i]), i) then
                     call Jumper_Jumping(i, GetUnitX(OrangeMushroom[i]), GetUnitY(OrangeMushroom[i]))
+                    set action = true
                 endif
             //! runtextmacro for_end("set i = i + 1")
+            
+            if action == false then
+                call DisplayTimedTextToPlayer(Player(playerId-1), 0, 0, 5, "※ 반대편 뮤테에 오브젝트가 있어야 이용할 수 있습니다.")
+            endif
         endmethod
 
-        public method Action takes unit user returns nothing
+        public method Action takes unit user, integer playerId returns nothing
             if IsUnitInRegion(this.r1, user) then
-                call this.Jumping(this.r2)
+                call this.Jumping(this.r2, playerId)
             else
-                call this.Jumping(this.r1)
+                call this.Jumping(this.r1, playerId)
             endif
         endmethod
 
@@ -55,7 +62,7 @@ library Mute initializer Init
 
         //! runtextmacro for("set i = 0", "i < a.size")
             if Mute(a[i]).Check(OrangeMushroom[playerId]) then
-                call Mute(a[i]).Action(OrangeMushroom[playerId])
+                call Mute(a[i]).Action(OrangeMushroom[playerId], playerId)
                 return
             endif
         //! runtextmacro for_end("set i = i + 1")
