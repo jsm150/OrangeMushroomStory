@@ -76,8 +76,15 @@ scope initialize initializer init
         set s = s + "- 심판 자리에서 오브젝트'화살'의 이펙트인 '배경이 번쩍이는 효과'를 제거했습니다.\n"
         set s = s + "- 기본 채팅 상태가 [모두]로 변경됩니다.\n"
         set s = s + "- 서버 저장 방식이 변경됩니다.\n"
-        set s = s + "- 아이템 '정령의 펜던트' 가격이 9,900리프로 인하됩니다."
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.6", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 아이템 '정령의 펜던트' 가격이 9,900리프로 인하됩니다.\n"
+        set s = s + "\n"
+        set s = s + "12.7\n"
+        set s = s + "- 2-8의 구조가 일부 변경되었습니다.\n"
+        set s = s + "- 엔딩을 스킵하는 기능이 추가되었습니다.\n"
+        set s = s + "- '카페'배경이 변경되었습니다.\n"
+        set s = s + "- '석상' 오브젝트를 상호작용 할 때의 화면 진동 효과를 비활성화 했습니다. \n"
+        
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.6~12.7", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "12.2\n"
         set s = s + "- 일부 아이템의 기능 및 가격이 수정됩니다\n"
         set s = s + "\n"
