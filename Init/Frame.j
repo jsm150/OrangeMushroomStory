@@ -72,6 +72,13 @@ scope Frame initializer init
                 set SpeedX = 0
             elseif pushNum != 0 then
                 // 좌측에 플레이어가 존재할 시
+
+                if pushNum > PLAYER_MAXINUM and GetUnitTypeId(OrangeMushroom[pushNum]) != 'o005' and GetUnitTypeId(OrangeMushroom[i]) == 'o005' and Cart_CanTakeOut(OrangeMushroom[i]) == false then
+                    // 카트가 유닛이랑 부딧혔을 때
+                    call Cart_Bump(OrangeMushroom[i], OrangeMushroom[pushNum], pushNum)
+                    return
+                endif
+                
                 if Acceleration[i] != 0 then
                     if Acceleration[pushNum] > 0 then
                         set Acceleration[pushNum] = -(Acceleration[pushNum]/2)
@@ -92,7 +99,7 @@ scope Frame initializer init
             else
                 set x = x-SpeedX+Acceleration[i]
             endif
-        elseif conleftmoving and conleft == false and GetUnitTypeId(OrangeMushroom[i]) == 'otau' then
+        elseif conleftmoving and conleft == false and (GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'o005') then
             //분홍문어블럭 우회전
             set LeftArrow[i] = false
             set RightArrow[i] = true
@@ -105,6 +112,13 @@ scope Frame initializer init
                 set SpeedX = 0
             elseif pushNum != 0 then
                 // 우측에 플레이어가 존재할 시
+
+                if pushNum > PLAYER_MAXINUM and GetUnitTypeId(OrangeMushroom[pushNum]) != 'o005' and GetUnitTypeId(OrangeMushroom[i]) == 'o005' and Cart_CanTakeOut(OrangeMushroom[i]) == false then
+                    // 카트가 유닛이랑 부딧혔을 때
+                    call Cart_Bump(OrangeMushroom[i], OrangeMushroom[pushNum], pushNum)
+                    return
+                endif
+
                 if Acceleration[i] != 0 then
                     if Acceleration[pushNum] < 0 then
                         set Acceleration[pushNum] = -(Acceleration[pushNum]/2)
@@ -124,7 +138,7 @@ scope Frame initializer init
             else
                 set x = x+SpeedX+Acceleration[i]
             endif
-        elseif conrightmoving and conright == false and GetUnitTypeId(OrangeMushroom[i]) == 'otau' then
+        elseif conrightmoving and conright == false and (GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'o005') then
             //분홍문어블럭 좌회전
             set LeftArrow[i] = true
             set RightArrow[i] = false
@@ -401,7 +415,7 @@ scope Frame initializer init
                 set y = y-gravity[i]
             endif
             set Landing[i] = true
-            if BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' or GetUnitTypeId(OrangeMushroom[i]) == 'h00S' or GetUnitTypeId(OrangeMushroom[i]) == 'h00T' then
+            if BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' or GetUnitTypeId(OrangeMushroom[i]) == 'h00S' or GetUnitTypeId(OrangeMushroom[i]) == 'h00T' or GetUnitTypeId(OrangeMushroom[i]) == 'o005' then
                 if GetUnitTypeId(OrangeMushroom[i]) == 'o001' then
                     if Direction[i] == "Left" then
                         if GravityChanger_State == false then
@@ -521,7 +535,7 @@ scope Frame initializer init
                 endif
                 set AirCheckState = true
             endif
-            if MushroomMoving_RectCondition(i, x, y, 40,"DownWidth") == false and (BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' or GetUnitTypeId(OrangeMushroom[i]) == 'h00S' or GetUnitTypeId(OrangeMushroom[i]) == 'h00T') and CinematicMode == false and GetUnitTypeId(OrangeMushroom[i]) != 'orai' then
+            if MushroomMoving_RectCondition(i, x, y, 40,"DownWidth") == false and (BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'o005' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' or GetUnitTypeId(OrangeMushroom[i]) == 'h00S' or GetUnitTypeId(OrangeMushroom[i]) == 'h00T') and CinematicMode == false and GetUnitTypeId(OrangeMushroom[i]) != 'orai' then
                 if LeftArrow[i] == true and MushroomMoving_RectCondition(i, x, y, gravity[i], "LeftHeight") then
                     call MushmomJumpEffect(i)
                     if GravityChanger_State == false then
@@ -687,21 +701,21 @@ scope Frame initializer init
     endfunction
     
     private function ViewSetting takes integer i returns nothing
-                    if CinematicMode == false then
-                        if Observer_ViewNumber[i] == 0 then
-                            if GravityChanger_State == false then
-                                call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, 128, false )
-                            else
-                                call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, -128, false )
-                            endif
-                        else
-                            if GravityChanger_State == false then
-                                call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[Observer_ViewNumber[i]], 0, 128, false )
-                            else
-                                call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[Observer_ViewNumber[i]], 0, -128, false )
-                            endif
-                        endif
-                    endif
+        if CinematicMode == false then
+            if Observer_ViewNumber[i] == 0 then
+                if GravityChanger_State == false then
+                    call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, 128, false )
+                else
+                    call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[i], 0, -128, false )
+                endif
+            else
+                if GravityChanger_State == false then
+                    call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[Observer_ViewNumber[i]], 0, 128, false )
+                else
+                    call SetCameraTargetControllerNoZForPlayer( Player(i-1), OrangeMushroom[Observer_ViewNumber[i]], 0, -128, false )
+                endif
+            endif
+        endif
     endfunction
     
     private function PlayersGroup takes nothing returns nothing

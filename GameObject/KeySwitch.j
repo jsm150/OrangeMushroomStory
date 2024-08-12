@@ -80,7 +80,7 @@ library Key initializer Init
     
     private function TypeCondition takes nothing returns boolean
         local integer kind = GetUnitTypeId(GetTriggerUnit())
-        return MushroomType(kind) or kind == 'opeo' or kind == 'ogru' or kind == 'otau' or kind == 'ocat' or kind == 'ohun' or kind == 'o000' or kind == 'o001' or kind == 'h00S' or kind == 'h00T' or kind == 'o006'
+        return MushroomType(kind) or kind == 'opeo' or kind == 'ogru' or kind == 'otau' or kind == 'ocat' or kind == 'ohun' or kind == 'o000' or kind == 'o001' or kind == 'h00S' or kind == 'h00T' or kind == 'o006' or kind == 'o005'
     endfunction
 
     private struct blockLocation
@@ -2015,7 +2015,7 @@ library Key initializer Init
         call posList.AddFirst(blockLocation.create(-10240, 9856))
         call posList.AddFirst(blockLocation.create(-10240, 9856 + 128))
         call posList.AddFirst(blockLocation.create(-10240, 9856 + 256))
-        call posList.AddFirst(blockLocation.create(-12288, 9728))
+        call posList.AddFirst(blockLocation.create(-12544, 9728))
         call keyMapManager.AddAction(posList, "Remove")
         call keyMapManager.SaveEvent()
 
@@ -2057,6 +2057,8 @@ library Key initializer Init
         call posList.AddFirst(blockLocation.create(-19456, 9856))
         call posList.AddFirst(blockLocation.create(-19456, 9856 + 128))
         call posList.AddFirst(blockLocation.create(-19456, 9856 + 256))
+        call posList.AddFirst(blockLocation.create(-17152, 9472))
+        call posList.AddFirst(blockLocation.create(-17152 + 128, 9472))
         call keyMapManager.AddAction(posList, "Remove")
         call keyMapManager.SaveEvent()
 

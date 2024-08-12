@@ -12,6 +12,7 @@
 
 // GameObject
 //! import "GameObject\Arrow.j"
+//! import "GameObject\Cart.j"
 //! import "GameObject\DragonStone.j"
 //! import "GameObject\GravityChanger.j"
 //! import "GameObject\Jumper.j"
@@ -65,6 +66,7 @@
 //! import "EasterEgg\CaveHiddenRectHint.j"
 //! import "EasterEgg\HiddenEvent.j"
 //! import "EasterEgg\HiddenWord.j"
+//! import "EasterEgg\Lever.j"
 //! import "EasterEgg\Maze.j"
 
 // Library
@@ -73,6 +75,7 @@
 //! import "Library\ClickEffect.j"
 //! import "Library\Decorate.j"
 //! import "Library\EndGameHook.j"
+//! import "Library\EXSetEffectXYHook.j"
 //! import "Library\MethodEvent.j"
 //! import "Library\MultiBorad.j"
 //! import "Library\MushroomMoving.j"
@@ -80,6 +83,7 @@
 //! import "Library\RandomStage.j"
 //! import "Library\RectList.j"
 //! import "Library\Security.j"
+//! import "Library\SpecialEffect.j"
 //! import "Library\StageClear.j"
 //! import "Library\StructList.j"
 //! import "Library\TeamColor.j"
@@ -109,6 +113,6 @@
 // Test
 // //! import "Test\CodePrint.j"
 // //! import "Test\HandleProfiler.j"
-// //! import "Test\MouseTeleport.j"
+//! import "Test\MouseTeleport.j"
 // //! import "Test\TestCommand.j"
 // //! import "Test\TestMode.j"

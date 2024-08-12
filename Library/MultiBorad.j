@@ -56,7 +56,7 @@ library Multiboard// initializer init
         elseif world == 9 or (world == 14 and stage == 3) then
             set BackgroundMusic = gg_snd_skylight_harbor
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
-            call BackGroundChange('hgyr')
+            call BackGroundChange('h00X')
         elseif world == 10 or (world == 14 and stage == 1) then
             set BackgroundMusic = gg_snd_Ariant
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )

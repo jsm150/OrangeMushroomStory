@@ -29,6 +29,8 @@ library MouseTeleportUI initializer Init
             return "폭탄"
         elseif kind == 'opeo' then
             return "상자"
+        elseif kind == 'o005' then
+            return "카트"
         elseif kind == 'orai' then
             return "비행기"
         endif

@@ -5,18 +5,21 @@ library EndingSkip initializer Init
         private tick Tk
         private integer SkipPoint
         private integer SetUp = 5
+        private string Msg
     endglobals
 
     
-    public function Ready takes tick tk, integer skipPoint returns nothing
-        call BJDebugMsg("　　　　　　엔딩을 스킵하려면 호스트 플레이어가 ESC를 5번 눌러주세요!" )
+    public function Ready takes tick tk, integer skipPoint, string msg returns nothing
         call EnableTrigger(T)
+        set Count = 0
         set Tk = tk
         set SkipPoint = skipPoint
+        set Msg = msg
     endfunction
 
     public function Disable takes nothing returns nothing
-        call DestroyTrigger(T)
+        call ClearTextMessages()
+        call DisableTrigger(T)
     endfunction
 
     private function Main takes nothing returns nothing
@@ -26,9 +29,9 @@ library EndingSkip initializer Init
 
         set Count = Count + 1
         if Count == SetUp then
-            call BJDebugMsg("　　　　　　|cffFF0202※ 엔딩을 스킵합니다!|r" )
+            call BJDebugMsg("　　　　　　|cffFF0202※ " + Msg + "|r" )
             set Tk.data = SkipPoint
-            call DestroyTrigger(T)
+            call DisableTrigger(T)
         endif
     endfunction
 

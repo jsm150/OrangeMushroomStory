@@ -73,8 +73,49 @@ library TrueEnding3 initializer init needs Cinematic
         call tk.start(4.0, false, function CMTTick)
         if tk.data == 0 then
             call CinematicFilterGenericBJ( 3.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 100.00, 100.00, 100.00, 0.00, 0, 0, 0, 0 )
+
+            loop
+                exitwhen i > PLAYER_MAXINUM
+                    if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
+                        set LeftArrow[i] = false
+                        set RightArrow[i] = false
+                        set gravity[i] = 0
+                        set SteppedPlayer[i] = 0
+                        if GetUnitTypeId(OrangeMushroom[i]) != OrangeMushroomType[i] then
+                            set MorphState[i] = false
+                            call RemoveUnit(OrangeMushroom[i])
+                            set OrangeMushroom[i] = CreateUnit(Player(i-1), OrangeMushroomType[i], GetRectMinX(ENDING_RECT)+(128*(i-1)), GetRectCenterY(ENDING_RECT), 270 )
+                            call SetUnitBlendTime(OrangeMushroom[i], 0.00)
+                        elseif GravityChanger_State == true then
+                            call RemoveUnit(OrangeMushroom[i])
+                            set OrangeMushroom[i] = CreateUnit(Player(i-1), OrangeMushroomType[i], GetRectMinX(ENDING_RECT)+(128*(i-1)), GetRectCenterY(ENDING_RECT), 270 )
+                            call SetUnitBlendTime(OrangeMushroom[i], 0.00)
+                        else
+                            call SetUnitPosition( OrangeMushroom[i], GetRectMinX(ENDING_RECT)+(128*(i-1)), GetRectCenterY(ENDING_RECT) )
+                        endif
+                        call SetUnitPosition( BackGroundUnits[i], 192, py )
+                        call SetUnitVertexColorBJ( BackGroundUnits[i], 0.00, 0.00, 0.00, 100 )
+                        if Player(i-1) == GetLocalPlayer() then
+                            call SetUnitVertexColorBJ( BackGroundUnits[i], 100.00, 100.00, 100.00, 0 )
+                        endif
+                        set Observer_State[i] = false
+                        set LevelClearState[i] = false
+                        set Observer_ViewNumber[i] = 0
+                        call UnitRemoveAbility( OrangeMushroom[i], 'Aloc' )
+                        call ShowUnitShow(OrangeMushroom[i])
+                        call UnitAddAbility( OrangeMushroom[i], 'Aloc' )
+                        call SetTextTagVisibility(NameTextTag[i], true)
+                        call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
+                    endif
+                set i = i + 1
+                endloop
+                set GravityChanger_State = false
+
+            call BJDebugMsg("　　　　　　인트로를 스킵하려면 호스트 플레이어가 ESC를 5번 눌러주세요!" )
+            call EndingSkip_Ready(tk, 34, "인트로를 스킵합니다!")
             call tk.start(4.0, false, function CMTTick)
         elseif tk.data == 1 then
+            call EndingSkip_Disable()
             call BackGroundChange('ebal')
             if TrueEnding3_CaveEnding == true then
                 call BackGroundChange('h002')
@@ -83,42 +124,7 @@ library TrueEnding3 initializer init needs Cinematic
             call PanCameraToTimed(-192, py, 0)
             call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2500.0, 0)
             call StartSound(gg_snd_KirbysEpicYarn)
-            loop
-            exitwhen i > PLAYER_MAXINUM
-                if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                    set LeftArrow[i] = false
-                    set RightArrow[i] = false
-                    set gravity[i] = 0
-                    set SteppedPlayer[i] = 0
-                    if GetUnitTypeId(OrangeMushroom[i]) != OrangeMushroomType[i] then
-                        set MorphState[i] = false
-                        call RemoveUnit(OrangeMushroom[i])
-                        set OrangeMushroom[i] = CreateUnit(Player(i-1), OrangeMushroomType[i], GetRectMinX(ENDING_RECT)+(128*(i-1)), GetRectCenterY(ENDING_RECT), 270 )
-                        call SetUnitBlendTime(OrangeMushroom[i], 0.00)
-                    elseif GravityChanger_State == true then
-                        call RemoveUnit(OrangeMushroom[i])
-                        set OrangeMushroom[i] = CreateUnit(Player(i-1), OrangeMushroomType[i], GetRectMinX(ENDING_RECT)+(128*(i-1)), GetRectCenterY(ENDING_RECT), 270 )
-                        call SetUnitBlendTime(OrangeMushroom[i], 0.00)
-                    else
-                        call SetUnitPosition( OrangeMushroom[i], GetRectMinX(ENDING_RECT)+(128*(i-1)), GetRectCenterY(ENDING_RECT) )
-                    endif
-                    call SetUnitPosition( BackGroundUnits[i], 192, py )
-                    call SetUnitVertexColorBJ( BackGroundUnits[i], 0.00, 0.00, 0.00, 100 )
-                    if Player(i-1) == GetLocalPlayer() then
-                        call SetUnitVertexColorBJ( BackGroundUnits[i], 100.00, 100.00, 100.00, 0 )
-                    endif
-                    set Observer_State[i] = false
-                    set LevelClearState[i] = false
-                    set Observer_ViewNumber[i] = 0
-                    call UnitRemoveAbility( OrangeMushroom[i], 'Aloc' )
-                    call ShowUnitShow(OrangeMushroom[i])
-                    call UnitAddAbility( OrangeMushroom[i], 'Aloc' )
-                    call SetTextTagVisibility(NameTextTag[i], true)
-                    call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
-                endif
-            set i = i + 1
-            endloop
-            set GravityChanger_State = false
+            
             call CinematicFilterGenericBJ( 5.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 100 )
             call tk.start(5.0, false, function CMTTick)
             //set tk.data = 33
@@ -296,6 +302,13 @@ library TrueEnding3 initializer init needs Cinematic
             call StopSound( gg_snd_OM_GayBar, false, true )
             call CinematicFilterGenericBJ( 1.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 100, 0, 0, 0, 0 )
         elseif tk.data == 34 then
+            call BackGroundChange('ebal')
+            if TrueEnding3_CaveEnding == true then
+                call BackGroundChange('h002')
+            endif
+            if BlackBoss == null then
+                set BlackBoss = CreateUnit(Player(11), 'hgry', -768, -30080, 270 )
+            endif
             call ClearTextMessages()
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 블랙의 공격을 피하면서 스톤볼 빔으로 공격하세요!" )
             //set BlackBoss = CreateUnit(Player(11), 'hgry', -512, -30848, 270 )

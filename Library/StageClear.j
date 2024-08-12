@@ -1,4 +1,4 @@
-library Stage initializer init
+library Stage initializer init needs Cart
     globals
         constant integer SENTINEL_TERRAIN = 'Xblm'
         
@@ -18,6 +18,25 @@ library Stage initializer init
         public group SentinelGroup = CreateGroup()
     endglobals
 
+    public function DeleteUnit takes integer which returns nothing
+        local integer i = 0
+
+        call RemoveUnit(OrangeMushroom[which])
+
+        //! runtextmacro for("set i = which", "i < PLAYER_MAXINUM + BoxsCount")
+            set OrangeMushroom[i] = OrangeMushroom[i + 1]
+
+            set gravity[i] = gravity[i + 1]
+            set LeftArrow[i] = LeftArrow[i + 1]
+            set RightArrow[i] = RightArrow[i + 1]
+            set Direction[i] = Direction[i + 1]
+            set Acceleration[i] = Acceleration[i + 1]
+        //! runtextmacro for_end("set i = i + 1")
+
+        set BoxsCount = BoxsCount - 1
+        call MouseTeleportUI_Setting()
+    endfunction
+
     public struct BlockBoom
         private static real array blockX
         private static real array blockY
@@ -28,7 +47,6 @@ library Stage initializer init
             local real posX = GetUnitX(bomb)
             local real posY = GetUnitY(bomb)
             local real targetY = posY
-            local integer i = 0
 
             if GravityChanger_State then
                 set targetY = targetY + 128
@@ -68,12 +86,7 @@ library Stage initializer init
             call SetTerrainType(posX + 128, targetY, UnTerrain, -1, 1, 0)
             call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX + 128, targetY ))
 
-            call RemoveUnit(bomb)
-            //! runtextmacro for("set i = id", "i < PLAYER_MAXINUM + BoxsCount")
-                set OrangeMushroom[i] = OrangeMushroom[i + 1]
-            //! runtextmacro for_end("set i = i + 1")
-            set BoxsCount = BoxsCount - 1
-            call MouseTeleportUI_Setting()
+            call DeleteUnit(id)
         endmethod
 
         public static method Reset takes nothing returns nothing
@@ -84,7 +97,7 @@ library Stage initializer init
             set count = 0
         endmethod
     endstruct
-    
+
     public function SetRestartMode takes nothing returns nothing
         set tk = tick.create(0)
     endfunction
@@ -196,6 +209,30 @@ library Stage initializer init
             set RightArrow[PLAYER_MAXINUM+i] = true
             set Direction[PLAYER_MAXINUM+i] = "Right"
             set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'otau', x, y, 270 )
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if (gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false) then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk Second" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell Second" )
+            endif
+        elseif angle == "CartLeft" then
+            set LeftArrow[PLAYER_MAXINUM+i] = true
+            set RightArrow[PLAYER_MAXINUM+i] = false
+            set Direction[PLAYER_MAXINUM+i] = "Left"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'o005', x, y, 270 )
+            call Cart_Add(OrangeMushroom[PLAYER_MAXINUM+i])
+            call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
+            if gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false then
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk First" )
+            else
+                call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Spell First" )
+            endif
+        elseif angle == "CartRight" then
+            set LeftArrow[PLAYER_MAXINUM+i] = false
+            set RightArrow[PLAYER_MAXINUM+i] = true
+            set Direction[PLAYER_MAXINUM+i] = "Right"
+            set OrangeMushroom[PLAYER_MAXINUM+i] = CreateUnit(Player(11), 'o005', x, y, 270 )
+            call Cart_Add(OrangeMushroom[PLAYER_MAXINUM+i])
             call SetUnitBlendTime(OrangeMushroom[PLAYER_MAXINUM+i], 0.00)
             if (gravity[PLAYER_MAXINUM+i] < 0 and MushroomMoving_RectCondition(PLAYER_MAXINUM+i, x, y, 40, "DownWidth") == false) then
                 call SetUnitAnimation( OrangeMushroom[PLAYER_MAXINUM+i], "Walk Second" )
@@ -482,6 +519,8 @@ library Stage initializer init
             call SetTerrainType(-10208 + 128, 9728, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(-10208 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(-10208 + 384, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-12416, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+            call SetTerrainType(-12416 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
         endif
     endfunction
     
@@ -1117,11 +1156,12 @@ library Stage initializer init
                 call CreateObject(0, gg_rct_Sentinel16_3_001, "SentinelRight")
                 call CreateObject(1, gg_rct_KingBloctopus16_3_001, "AutoRight")
                 call CreateObject(2, gg_rct_Propelly16_3_001, "FlyRight")
-                call CreateObject(3, gg_rct_Bomb16_3_001, "Bomb")
-                call CreateObject(4, gg_rct_Bomb16_3_002, "Bomb")
-                call CreateObject(5, gg_rct_Bomb16_3_003, "Bomb")
-                call CreateObject(6, gg_rct_Bomb16_3_004, "Bomb")
-                set BoxsCount = 6
+                call CreateObject(3, gg_rct_Propelly16_3_002, "FlyRight")
+                call CreateObject(4, gg_rct_Bomb16_3_001, "Bomb")
+                call CreateObject(5, gg_rct_Bomb16_3_002, "Bomb")
+                call CreateObject(6, gg_rct_Bomb16_3_003, "Bomb")
+                call CreateObject(7, gg_rct_Bomb16_3_004, "Bomb")
+                set BoxsCount = 7
             elseif Status.Level == 4 then
                 call CreateObject(1, gg_rct_KingBloctopus16_4_001, "AutoRight")
                 call CreateObject(2, gg_rct_KingBloctopus16_4_002, "AutoRight")
@@ -1428,6 +1468,7 @@ library Stage initializer init
         call Status.SetEscapers(0)
         call RemoveBox()
         call BlockBoom.Reset()
+        call Cart_Reset()
         call ForGroup(SentinelGroup, function RemoveSentinel)
         call ForGroup(Frame_SentinelMissile, function RemoveSentinelMissile)
         call GroupClear( SentinelGroup )

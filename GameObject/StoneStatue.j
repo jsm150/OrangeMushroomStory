@@ -37,6 +37,13 @@ library StoneStatue initializer Init needs Key
     
             call TimerStart(thistype.tk, time, false, function thistype.CameraShakeOff)
         endmethod
+
+        private static method onInit takes nothing returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+                set thistype.IsShakeOffForPlayer[i] = true
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
     endstruct
 
     private struct abstractBlock
@@ -146,7 +153,7 @@ library StoneStatue initializer Init needs Key
 
         private static method TypeCondition takes unit u returns boolean
             local integer kind = GetUnitTypeId(u)
-            return MushroomType(kind) or kind == 'opeo' or kind == 'ogru' or kind == 'otau' or kind == 'ocat' or kind == 'ohun' or kind == 'o000' or kind == 'o001' or kind == 'h00S' or kind == 'h00T' or kind == 'o006'
+            return MushroomType(kind) or kind == 'opeo' or kind == 'ogru' or kind == 'otau' or kind == 'ocat' or kind == 'ohun' or kind == 'o000' or kind == 'o001' or kind == 'h00S' or kind == 'h00T' or kind == 'o006' or kind == 'o005'
         endmethod
 
         method AddBlock takes abstractBlock b returns nothing
