@@ -3,7 +3,7 @@ scope initialize initializer init
         hashtable Hash = InitHashtable()
         
         constant integer PLAYER_MAXINUM = 7
-        constant boolean TESTMODE = false
+        constant boolean TESTMODE = true
         boolean PracticeMode = false
         unit array OrangeMushroom
         unit array BackGroundUnits
