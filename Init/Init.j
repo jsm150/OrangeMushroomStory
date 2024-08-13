@@ -664,7 +664,7 @@ scope initialize initializer init
         set s = s + "-열쇠 블럭은 파괴할 수 없습니다."
         set s = s + "\n"
         set s = s + "● 카트\n"
-        set s = s + "-분홍 문어 블럭과 동일하나, 다른 오브젝트와 옆으로(좌,우) 부딪힐 경우, 그 오브젝트를 카트에 담습니다.\n"
+        set s = s + "-분홍 문어 블럭과 동일하나 카트 이동방향에 다른 오브젝트가 있을 경우, 옆으로 부딪혔을 때 그 오브젝트를 카트에 담습니다.\n"
         set s = s + "-카트 안에 담긴 오브젝트가 있을 경우, 카트 위에서 방향키(↓)를 누르면 카트가 파괴되고, 담겨있던 오브젝트가 나옵니다.\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "오브젝트 설명4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "2-8에 분기점 입구가 있습니다.\n"
