@@ -73,9 +73,10 @@ scope Frame initializer init
             elseif pushNum != 0 then
                 // 좌측에 플레이어가 존재할 시
 
-                if pushNum > PLAYER_MAXINUM and GetUnitTypeId(OrangeMushroom[pushNum]) != 'o005' and GetUnitTypeId(OrangeMushroom[i]) == 'o005' and Cart_CanTakeOut(OrangeMushroom[i]) == false then
+                if pushNum > PLAYER_MAXINUM and (GetUnitTypeId(OrangeMushroom[pushNum]) != 'o005' and GetUnitTypeId(OrangeMushroom[pushNum]) != 'orai') and GetUnitTypeId(OrangeMushroom[i]) == 'o005' and Cart_CanTakeOut(OrangeMushroom[i]) == false then
                     // 카트가 유닛이랑 부딧혔을 때
                     call Cart_Bump(OrangeMushroom[i], OrangeMushroom[pushNum], pushNum)
+                    call Stage_DeleteUnit(pushNum)
                     return
                 endif
                 
@@ -113,9 +114,10 @@ scope Frame initializer init
             elseif pushNum != 0 then
                 // 우측에 플레이어가 존재할 시
 
-                if pushNum > PLAYER_MAXINUM and GetUnitTypeId(OrangeMushroom[pushNum]) != 'o005' and GetUnitTypeId(OrangeMushroom[i]) == 'o005' and Cart_CanTakeOut(OrangeMushroom[i]) == false then
+                if pushNum > PLAYER_MAXINUM and (GetUnitTypeId(OrangeMushroom[pushNum]) != 'o005' and GetUnitTypeId(OrangeMushroom[pushNum]) != 'orai') and GetUnitTypeId(OrangeMushroom[i]) == 'o005' and Cart_CanTakeOut(OrangeMushroom[i]) == false then
                     // 카트가 유닛이랑 부딧혔을 때
                     call Cart_Bump(OrangeMushroom[i], OrangeMushroom[pushNum], pushNum)
+                    call Stage_DeleteUnit(pushNum)
                     return
                 endif
 
@@ -369,6 +371,10 @@ scope Frame initializer init
         local integer SaveMainPlayerY
         local boolean b = false
         local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
+
+        if OrangeMushroom[i] == null then
+            return
+        endif
 
         if GetUnitTypeId(OrangeMushroom[i]) == 'orai' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' then
             if i > PLAYER_MAXINUM then

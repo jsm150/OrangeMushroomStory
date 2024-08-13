@@ -44,7 +44,7 @@ library Cart initializer Init needs TriggerSleepAction
         call SetUnitVertexColor(img, 255, 255, 255, 150)
         call SetUnitScale(img, 0.5, 0.5, 1)
         loop
-            exitwhen storage[idx] == null
+            exitwhen storage[idx] == 0
 
             call SetUnitX(img, GetUnitX(u))
             call SetUnitY(img, GetUnitY(u))
@@ -71,7 +71,6 @@ library Cart initializer Init needs TriggerSleepAction
         endif
 
         set storage[idx] = Unit.create(GetUnitTypeId(target), LeftArrow[which], RightArrow[which], Direction[which])
-        call Stage_DeleteUnit.evaluate(which)
         call ChangeCartImg.execute(u, idx)
 
         call DestroyEffect(AddSpecialEffect("war3mapImported\\Morph.mdl", x, y ))
@@ -81,6 +80,8 @@ library Cart initializer Init needs TriggerSleepAction
         local integer idx = Find(u)
         local real x = GetUnitX(u)
         local real y = GetUnitY(u)
+        local string first = "First"
+        local string second = "Second"
         call RemoveUnit(u)
 
         set OrangeMushroom[num] = CreateUnit(Player(11), storage[idx].Id, x, y, 270 )
@@ -89,12 +90,32 @@ library Cart initializer Init needs TriggerSleepAction
         set Direction[num] = storage[idx].Direction
         call SetUnitBlendTime(OrangeMushroom[num], 0.00)
 
-        if gravity[num] < 0 and MushroomMoving_RectCondition(num, x, y, 40, "DownWidth") == false then
-            call SetUnitAnimation( OrangeMushroom[num], "Walk First" )
-        else
-            call SetUnitAnimation( OrangeMushroom[num], "Spell First" )
+        debug call JNWriteLog("  " + storage[idx].Direction)
+
+        if GravityChanger_State then
+            set first = "Second"
+            set second = "First"
         endif
 
+        if gravity[num] < 0 and MushroomMoving_RectCondition(num, x, y, 40, "DownWidth") == false then
+            if storage[idx].Direction == "Left" then
+                call SetUnitAnimation( OrangeMushroom[num], "Stand " + first )
+            else
+                call SetUnitAnimation( OrangeMushroom[num], "Stand " + second )
+            endif
+        else
+            if storage[idx].Direction == "Left" then
+                call SetUnitAnimation( OrangeMushroom[num], "Spell " + first)
+            else
+                call SetUnitAnimation( OrangeMushroom[num], "Spell " + second )
+            endif
+        endif
+
+        set gravity[num] = 0
+        set Acceleration[num] = 0
+
+        call storage[idx].destroy()
+        set storage[idx] = 0
         call DestroyEffect(AddSpecialEffect("war3mapImported\\Morph.mdl", x, y ))
     endfunction
 

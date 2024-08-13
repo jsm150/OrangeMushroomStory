@@ -23,16 +23,15 @@ library Stage initializer init needs Cart
 
         call RemoveUnit(OrangeMushroom[which])
 
-        //! runtextmacro for("set i = which", "i < PLAYER_MAXINUM + BoxsCount")
-            set OrangeMushroom[i] = OrangeMushroom[i + 1]
+        set OrangeMushroom[which] = OrangeMushroom[PLAYER_MAXINUM + BoxsCount]
 
-            set gravity[i] = gravity[i + 1]
-            set LeftArrow[i] = LeftArrow[i + 1]
-            set RightArrow[i] = RightArrow[i + 1]
-            set Direction[i] = Direction[i + 1]
-            set Acceleration[i] = Acceleration[i + 1]
-        //! runtextmacro for_end("set i = i + 1")
+        set gravity[which] = gravity[PLAYER_MAXINUM + BoxsCount]
+        set LeftArrow[which] = LeftArrow[PLAYER_MAXINUM + BoxsCount]
+        set RightArrow[which] = RightArrow[PLAYER_MAXINUM + BoxsCount]
+        set Direction[which] = Direction[PLAYER_MAXINUM + BoxsCount]
+        set Acceleration[which] = Acceleration[PLAYER_MAXINUM + BoxsCount]
 
+        set OrangeMushroom[PLAYER_MAXINUM + BoxsCount] = null
         set BoxsCount = BoxsCount - 1
         call MouseTeleportUI_Setting()
     endfunction

@@ -3,7 +3,7 @@ scope initialize initializer init
         hashtable Hash = InitHashtable()
         
         constant integer PLAYER_MAXINUM = 7
-        constant boolean TESTMODE = false
+        constant boolean TESTMODE = true
         boolean PracticeMode = false
         unit array OrangeMushroom
         unit array BackGroundUnits
@@ -76,8 +76,15 @@ scope initialize initializer init
         set s = s + "- 심판 자리에서 오브젝트'화살'의 이펙트인 '배경이 번쩍이는 효과'를 제거했습니다.\n"
         set s = s + "- 기본 채팅 상태가 [모두]로 변경됩니다.\n"
         set s = s + "- 서버 저장 방식이 변경됩니다.\n"
-        set s = s + "- 아이템 '정령의 펜던트' 가격이 9,900리프로 인하됩니다."
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.6", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 아이템 '정령의 펜던트' 가격이 9,900리프로 인하됩니다.\n"
+        set s = s + "\n"
+        set s = s + "12.7\n"
+        set s = s + "- 2-8의 구조가 일부 변경되었습니다.\n"
+        set s = s + "- 엔딩을 스킵하는 기능이 추가되었습니다.\n"
+        set s = s + "- '카페'배경이 변경되었습니다.\n"
+        set s = s + "- '석상' 오브젝트를 상호작용 할 때의 화면 진동 효과를 비활성화 했습니다. \n"
+        
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.6~12.7", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "12.2\n"
         set s = s + "- 일부 아이템의 기능 및 가격이 수정됩니다\n"
         set s = s + "\n"
@@ -652,6 +659,13 @@ scope initialize initializer init
         set s = s + "\n"
         set s = s + "● 다크 레쉬\n"
         set s = s + "-상자와 동일하나, 다크 레쉬 위에서 방향키(↓)를 누르면 레쉬로 변신합니다.\n"
+        set s = s + "● 폭탄\n"
+        set s = s + "-상자와 동일하나, 폭탄 위에서 방향키(↓)를 누르면 폭탄 위치 기준, 아래 블럭 3칸이 가로 방향으로 파괴됩니다.\n"
+        set s = s + "-열쇠 블럭은 파괴할 수 없습니다."
+        set s = s + "\n"
+        set s = s + "● 카트\n"
+        set s = s + "-분홍 문어 블럭과 동일하나 카트 이동방향에 다른 오브젝트가 있을 경우, 옆으로 부딪혔을 때 그 오브젝트를 카트에 담습니다.\n"
+        set s = s + "-카트 안에 담긴 오브젝트가 있을 경우, 카트 위에서 방향키(↓)를 누르면 카트가 파괴되고, 담겨있던 오브젝트가 나옵니다.\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "오브젝트 설명4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "2-8에 분기점 입구가 있습니다.\n"
         set s = s + "이 곳에 입장하기 위해선 호스트가 비밀 코드를 입력하셔야 합니다.\n"
@@ -814,6 +828,7 @@ scope initialize initializer init
         set s = s + "● Waterflame - Red - Layerz OST\n"
         set s = s + "● Waterflame - Everybody Bounce\n"
         set s = s + "● Maple Story - Full Moon Goblin Night Market"
+        set s = s + "● EverPlanet - Vacation Beach"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "사용된 BGM", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
     endfunction
 
