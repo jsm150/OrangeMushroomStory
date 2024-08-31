@@ -1,6 +1,6 @@
 library Cart initializer Init needs TriggerSleepAction
 
-    private struct Unit
+    private struct UnitData
         public integer Id
         public boolean Left
         public boolean Right
@@ -19,7 +19,7 @@ library Cart initializer Init needs TriggerSleepAction
 
     globals
         private unit array uList
-        private Unit array storage
+        private UnitData array storage
         private integer count = 0
     endglobals
 
@@ -39,20 +39,19 @@ library Cart initializer Init needs TriggerSleepAction
     endfunction
 
     private function ChangeCartImg takes unit u, integer idx returns nothing
-        local unit img = CreateUnit(Player(11), storage[idx].Id, GetUnitX(u), GetUnitY(u), 270 )
-
-        call SetUnitVertexColor(img, 255, 255, 255, 150)
-        call SetUnitScale(img, 0.5, 0.5, 1)
+        local effect img = AddSpecialEffect(NativeIdToPath(storage[idx].Id), GetUnitX(u), GetUnitY(u))
+        call SetSpecialEffectAlpha(img, 150)
+        call EXSetEffectSize(img, 0.5)
+        call EXSetEffectZ(img, 1)
+        call EXEffectMatRotateZ(img, 270)
+        
         loop
             exitwhen storage[idx] == 0
-
-            call SetUnitX(img, GetUnitX(u))
-            call SetUnitY(img, GetUnitY(u))
-
+            call EXSetEffectXY(img, GetUnitX(u), GetUnitY(u))
             call TriggerSleepActionByTimer(0.02)
         endloop
 
-        call RemoveUnit(img)
+        call DestroyEffect(img)
         set img = null
     endfunction
 
@@ -70,7 +69,7 @@ library Cart initializer Init needs TriggerSleepAction
             return
         endif
 
-        set storage[idx] = Unit.create(GetUnitTypeId(target), LeftArrow[which], RightArrow[which], Direction[which])
+        set storage[idx] = UnitData.create(GetUnitTypeId(target), LeftArrow[which], RightArrow[which], Direction[which])
         call ChangeCartImg.execute(u, idx)
 
         call DestroyEffect(AddSpecialEffect("war3mapImported\\Morph.mdl", x, y ))

@@ -1,4 +1,41 @@
 library Calculation
+
+    globals
+        constant string Octopus_Path = "war3mapImported\\Bloctopus.mdl"
+        constant string KingOctopus_Path = "war3mapImported\\KingBloctopus.mdl"
+        constant string CokeMushroom_Path = "war3mapImported\\CokeMushroom.mdl"
+        constant string Blin_Path = "war3mapImported\\BlinNormal.mdl"
+        constant string Ghost_Path = "war3mapImported\\Blin.mdl"
+        constant string DarkRash_Path = "war3mapImported\\DarkRash.mdl"
+        constant string Rash_Path = "war3mapImported\\Rash.mdl"
+        constant string Bomb_Path = "war3mapImported\\Bomb.mdl"
+        constant string Box_Path = "war3mapImported\\Box.mdl"
+    endglobals
+
+    function NativeIdToPath takes integer id returns string
+        if id == 'opeo' then
+            return Box_Path
+        elseif id == 'ogru' then
+            return Octopus_Path
+        elseif id == 'otau' then
+            return KingOctopus_Path
+        elseif id == 'ocat' then
+            return CokeMushroom_Path
+        elseif id == 'o000' then
+            return Blin_Path
+        elseif id == 'o001' then
+            return Ghost_Path
+        elseif id == 'h00S' then
+            return Rash_Path
+        elseif id == 'h00T' then
+            return DarkRash_Path
+        elseif id == 'o006' then
+            return Bomb_Path
+        endif
+        
+        return ""
+    endfunction
+
     function DistanceBetween takes real x1, real y1, real x2, real y2 returns real // [x1,y2] 와 [x2,y2] 의 거리
         local real dx = x2 - x1
         local real dy = y2 - y1
