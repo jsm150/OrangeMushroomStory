@@ -105,7 +105,7 @@ library Stage initializer init needs Cart
         local integer i = 1
         local integer j = 1
         local integer sum = 0
-        local integer worldCount = 15
+        local integer worldCount = 16
         
         loop
             exitwhen i > worldCount
@@ -1284,6 +1284,8 @@ library Stage initializer init needs Cart
                 call Status.SetLevel(14, 9)
             elseif HiddenPortalState() == 14 then
                 call Status.SetLevel(15, 9)
+            elseif HiddenPortalState() == 15 then
+                call Status.SetLevel(16, 9)
             else
                 if Stage_WorldSkip then
                     call Status.SetLevel(2, 8)
@@ -1315,6 +1317,7 @@ library Stage initializer init needs Cart
         set HiddenPortalCount[12] = 0
         set HiddenPortalCount[13] = 0
         set HiddenPortalCount[14] = 0
+        set HiddenPortalCount[15] = 0
         set GravityChanger_SentinelTime = 0
         set GravityChanger_SentinelTime2 = 0
         call PauseTimer(SentinelTimer)
@@ -1363,6 +1366,9 @@ library Stage initializer init needs Cart
                     set change = true
                 elseif Status.World == 15 and User_UserDataList[i].RefreMax < Status.Level then
                     set User_UserDataList[i].RefreMax = Status.Level
+                    set change = true
+                elseif Status.World == 17 and User_UserDataList[i].MirrorMax < Status.Level then
+                    set User_UserDataList[i].MirrorMax = Status.Level
                     set change = true
                 endif
             endif
@@ -1599,6 +1605,8 @@ library Stage initializer init needs Cart
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 8): 리프레" )
             elseif HiddenPortalState() == 14 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 항구" )
+            elseif HiddenPortalState() == 15 then
+                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울 세계" )
             else
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World: 핑크 핑크" )
             endif
@@ -1911,7 +1919,8 @@ library Stage initializer init needs Cart
         call SaveRectHandle(StartRectList, 16, 3, gg_rct_StartRect124)
         call SaveRectHandle(StartRectList, 16, 4, gg_rct_StartRect125)
 
-    
+        call SaveRectHandle(StartRectList, 17, 1, gg_rct_StartRect130)
+
 
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub109)

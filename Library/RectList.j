@@ -13,6 +13,7 @@ library Rect initializer init
         public region Cave
         public region DragonEgg
         public region Harbor
+        public region Mirror
         public region NoEntry
         public region MissileZone
         public region Unlimited
@@ -33,6 +34,7 @@ library Rect initializer init
         set Cave = CreateRegion()
         set DragonEgg = CreateRegion()
         set Harbor = CreateRegion()
+        set Mirror = CreateRegion()
         
         set NoEntry = CreateRegion()
         set MissileZone = CreateRegion()
@@ -53,6 +55,7 @@ library Rect initializer init
         call RegionAddRect( Cave, gg_rct_Cave )
         call RegionAddRect( DragonEgg, gg_rct_DragonEgg )
         call RegionAddRect( Harbor, gg_rct_Harbor )
+        call RegionAddRect( Mirror, gg_rct_Mirror )
         call RegionAddRect( Portal, gg_rct_Portal001 )
         call RegionAddRect( Portal, gg_rct_Portal002 )
         call RegionAddRect( Portal, gg_rct_Portal003 )
@@ -201,6 +204,7 @@ library Rect initializer init
         call RegionAddRect( Portal, gg_rct_Cave )
         call RegionAddRect( Portal, gg_rct_DragonEgg )
         call RegionAddRect( Portal, gg_rct_Harbor )
+        call RegionAddRect( Portal, gg_rct_Mirror )
     endfunction
     
     private function init takes nothing returns nothing
