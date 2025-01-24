@@ -1481,6 +1481,9 @@ library Stage initializer init needs Cart
         call MovePortal_ResetCanMove.execute(Status.World, Status.Level)
         call StoneStatue_ResetBlocks.execute(Status.World, Status.Level)
         call Frame_LaserBlockHistory.Clear()
+        if Status.World == 17 then
+            call Mirror_Reset()
+        endif
         set StartRect = LoadRectHandle(StartRectList, Status.World, Status.Level)
         if CountUnitsInGroup(SentinelGroup) > 0 then
             call TimerStart(SentinelTimer, 1.5, false, function SentinelAttack)

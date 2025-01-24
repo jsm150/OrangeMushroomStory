@@ -43,6 +43,9 @@ scope ArrowKey initializer init
         if GetUnitTypeId(OrangeMushroom[i]) != 'ogru' and GetUnitTypeId(OrangeMushroom[i]) != 'otau' and GetUnitTypeId(OrangeMushroom[i]) != 'o000' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
             set LeftArrow[i] = true
             set Direction[i] = "Left"
+            if LeftArrow[i] == true and RightArrow[i] == true and DownArrow[i] == true then
+                call Mirror_Main(i, Status.World, Status.Level)
+            endif
             if pet != 0 then
                 call pet.GoLeft()
             endif
@@ -65,6 +68,9 @@ scope ArrowKey initializer init
         local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
         if GetUnitTypeId(OrangeMushroom[i]) != 'ogru' and GetUnitTypeId(OrangeMushroom[i]) != 'otau' and GetUnitTypeId(OrangeMushroom[i]) != 'o000' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
             set RightArrow[i] = true
+            if LeftArrow[i] == true and RightArrow[i] == true and DownArrow[i] == true then
+                call Mirror_Main(i, Status.World, Status.Level)
+            endif
             if pet != 0 then
                 call pet.GoRight()
             endif
@@ -169,9 +175,16 @@ scope ArrowKey initializer init
         local real y = GetUnitY(OrangeMushroom[i])
         local integer types
         local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
+        local boolean mirrorApply = false
 
         set DownArrow[i] = true
         if Stage_Loading == false and Observer_State[i] == false and GravityChanger_Loading == false then
+
+            if LeftArrow[i] == true and RightArrow[i] == true then
+                set mirrorApply = Mirror_Main(i, Status.World, Status.Level)
+            endif
+
+            if mirrorApply == false then
             if MushroomMoving_RectCondition(i, x, y, 40,"DownWidth") == false then
                 if IsUnitInRegion(Rect_Portal, OrangeMushroom[i]) == true and MorphState[i] == false then
                     if IsUnitInRegion(Rect_Subway, OrangeMushroom[i]) == true then
@@ -333,6 +346,8 @@ scope ArrowKey initializer init
             if ((IsUnitInRegion(TeleportStone_Region, OrangeMushroom[i]) == false and IsUnitInRegion(TeleportMoon_Region, OrangeMushroom[i]) == false) or Frame_MainPlayerY == 0) and Status.World == 11 or (Status.World == 14 and Status.Level == 2) then
                 call ShortTeleport_Main(i, x, y)
             endif
+            endif
+
         endif
     endfunction
     

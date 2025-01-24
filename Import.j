@@ -17,6 +17,7 @@
 //! import "GameObject\GravityChanger.j"
 //! import "GameObject\Jumper.j"
 //! import "GameObject\KeySwitch.j"
+//! import "GameObject\Mirror.j"
 //! import "GameObject\MorphStone.j"
 //! import "GameObject\MovePortal.j"
 //! import "GameObject\MovePropelly.j"

@@ -1,14 +1,7 @@
 library Multiboard// initializer init
-    function BackGroundChange takes integer unitType returns nothing
-        local integer i = 1
-        local real x
-        local real y
-        
-        loop
-        exitwhen i > PLAYER_MAXINUM
-            if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                set x = GetUnitX(BackGroundUnits[i])
-                set y = GetUnitY(BackGroundUnits[i])
+    function BackGroundChangeById takes integer i, integer unitType returns nothing
+        local real x = GetUnitX(BackGroundUnits[i])
+        local real y = GetUnitY(BackGroundUnits[i])
                 call RemoveUnit(BackGroundUnits[i])
                 set BackGroundUnits[i] = CreateUnit(Player(i-1), unitType, x, y, 270 )
                 if SubString("|", -1, 0) != "o" and GetUnitTypeId(BackGroundUnits[i]) != 'hspt' then
@@ -18,6 +11,15 @@ library Multiboard// initializer init
                 if Player(i-1) == GetLocalPlayer() then
                     call SetUnitVertexColorBJ( BackGroundUnits[i], 100.00, 100.00, 100.00, 0 )
                 endif
+    endfunction
+    
+    function BackGroundChange takes integer unitType returns nothing
+        local integer i = 1
+        
+        loop
+        exitwhen i > PLAYER_MAXINUM
+            if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
+                call BackGroundChangeById(i, unitType)
             endif
         set i = i + 1
         endloop
