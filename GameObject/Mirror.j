@@ -16,22 +16,28 @@ library Mirror needs MushroomMoving, Water, TriggerSleepAction, UnitMotion
         call SetUnitY(BackGroundUnits[i], GetUnitY(BackGroundUnits[i]) + offsetY)
     endfunction
 
+    private function CollisionCheck takes real nx, real ny returns boolean
+        return BackGroundsCheck(nx - 39.9, ny) and BackGroundsCheck(nx + 39.9, ny) and BackGroundsCheck(nx, ny - 10) and BackGroundsCheck(nx, ny + 10)
+    endfunction
+
     private function Teleport takes integer i, real x, real y, real nx, real ny returns boolean
+        local real offsetX = 0
         set Frame_MainPlayerY = 0
         call MushroomMoving_RectCondition(i, x, y, 40, "DownWidthOM")
 
-        if BackGroundsCheck(nx - 39.9, ny) and BackGroundsCheck(nx + 39.9, ny) and BackGroundsCheck(nx, ny - 10) and BackGroundsCheck(nx, ny + 10) then
+        if CollisionCheck(nx, ny) then
             call SetUnitPosition( OrangeMushroom[i], nx, ny )
             call BackGroundMove(i, nx - x, ny - y)
 
             if Frame_MainPlayerY != 0 and MushroomType(GetUnitTypeId(OrangeMushroom[Frame_MainPlayerY])) == false and Frame_MainPlayerY > PLAYER_MAXINUM then
                 // call DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl", GetUnitX(OrangeMushroom[Frame_MainPlayerY]), GetUnitY(OrangeMushroom[Frame_MainPlayerY]) ))
+                set offsetX = GetUnitX(OrangeMushroom[Frame_MainPlayerY]) - x
                 call Water_EffectTimer(Frame_MainPlayerY)
-                if GravityChanger_State == false and GetTerrainType(nx, ny-100) == BACKGROUND_TILE then
-                    call SetUnitPosition( OrangeMushroom[Frame_MainPlayerY], nx, ny-90 )
+                if GravityChanger_State == false and CollisionCheck(nx + offsetX, ny-90) then
+                    call SetUnitPosition( OrangeMushroom[Frame_MainPlayerY], nx + offsetX, ny-90 )
                     // call DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", nx-300, ny-90 ))
-                elseif GravityChanger_State == true and GetTerrainType(nx, ny+100) == BACKGROUND_TILE then
-                    call SetUnitPosition( OrangeMushroom[Frame_MainPlayerY], nx, ny+90 )
+                elseif GravityChanger_State == true and CollisionCheck(nx + offsetX, ny+90) then
+                    call SetUnitPosition( OrangeMushroom[Frame_MainPlayerY], nx + offsetX, ny+90 )
                     // call DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", nx-300, ny+90 ))
                 endif
             endif
