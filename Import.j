@@ -3,6 +3,7 @@
 //! import "JN\DzAPIHardware.j"
 //! import "JN\DzAPIPlus.j"
 //! import "JN\DzAPISync.j"
+//! import "JN\JAPIEffect.j"
 //! import "JN\JNCommon.j"
 //! import "JN\JNServer.j"
 //! import "JN\JNStopwatch.j"

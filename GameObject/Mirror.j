@@ -1,9 +1,10 @@
-library Mirror initializer Init needs MushroomMoving, Water
+library Mirror needs MushroomMoving, Water, TriggerSleepAction, UnitMotion
 
     globals
         private boolean array inMirrorState
         private effect array shadowEffect
-        private boolean isRunShadowEngine
+        private boolean isRunShadowEngine = false
+        private boolean registed = false
     endglobals
 
     private function BackGroundsCheck takes real x, real y returns boolean
@@ -53,32 +54,7 @@ library Mirror initializer Init needs MushroomMoving, Water
         endif
     endfunction
 
-    private function RunShadowEngine takes integer i returns nothing
-        local integer i = 1
-        set isRunShadowEngine = true
-
-        loop
-            exitwhen isRunShadowEngine == false
-            //! runtextmacro for("set i = i + 1", "i <= PLAYER_MAXINUM")
-                
-            //! runtextmacro for_end("set i = i + 1")
-            call TriggerSleepActionByTimer(0.02)
-        endloop
-    endfunction
-
-    private function StopShadowEngine takes integer i returns nothing
-        set isRunShadowEngine = false
-    endfunction
-
-    private function RemoveShadow takes integer i returns nothing
-        
-    endfunction
-
-    private function CreateShadow takes integer i returns nothing
-        
-    endfunction
-
-    public function Main takes integer i, integer world, integer level returns boolean
+    private function GetXY takes integer i, integer world, integer level returns location
         local real nx = 0
         local real ny = 0
         local real x = GetUnitX(OrangeMushroom[i])
@@ -92,34 +68,163 @@ library Mirror initializer Init needs MushroomMoving, Water
                 set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain001) + GetRectCenterX(gg_rct_MirrorOffsetSub001)
                 set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain001) + GetRectCenterY(gg_rct_MirrorOffsetSub001)
             endif
-        elseif world == 17 and level == 2 then
-            
         else
+            return null
+        endif
+        return Location(nx, ny)
+    endfunction
+
+    public function RunShadowEngine takes integer world, integer level returns nothing
+        local integer i = 1
+        local location xy = null
+
+        if registed == false then
+            return
+        endif
+
+        //! runtextmacro for("set i = 1", "i <= PLAYER_MAXINUM")
+            if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and shadowEffect[i] != null then
+                set xy = GetXY(i, world, level)
+                call EXSetEffectXY(shadowEffect[i], GetLocationX(xy), GetLocationY(xy))
+                call RemoveLocation(xy)
+            endif
+        //! runtextmacro for_end("set i = i + 1")
+
+        set xy = null
+    endfunction
+
+    private function RemoveShadow takes integer i returns nothing
+        // 삭제해도 일정시간 남아있기 때문에 좌표를 멀리 이동시킨다.
+        call EXSetEffectXY(shadowEffect[i], 13000, 8000)
+        call DestroyEffect(shadowEffect[i])
+    endfunction
+
+    private function CreateShadow takes integer i returns nothing
+        set shadowEffect[i] = AddSpecialEffect( "war3mapImported\\Mushroom.mdl", GetUnitX(OrangeMushroom[i]), GetUnitY(OrangeMushroom[i]) )
+        call EXEffectMatRotateZ(shadowEffect[i], 270)
+        call SetSpecialEffectAlpha(shadowEffect[i], 90)
+    endfunction
+
+    private struct ShadowMotion extends UnitMotion_IMotionAble
+
+        public method LeftJumpMotion takes integer i returns nothing
+            local effect shadow = shadowEffect[i]
+            if shadow == null then
+                return
+            endif
+            
+            call KeyEffectAnimation(shadow, LEFT_JUMP_ANIMATION)
+        endmethod
+
+        public method RightJumpMotion takes integer i returns nothing
+            local effect shadow = shadowEffect[i]
+            if shadow == null then
+                return
+            endif
+
+            call KeyEffectAnimation(shadow, RIGHT_JUMP_ANIMATION)
+        endmethod
+
+        public method LeftStandMotion takes integer i returns nothing
+            local effect shadow = shadowEffect[i]
+            if shadow == null then
+                return
+            endif
+
+            call KeyEffectAnimation(shadow, LEFT_STAND_ANIMATION)
+        endmethod
+
+        public method RightStandMotion takes integer i returns nothing
+            local effect shadow = shadowEffect[i]
+            if shadow == null then
+                return
+            endif
+
+            call KeyEffectAnimation(shadow, RIGHT_STAND_ANIMATION)
+        endmethod
+
+        public method LeftWalkMotion takes integer i returns nothing
+            local effect shadow = shadowEffect[i]
+            if shadow == null then
+                return
+            endif
+
+            call KeyEffectAnimation(shadow, LEFT_WALK_ANIMATION)
+        endmethod
+
+        public method RightWalkMotion takes integer i returns nothing
+            local effect shadow = shadowEffect[i]
+            if shadow == null then
+                return
+            endif
+
+            call KeyEffectAnimation(shadow, RIGHT_WALK_ANIMATION)
+        endmethod
+
+        public method LeftDownMotion takes integer i returns nothing
+            local effect shadow = shadowEffect[i]
+            if shadow == null then
+                return
+            endif
+
+            call KeyEffectAnimation(shadow, LEFT_DOWN_ANIMATION)
+        endmethod
+
+        public method RightDownMotion takes integer i returns nothing
+            local effect shadow = shadowEffect[i]
+            if shadow == null then
+                return
+            endif
+
+            call KeyEffectAnimation(shadow, RIGHT_DOWN_ANIMATION)
+        endmethod
+
+        private static method onInit takes nothing returns nothing
+            local thistype this = thistype.allocate()
+            call UnitMotion_AddMotion(this)
+        endmethod
+    endstruct
+
+    public function Main takes integer i, integer world, integer level returns boolean
+        local location xy = GetXY(i, world, level)
+        local real x = GetUnitX(OrangeMushroom[i])
+        local real y = GetUnitY(OrangeMushroom[i])
+
+        if xy == null then
             return false
         endif
         
-        if Teleport(i, x, y, nx, ny) then
+        if Teleport(i, x, y, GetLocationX(xy), GetLocationY(xy)) then
             set inMirrorState[i] = not(inMirrorState[i])
             call ChangeBackGround(i, inMirrorState[i])
         endif
 
+        call RemoveLocation(xy)
+        set xy = null
         return true
     endfunction
 
-    
-
-    public function Reset takes nothing returns nothing
+    public function Reset takes integer world, integer level returns nothing
         local integer i = 1
+
+        if world != 17 then
+            return
+        endif
+
+        if registed == false then
+            call UnitMotion_AddMotion(ShadowMotion.create())
+            set registed = true
+        endif
+
+
         //! runtextmacro for("set i = 1", "i <= PLAYER_MAXINUM")
             set inMirrorState[i] = false
-            call ChangeBackGround(i, false)
-
             call RemoveShadow(i)
-            call CreateShadow(i)
+            
+            if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
+                call ChangeBackGround(i, false)
+                call CreateShadow(i)
+            endif
         //! runtextmacro for_end("set i = i + 1")
-    endfunction
-    
-    private function Init takes nothing returns nothing
-        call Reset()
     endfunction
 endlibrary  

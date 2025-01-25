@@ -802,6 +802,7 @@ scope Frame initializer init
         call PlayersGroup()
         call BossMoving()
         call Decorate_Movement()
+        call Mirror_RunShadowEngine(Status.World, Status.Level)
         if GravityChanger_Loading == false then
             if GravityChanger_State == false then
                 call SetCameraField(CAMERA_FIELD_ROTATION, 90.0, 0)

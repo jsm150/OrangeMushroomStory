@@ -1,4 +1,4 @@
-library TrueEnding2 initializer init needs Cinematic
+library TrueEnding2 initializer init needs Cinematic, UnitMotion
     globals
         public trigger Trigger
         private tick tk

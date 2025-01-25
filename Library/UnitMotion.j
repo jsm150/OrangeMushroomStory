@@ -1,4 +1,4 @@
-library UnitMotion
+library UnitMotion needs SpecialEffect
 
     public interface IMotionAble
         public method LeftJumpMotion takes integer i returns nothing
@@ -13,6 +13,15 @@ library UnitMotion
 
     globals
         private sList motionList = 0
+
+        integer LEFT_STAND_ANIMATION = 0
+        integer LEFT_WALK_ANIMATION = 1
+        integer LEFT_DOWN_ANIMATION = 2
+        integer LEFT_JUMP_ANIMATION = 3
+        integer RIGHT_STAND_ANIMATION = 4
+        integer RIGHT_WALK_ANIMATION = 5
+        integer RIGHT_DOWN_ANIMATION = 6
+        integer RIGHT_JUMP_ANIMATION = 7
     endglobals
 
     function SetUnitMoveAnimation takes unit u, string aniName returns nothing
@@ -47,6 +56,24 @@ library UnitMotion
             else
                 call SetUnitAnimationByIndex( u, 5 )
             endif
+        endif
+    endfunction
+
+    function KeyEffectAnimation takes effect e, integer whichAnim returns nothing
+        if GravityChanger_State then
+            set whichAnim = ModuloInteger(whichAnim + 4, 8)
+        endif
+
+        // if GetUnitTypeId(u) == 'orai' then
+        //     if whichAnim < 4 then
+        //         set whichAnim = LEFT_STAND_ANIMATION
+        //     else
+        //         set whichAnim = RIGHT_STAND_ANIMATION
+        //     endif
+        // endif
+        
+        if GravityChanger_Loading == false then
+            call SetSpecialEffectAnimationByIndex(e, whichAnim)
         endif
     endfunction
 
