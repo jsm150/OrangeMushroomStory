@@ -91,6 +91,7 @@
 //! import "Library\TimerTick.j"
 //! import "Library\TimerUtils.j"
 //! import "Library\TriggerSleepAction.j"
+//! import "Library\UnitMotion.j"
 //! import "Library\World.j"
 
 // Server

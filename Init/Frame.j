@@ -370,7 +370,6 @@ scope Frame initializer init
     private function MovingY takes integer i, real x, real y returns nothing
         local integer SaveMainPlayerY
         local boolean b = false
-        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
 
         if OrangeMushroom[i] == null then
             return
@@ -424,55 +423,15 @@ scope Frame initializer init
             if BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' or GetUnitTypeId(OrangeMushroom[i]) == 'h00S' or GetUnitTypeId(OrangeMushroom[i]) == 'h00T' or GetUnitTypeId(OrangeMushroom[i]) == 'o005' then
                 if GetUnitTypeId(OrangeMushroom[i]) == 'o001' then
                     if Direction[i] == "Left" then
-                        if GravityChanger_State == false then
-                            call SetUnitMoveAnimation( OrangeMushroom[i], "Walk First" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Walk First" )
-                            endif
-                        else
-                            call SetUnitMoveAnimation( OrangeMushroom[i], "Walk Second" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Walk Second" )
-                            endif
-                        endif
+                        call UnitMotion_LeftWalk(i)
                     elseif Direction[i] == "Right" then
-                        if GravityChanger_State == false then
-                            call SetUnitMoveAnimation( OrangeMushroom[i], "Walk Second" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Walk Second" )
-                            endif
-                        else
-                            call SetUnitMoveAnimation( OrangeMushroom[i], "Walk First" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Walk First" )
-                            endif
-                        endif
+                        call UnitMotion_RightWalk(i)
                     endif
                 else
                     if Direction[i] == "Left" then
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[i], "Spell First" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Spell First" )
-                            endif
-                        else
-                            call SetUnitAnimation( OrangeMushroom[i], "Spell Second" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Spell Second" )
-                            endif
-                        endif
+                        call UnitMotion_LeftJump(i)
                     elseif Direction[i] == "Right" then
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[i], "Spell Second" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Spell Second" )
-                            endif
-                        else
-                            call SetUnitAnimation( OrangeMushroom[i], "Spell First" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Spell First" )
-                            endif
-                        endif
+                        call UnitMotion_RightJump(i)
                     endif
                 endif
                 call SpecialDownStateEnd(i)
@@ -544,86 +503,26 @@ scope Frame initializer init
             if MushroomMoving_RectCondition(i, x, y, 40,"DownWidth") == false and (BoxState == false or GetUnitTypeId(OrangeMushroom[i]) == 'ogru' or GetUnitTypeId(OrangeMushroom[i]) == 'otau' or GetUnitTypeId(OrangeMushroom[i]) == 'o005' or GetUnitTypeId(OrangeMushroom[i]) == 'ocat' or GetUnitTypeId(OrangeMushroom[i]) == 'o001' or GetUnitTypeId(OrangeMushroom[i]) == 'o000' or GetUnitTypeId(OrangeMushroom[i]) == 'h00S' or GetUnitTypeId(OrangeMushroom[i]) == 'h00T') and CinematicMode == false and GetUnitTypeId(OrangeMushroom[i]) != 'orai' then
                 if LeftArrow[i] == true and MushroomMoving_RectCondition(i, x, y, gravity[i], "LeftHeight") then
                     call MushmomJumpEffect(i)
-                    if GravityChanger_State == false then
-                        call SetUnitMoveAnimation(OrangeMushroom[i], "Walk First")
-                        if pet != 0 then
-                            call SetUnitAnimation( pet.Unit, "Walk First" )
-                        endif
-                    else
-                        call SetUnitMoveAnimation( OrangeMushroom[i], "Walk Second" )
-                        if pet != 0 then
-                            call SetUnitAnimation( pet.Unit, "Walk Second" )
-                        endif
-                    endif
+                    call UnitMotion_LeftWalk(i)
                 elseif RightArrow[i] == true and MushroomMoving_RectCondition(i, x, y, gravity[i], "RightHeight") then
                     call MushmomJumpEffect(i)
-                    if GravityChanger_State == false then
-                        call SetUnitMoveAnimation( OrangeMushroom[i], "Walk Second" )
-                        if pet != 0 then
-                            call SetUnitAnimation( pet.Unit, "Walk Second" )
-                        endif
-                    else
-                        call SetUnitMoveAnimation( OrangeMushroom[i], "Walk First" )
-                        if pet != 0 then
-                            call SetUnitAnimation( pet.Unit, "Walk First" )
-                        endif
-                    endif
+                    call UnitMotion_RightWalk(i)
                 elseif Direction[i] == "Left" and Landing[i] == true then
                     set Landing[i] = false
                     call MushmomJumpEffect(i)
                     if DownArrow[i] == false then
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Stand First" )
-                            endif
-                        else
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand Second" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Stand Second" )
-                            endif
-                        endif
+                        call UnitMotion_LeftStand(i)
                     else
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand ready First" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Stand ready First" )
-                            endif
-                        else
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand ready Second" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Stand ready Second" )
-                            endif
-                        endif
+                        call UnitMotion_LeftDown(i)
                         call SpecialDownStateStart(i)
                     endif
                 elseif Direction[i] == "Right" and Landing[i] == true then
                     set Landing[i] = false
                     call MushmomJumpEffect(i)
                     if DownArrow[i] == false then
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand Second" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Stand Second" )
-                            endif
-                        else
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Stand First" )
-                            endif
-                        endif
+                        call UnitMotion_RightStand(i)
                     else
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand ready Second" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Stand ready Second" )
-                            endif
-                        else
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand ready First" )
-                            if pet != 0 then
-                                call SetUnitAnimation( pet.Unit, "Stand ready First" )
-                            endif
-                        endif
+                        call UnitMotion_RightDown(i)
                         call SpecialDownStateStart(i)
                     endif
                 endif

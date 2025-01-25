@@ -1,4 +1,4 @@
-library Decorate initializer Init
+library Decorate initializer Init needs UnitMotion
     globals
         public key Aura
         public key Designation
@@ -64,6 +64,12 @@ library Decorate initializer Init
         endmethod
     endstruct
 
+    private type DecorateSkinUserList extends sList array[PLAYER_MAXINUM]
+
+    globals
+        private DecorateSkinUserList List
+    endglobals
+
     public struct PetSkin extends Skin
         public method GoLeft takes nothing returns nothing
             if this.offsetX < 0 then
@@ -92,11 +98,78 @@ library Decorate initializer Init
         endmethod
     endstruct
 
-    private type DecorateSkinUserList extends sList array[PLAYER_MAXINUM]
+    public function GetPetSkin takes integer playerId returns PetSkin
+        local integer i = 0
+        //! runtextmacro for("set i = 0", "i < List[playerId].size")
+            if Skin(List[playerId][i]).Type == Pet then
+                return List[playerId][i]
+            endif
+        //! runtextmacro for_end("set i = i + 1")
+        return 0
+    endfunction
 
-    globals
-        private DecorateSkinUserList List
-    endglobals
+    public struct PetMotion extends UnitMotion_IMotionAble
+        public method LeftJumpMotion takes integer i returns nothing
+            local PetSkin pet = GetPetSkin(i - 1)
+            if pet != 0 then
+                call KeyAnimation( pet.Unit, "Spell", "First" )
+            endif
+        endmethod
+
+        public method RightJumpMotion takes integer i returns nothing
+            local PetSkin pet = GetPetSkin(i - 1)
+            if pet != 0 then
+                call KeyAnimation( pet.Unit, "Spell", "Second" )
+            endif
+        endmethod
+
+        public method LeftStandMotion takes integer i returns nothing
+            local PetSkin pet = GetPetSkin(i - 1)
+            if pet != 0 then
+                call KeyAnimation( pet.Unit, "Stand", "First" )
+            endif
+        endmethod
+
+        public method RightStandMotion takes integer i returns nothing
+            local PetSkin pet = GetPetSkin(i - 1)
+            if pet != 0 then
+                call KeyAnimation( pet.Unit, "Stand", "Second" )
+            endif
+        endmethod
+
+        public method LeftWalkMotion takes integer i returns nothing
+            local PetSkin pet = GetPetSkin(i - 1)
+            if pet != 0 then
+                call KeyAnimation( pet.Unit, "Walk", "First" )
+            endif
+        endmethod
+
+        public method RightWalkMotion takes integer i returns nothing
+            local PetSkin pet = GetPetSkin(i - 1)
+            if pet != 0 then
+                call KeyAnimation( pet.Unit, "Walk", "Second" )
+            endif
+        endmethod
+
+        public method LeftDownMotion takes integer i returns nothing
+            local PetSkin pet = GetPetSkin(i - 1)
+            if pet != 0 then
+                call KeyAnimation( pet.Unit, "Stand Ready", "First" )
+            endif
+        endmethod
+
+        public method RightDownMotion takes integer i returns nothing
+            local PetSkin pet = GetPetSkin(i - 1)
+            if pet != 0 then
+                call KeyAnimation( pet.Unit, "Stand Ready", "Second" )
+            endif
+        endmethod
+
+        private static method onInit takes nothing returns nothing
+            local thistype this = thistype.allocate()
+            call UnitMotion_AddMotion(this)
+        endmethod
+    endstruct
 
     public function SetAbility takes integer playerId, integer abilityId, boolean apply returns nothing
         local integer i = 0
@@ -193,15 +266,7 @@ library Decorate initializer Init
         //! runtextmacro for_end("set i = i + 1")
     endfunction
 
-    public function GetPetSkin takes integer playerId returns PetSkin
-        local integer i = 0
-        //! runtextmacro for("set i = 0", "i < List[playerId].size")
-            if Skin(List[playerId][i]).Type == Pet then
-                return List[playerId][i]
-            endif
-        //! runtextmacro for_end("set i = i + 1")
-        return 0
-    endfunction
+    
 
     private function InitPosList takes nothing returns nothing
         call SaveLocationHandle(posList, 0, Aura, Location(0, 0))

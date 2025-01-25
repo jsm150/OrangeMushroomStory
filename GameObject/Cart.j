@@ -92,22 +92,17 @@ library Cart initializer Init needs TriggerSleepAction
 
         debug call JNWriteLog("  " + storage[idx].Direction)
 
-        if GravityChanger_State then
-            set first = "Second"
-            set second = "First"
-        endif
-
         if gravity[num] < 0 and MushroomMoving_RectCondition(num, x, y, 40, "DownWidth") == false then
             if storage[idx].Direction == "Left" then
-                call SetUnitAnimation( OrangeMushroom[num], "Stand " + first )
+                call UnitMotion_LeftStand(num)
             else
-                call SetUnitAnimation( OrangeMushroom[num], "Stand " + second )
+                call UnitMotion_RightStand(num)
             endif
         else
             if storage[idx].Direction == "Left" then
-                call SetUnitAnimation( OrangeMushroom[num], "Spell " + first)
+                call UnitMotion_LeftJump(num)
             else
-                call SetUnitAnimation( OrangeMushroom[num], "Spell " + second )
+                call UnitMotion_RightJump(num)
             endif
         endif
 
