@@ -84,7 +84,7 @@ library Multiboard// initializer init
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h00W')
         elseif world == 17 then 
-            set BackgroundMusic = gg_snd_Vacation_Beach
+            set BackgroundMusic = gg_snd_Over_the_Azure
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             // 배경은 MirrorTeleport에서 따로 처리.
         endif
