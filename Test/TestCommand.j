@@ -1,4 +1,9 @@
 library Test initializer Init needs Stage
+
+    globals
+        private effect testEffect = null
+    endglobals
+
     private function Trig_TestCommand_Actions takes nothing returns nothing    
         local integer ii = 1
         local integer i = 1
@@ -76,6 +81,13 @@ library Test initializer Init needs Stage
             call Status.SetContinues(S2I(SubString(s, 2, 5)))
         elseif SubString(s, 0, 2) == "-a" then
             call SetUnitAnimationByIndex( OrangeMushroom[i], S2I(SubString(s, 2, 3)) )
+        elseif SubString(s, 0, 3) == "-ea" then
+            call SetSpecialEffectAnimationByIndex( testEffect, S2I(SubString(s, 3, 4)) )
+            call JNWriteLog("testEffect Animation: " +SubString(s, 3, 4))
+        elseif JNStringSplit(s, " ", 0) == "-e" then
+            call JNWriteLog("testEffect : " + JNStringSplit(s, " ", 1))
+            set testEffect = AddSpecialEffect( JNStringSplit(s, " ", 1), GetUnitX(OrangeMushroom[i]) + 150, GetUnitY(OrangeMushroom[i]) )
+            call EXEffectMatRotateZ(testEffect, 270)
         elseif SubString(s, 0, 2) == "-g" then
             set User_UserDataList[0].GoldLeaf = S2I(SubString(s, 2, 8))
         endif
