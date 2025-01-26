@@ -1,4 +1,4 @@
-library Mirror needs MushroomMoving, Water, TriggerSleepAction, UnitMotion
+library Mirror needs MushroomMoving, Water, UnitMotion
 
     globals
         private boolean array inMirrorState
@@ -99,10 +99,12 @@ library Mirror needs MushroomMoving, Water, TriggerSleepAction, UnitMotion
         set xy = null
     endfunction
 
-    private function RemoveShadow takes integer i returns nothing
+    public function RemoveShadow takes integer i returns nothing
+        local effect shadow = shadowEffect[i]
+        set shadowEffect[i] = null
         // 삭제해도 일정시간 남아있기 때문에 좌표를 멀리 이동시킨다.
-        call EXSetEffectXY(shadowEffect[i], 13000, 8000)
-        call DestroyEffect(shadowEffect[i])
+        call EXSetEffectXY(shadow, 13000, 8000)
+        call DestroyEffect(shadow)
     endfunction
 
     private function CreateShadow takes integer i returns nothing
@@ -184,11 +186,6 @@ library Mirror needs MushroomMoving, Water, TriggerSleepAction, UnitMotion
 
             call KeyEffectAnimation(shadow, RIGHT_DOWN_ANIMATION)
         endmethod
-
-        private static method onInit takes nothing returns nothing
-            local thistype this = thistype.allocate()
-            call UnitMotion_AddMotion(this)
-        endmethod
     endstruct
 
     public function Main takes integer i, integer world, integer level returns boolean
@@ -203,6 +200,7 @@ library Mirror needs MushroomMoving, Water, TriggerSleepAction, UnitMotion
         if Teleport(i, x, y, GetLocationX(xy), GetLocationY(xy)) then
             set inMirrorState[i] = not(inMirrorState[i])
             call ChangeBackGround(i, inMirrorState[i])
+            call Observer_Reload.evaluate(i)
         endif
 
         call RemoveLocation(xy)
