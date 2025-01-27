@@ -355,6 +355,13 @@ library Jumper initializer init needs UnitMotion
         call RegionAddRect( Rects, gg_rct_Jumper316 )
         call RegionAddRect( Rects, gg_rct_Jumper317 )
 
+        call RegionAddRect( Rects, gg_rct_Jumper318 )
+        call RegionAddRect( Rects, gg_rct_Jumper319 )
+        call RegionAddRect( Rects, gg_rct_Jumper320 )
+        call RegionAddRect( Rects, gg_rct_Jumper321 )
+        call RegionAddRect( Rects, gg_rct_Jumper322 )
+        call RegionAddRect( Rects, gg_rct_Jumper323 )
+        call RegionAddRect( Rects, gg_rct_Jumper324 )
 
     endfunction
 endlibrary

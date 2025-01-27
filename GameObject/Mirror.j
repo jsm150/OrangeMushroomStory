@@ -195,6 +195,22 @@ library Mirror needs MushroomMoving, Water, UnitMotion
                 set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain001) + GetRectCenterX(gg_rct_MirrorOffsetSub001)
                 set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain001) + GetRectCenterY(gg_rct_MirrorOffsetSub001)
             endif
+        elseif world == 17 and level == 2 then
+            if inMirrorState[i] then
+                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetSub002) + GetRectCenterX(gg_rct_MirrorOffsetMain002)
+                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetSub002) + GetRectCenterY(gg_rct_MirrorOffsetMain002)
+            else
+                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain002) + GetRectCenterX(gg_rct_MirrorOffsetSub002)
+                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain002) + GetRectCenterY(gg_rct_MirrorOffsetSub002)
+            endif
+        elseif world == 17 and level == 3 then
+            if inMirrorState[i] then
+                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetSub003) + GetRectCenterX(gg_rct_MirrorOffsetMain003)
+                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetSub003) + GetRectCenterY(gg_rct_MirrorOffsetMain003)
+            else
+                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain003) + GetRectCenterX(gg_rct_MirrorOffsetSub003)
+                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain003) + GetRectCenterY(gg_rct_MirrorOffsetSub003)
+            endif
         else
             return null
         endif

@@ -321,6 +321,10 @@ library GravityChanger initializer init needs UnitMotion
         call SetRect(t, gg_rct_GravityChanger055)
         call SetRect(t, gg_rct_GravityChanger056)
         call SetRect(t, gg_rct_GravityChanger057)
+        call SetRect(t, gg_rct_GravityChanger058)
+        call SetRect(t, gg_rct_GravityChanger059)
+        call SetRect(t, gg_rct_GravityChanger060)
+        call SetRect(t, gg_rct_GravityChanger061)
 
         call TriggerAddAction( t, function Main )
         
