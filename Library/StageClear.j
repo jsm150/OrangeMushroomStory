@@ -1603,13 +1603,13 @@ library Stage initializer init needs Cart
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 8): 리프레" )
             elseif HiddenPortalState() == 14 then
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 항구" )
-            elseif HiddenPortalState() == 15 then
-                call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울 세계" )
             else
                 call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World: 핑크 핑크" )
             endif
         elseif HiddenPortalState() == 10 then
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 얼음 동굴" )
+        elseif HiddenPortalState() == 15 then
+            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울 세계" )
         elseif TESTMODE == false then
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "World 1: 집 앞마당" )
         endif
@@ -1681,7 +1681,7 @@ library Stage initializer init needs Cart
                             call tk.start(2.0, false, function WorldTimer)
                         endif
                     endif
-                elseif HiddenPortalState() == 10 and i > 0 then
+                elseif (HiddenPortalState() == 10 or HiddenPortalState() == 15) and i > 0 then
                     call Inventory_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call StopSound( BackgroundMusic, false, true )
