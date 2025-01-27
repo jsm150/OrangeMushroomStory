@@ -1,4 +1,4 @@
-library MorphStone initializer init
+library MorphStone initializer init needs UnitMotion
     globals
         boolean array MorphState
         
@@ -124,17 +124,9 @@ library MorphStone initializer init
                 
                 if GetUnitTypeId(MorphUnit[i]) == 'orai' then
                     if Direction[j] == "Left" then
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[j], "Stand First" )
-                        else
-                            call SetUnitAnimation( OrangeMushroom[j], "Stand Second" )
-                        endif
+                        call UnitMotion_LeftStand(j)
                     else
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[j], "Stand Second" )
-                        else
-                            call SetUnitAnimation( OrangeMushroom[j], "Stand First" )
-                        endif
+                        call UnitMotion_RightStand(j)
                     endif
                 elseif GetUnitTypeId(MorphUnit[i]) == 'ogru' or GetUnitTypeId(MorphUnit[i]) == 'otau' then
                     if Direction[j] == "Left" then

@@ -105,7 +105,7 @@ library Stage initializer init needs Cart
         local integer i = 1
         local integer j = 1
         local integer sum = 0
-        local integer worldCount = 15
+        local integer worldCount = 16
         
         loop
             exitwhen i > worldCount
@@ -1284,6 +1284,8 @@ library Stage initializer init needs Cart
                 call Status.SetLevel(14, 9)
             elseif HiddenPortalState() == 14 then
                 call Status.SetLevel(15, 9)
+            elseif HiddenPortalState() == 15 then
+                call Status.SetLevel(16, 9)
             else
                 if Stage_WorldSkip then
                     call Status.SetLevel(2, 8)
@@ -1315,6 +1317,7 @@ library Stage initializer init needs Cart
         set HiddenPortalCount[12] = 0
         set HiddenPortalCount[13] = 0
         set HiddenPortalCount[14] = 0
+        set HiddenPortalCount[15] = 0
         set GravityChanger_SentinelTime = 0
         set GravityChanger_SentinelTime2 = 0
         call PauseTimer(SentinelTimer)
@@ -1363,6 +1366,9 @@ library Stage initializer init needs Cart
                     set change = true
                 elseif Status.World == 15 and User_UserDataList[i].RefreMax < Status.Level then
                     set User_UserDataList[i].RefreMax = Status.Level
+                    set change = true
+                elseif Status.World == 17 and User_UserDataList[i].MirrorMax < Status.Level then
+                    set User_UserDataList[i].MirrorMax = Status.Level
                     set change = true
                 endif
             endif
@@ -1481,6 +1487,7 @@ library Stage initializer init needs Cart
         call MovePortal_ResetCanMove.execute(Status.World, Status.Level)
         call StoneStatue_ResetBlocks.execute(Status.World, Status.Level)
         call Frame_LaserBlockHistory.Clear()
+        call Mirror_Reset(Status.World, Status.Level)
         set StartRect = LoadRectHandle(StartRectList, Status.World, Status.Level)
         if CountUnitsInGroup(SentinelGroup) > 0 then
             call TimerStart(SentinelTimer, 1.5, false, function SentinelAttack)
@@ -1601,6 +1608,8 @@ library Stage initializer init needs Cart
             endif
         elseif HiddenPortalState() == 10 then
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 얼음 동굴" )
+        elseif HiddenPortalState() == 15 then
+            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울 세계" )
         elseif TESTMODE == false then
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "World 1: 집 앞마당" )
         endif
@@ -1672,7 +1681,7 @@ library Stage initializer init needs Cart
                             call tk.start(2.0, false, function WorldTimer)
                         endif
                     endif
-                elseif HiddenPortalState() == 10 and i > 0 then
+                elseif (HiddenPortalState() == 10 or HiddenPortalState() == 15) and i > 0 then
                     call Inventory_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call StopSound( BackgroundMusic, false, true )
@@ -1908,7 +1917,8 @@ library Stage initializer init needs Cart
         call SaveRectHandle(StartRectList, 16, 3, gg_rct_StartRect124)
         call SaveRectHandle(StartRectList, 16, 4, gg_rct_StartRect125)
 
-    
+        call SaveRectHandle(StartRectList, 17, 1, gg_rct_StartRect130)
+
 
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub109)

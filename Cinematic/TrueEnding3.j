@@ -1,4 +1,4 @@
-library TrueEnding3 initializer init needs Cinematic
+library TrueEnding3 initializer init needs Cinematic, UnitMotion
     globals
         boolean SecretEnding = false
         boolean SecretEnding2 = false

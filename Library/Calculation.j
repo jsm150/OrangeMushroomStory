@@ -267,40 +267,6 @@ library Calculation
         set u = null
     endfunction
     
-    function SetUnitMoveAnimation takes unit u, string aniName returns nothing
-        local integer tp = GetUnitTypeId(u)
-        if aniName == "Walk First" then
-            if tp == 'uobs' then
-                call SetUnitAnimationByIndex( u, 0 )
-            elseif tp == 'ufro' or tp == 'earc' then
-                call SetUnitAnimationByIndex( u, 6 )
-            elseif tp == 'esen' or tp == 'edry' then
-                call SetUnitAnimationByIndex( u, 4 )
-            elseif tp == 'ohun' or tp == 'edot' then
-                call SetUnitAnimationByIndex( u, 6 )
-            elseif tp == 'orai' then
-                call SetUnitAnimation( u, "Stand First" )
-            else
-                call SetUnitAnimationByIndex( u, 1 )
-            endif
-        elseif aniName == "Walk Second" then
-            if tp == 'ogru' or tp == 'uabo' or tp == 'otau' or tp == 'o005' or tp == 'umtw' or tp == 'h00N' or tp == 'h00J' or tp == 'h00O' or tp == 'h00M' or tp == 'h00L' or tp == 'h00K' then
-                call SetUnitAnimationByIndex( u, 4 )
-            elseif tp == 'uobs' then
-                call SetUnitAnimationByIndex( u, 1 )
-            elseif tp == 'ufro' or tp == 'earc' then
-                call SetUnitAnimationByIndex( u, 7 )
-            elseif tp == 'ohun' or tp == 'edot' then
-                call SetUnitAnimationByIndex( u, 7 )
-            elseif tp == 'orai' then
-                call SetUnitAnimation( u, "Stand Second" )
-            elseif tp == 'h00S' or tp == 'h00T' then
-                call SetUnitAnimationByIndex( u, 4 )
-            else
-                call SetUnitAnimationByIndex( u, 5 )
-            endif
-        endif
-    endfunction
     
     globals
         private effect array MushmomEyeDummy

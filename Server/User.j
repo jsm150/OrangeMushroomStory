@@ -129,6 +129,7 @@ scope User initializer Init
         private static constant string WorldClearCount_DownTown = "WorldClearCount_DownTown"
         private static constant string WorldClearCount_WorldChallenge2 = "WorldClearCount_WorldChallenge2"
         private static constant string WorldClearCount_Refre = "WorldClearCount_Refre"
+        private static constant string WorldClearCount_Mirror = "WorldClearCount_Mirror"
         private static constant string WorldClearCount_Random = "WorldClearCount_Random"
         private static constant string WorldClearCount_HardRandom = "WorldClearCount_HardRandom"
 
@@ -145,9 +146,9 @@ scope User initializer Init
         //! runtextmacro USERDATA_GETTER_AND_SETTER("DownTownCount", "WorldClearCount_DownTown")
         //! runtextmacro USERDATA_GETTER_AND_SETTER("WorldChallenge2Count", "WorldClearCount_WorldChallenge2")
         //! runtextmacro USERDATA_GETTER_AND_SETTER("RefreCount", "WorldClearCount_Refre")
+        //! runtextmacro USERDATA_GETTER_AND_SETTER("MirrorCount", "WorldClearCount_Mirror")
         //! runtextmacro USERDATA_GETTER_AND_SETTER("RandomCount", "WorldClearCount_Random")
         //! runtextmacro USERDATA_GETTER_AND_SETTER("HardRandomCount", "WorldClearCount_HardRandom")
-
         // ==========================================================================
         // WorldLastStage : 가장 멀리 간 스테이지
         // ==========================================================================
@@ -164,6 +165,7 @@ scope User initializer Init
         private static constant string WorldLastStage_DownTown = "WorldLastStage_DownTown"
         private static constant string WorldLastStage_WorldChallenge2 = "WorldLastStage_WorldChallenge2"
         private static constant string WorldLastStage_Refre = "WorldLastStage_Refre"
+        private static constant string WorldLastStage_Mirror = "WorldLastStage_Mirror"
 
         //! runtextmacro USERDATA_GETTER_AND_SETTER("CaptainJackMax", "WorldLastStage_CaptainJack")
         //! runtextmacro USERDATA_GETTER_AND_SETTER("SubwayMax", "WorldLastStage_Subway")
@@ -178,6 +180,7 @@ scope User initializer Init
         //! runtextmacro USERDATA_GETTER_AND_SETTER("DownTownMax", "WorldLastStage_DownTown")
         //! runtextmacro USERDATA_GETTER_AND_SETTER("WorldChallenge2Max", "WorldLastStage_WorldChallenge2")
         //! runtextmacro USERDATA_GETTER_AND_SETTER("RefreMax", "WorldLastStage_Refre")
+        //! runtextmacro USERDATA_GETTER_AND_SETTER("MirrorMax", "WorldLastStage_Mirror")
 
         // ==========================================================================
         // Item : 인벤토리에 있는 것

@@ -1,4 +1,4 @@
-library Ending initializer init needs Cinematic, EndingSkip
+library Ending initializer init needs Cinematic, EndingSkip, UnitMotion
     globals
         public trigger Trigger
         private tick tk
