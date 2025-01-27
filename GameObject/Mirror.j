@@ -6,6 +6,128 @@ library Mirror needs MushroomMoving, Water, UnitMotion
         private boolean isRunShadowEngine = false
         private boolean registed = false
     endglobals
+    
+    private struct TeleportEffect
+        private static sList list = 0
+        private static integer end = 550
+        private static real tick = 20
+        private integer repeat = 0
+        private effect e
+
+        private method Remove takes nothing returns nothing
+            call list.remove(this)
+            call EXSetEffectXY(this.e, 13000, 8000)
+            call DestroyEffect(this.e)
+            call thistype.deallocate(this)
+        endmethod
+
+        private stub method GetHandle takes nothing returns integer
+            return 0
+        endmethod
+
+        private stub method GetX takes nothing returns real
+            return 1.0
+        endmethod
+
+        private stub method GetY takes nothing returns real
+            return 1.0
+        endmethod
+
+        public method PositionSync takes nothing returns nothing
+            call EXSetEffectXY(this.e, this.GetX(), this.GetY())
+
+            set this.repeat = this.repeat + 1
+            if this.repeat * tick >= end then
+                call JNWriteLog("Remove TeleportEffect")
+                call this.Remove()
+            endif
+        endmethod
+
+        public static method Sync takes nothing returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < list.size")
+                call thistype(list[i]).PositionSync()
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
+
+        public static method Add takes thistype this returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < list.size")
+                if thistype(list[i]).GetHandle() == this.GetHandle() then
+                    call thistype(list[i]).Remove()
+                    exitwhen true
+                endif
+            //! runtextmacro for_end("set i = i + 1")
+
+            call list.add(this)
+        endmethod
+
+        public static method create takes integer alpha, boolean inMirror returns thistype
+            local thistype this = thistype.allocate()
+            local string path = "MirrorPurpleTeleport.mdx"
+            if inMirror then
+                set path = "MirrorBlueTeleport.mdx"
+            endif
+
+            set this.e = AddSpecialEffect(path, this.GetX(), this.GetY())
+            set this.repeat = 0
+            call EXSetEffectZ(this.e, 5)
+            call EXSetEffectSize(this.e, 1.9)
+            if alpha < 100 then
+                call SetSpecialEffectAlpha(this.e, alpha)
+            endif
+
+            return this
+        endmethod
+
+        private static method onInit takes nothing returns nothing
+            set list = sList.create()
+        endmethod
+    endstruct
+
+    private struct TeleportEffectFromUnit extends TeleportEffect
+        private unit u
+
+        private method GetHandle takes nothing returns integer
+            return GetHandleId(this.u)
+        endmethod
+
+        private method GetX takes nothing returns real
+            return GetUnitX(this.u)
+        endmethod
+
+        private method GetY takes nothing returns real
+            return GetUnitY(this.u)
+        endmethod
+
+        public static method create takes unit u, integer alpha, boolean inMirror returns thistype
+            local thistype this = thistype.allocate(alpha, inMirror)
+            set this.u = u
+            return this
+        endmethod
+    endstruct
+
+    private struct TeleportEffectFromEffect extends TeleportEffect
+        private effect ef
+
+        private method GetHandle takes nothing returns integer
+            return GetHandleId(this.ef)
+        endmethod
+
+        private method GetX takes nothing returns real
+            return EXGetEffectX(this.ef)
+        endmethod
+
+        private method GetY takes nothing returns real
+            return EXGetEffectY(this.ef)
+        endmethod
+
+        public static method create takes effect ef, integer alpha, boolean inMirror returns thistype
+            local thistype this = thistype.allocate(alpha, inMirror)
+            set this.ef = ef
+            return this
+        endmethod
+    endstruct
 
     private function BackGroundsCheck takes real x, real y returns boolean
         return GetTerrainType(x, y) == BACKGROUND_TILE and IsPointInRegion(Rect_NoEntry, x, y) == false
@@ -28,21 +150,20 @@ library Mirror needs MushroomMoving, Water, UnitMotion
         if CollisionCheck(nx, ny) then
             call SetUnitPosition( OrangeMushroom[i], nx, ny )
             call BackGroundMove(i, nx - x, ny - y)
+            call TeleportEffect.Add(TeleportEffectFromUnit.create(OrangeMushroom[i], 100, inMirrorState[i]))
+            call TeleportEffect.Add(TeleportEffectFromEffect.create(shadowEffect[i], 90, not(inMirrorState[i])))
 
             if Frame_MainPlayerY != 0 and MushroomType(GetUnitTypeId(OrangeMushroom[Frame_MainPlayerY])) == false and Frame_MainPlayerY > PLAYER_MAXINUM then
-                // call DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl", GetUnitX(OrangeMushroom[Frame_MainPlayerY]), GetUnitY(OrangeMushroom[Frame_MainPlayerY]) ))
                 set offsetX = GetUnitX(OrangeMushroom[Frame_MainPlayerY]) - x
                 call Water_EffectTimer(Frame_MainPlayerY)
                 if GravityChanger_State == false and CollisionCheck(nx + offsetX, ny-90) then
                     call SetUnitPosition( OrangeMushroom[Frame_MainPlayerY], nx + offsetX, ny-90 )
-                    // call DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", nx-300, ny-90 ))
                 elseif GravityChanger_State == true and CollisionCheck(nx + offsetX, ny+90) then
                     call SetUnitPosition( OrangeMushroom[Frame_MainPlayerY], nx + offsetX, ny+90 )
-                    // call DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", nx-300, ny+90 ))
                 endif
+                call TeleportEffect.Add(TeleportEffectFromUnit.create(OrangeMushroom[Frame_MainPlayerY], 100, inMirrorState[i]))
             endif
             
-            // call DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", nx, ny ))
             return true
         else
             call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 5, "※ 빈 공간이 없어 이동할 수 없습니다!")
@@ -92,6 +213,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and shadowEffect[i] != null then
                 set xy = GetXY(i, world, level)
                 call EXSetEffectXY(shadowEffect[i], GetLocationX(xy), GetLocationY(xy))
+                call TeleportEffect.Sync()
                 call RemoveLocation(xy)
             endif
         //! runtextmacro for_end("set i = i + 1")
