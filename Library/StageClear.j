@@ -1447,8 +1447,8 @@ library Stage initializer init needs Cart
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 레쉬와 다크 레쉬에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명4'을 참고해주세요." )
                 elseif Status.World == 16 and Status.Level == 1 then
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 폭탄에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명4'을 참고해주세요." )
-                elseif Status.World == 17 and Status.Level == 1 then
-                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "|cffeeff55※ 아직 미완성 월드 입니다!|r" )
+                elseif Status.World == 17 and Status.Level == 4 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "|cffeeff55※ 아직 미완성 월드 입니다..|r" )
                 endif
             endif
         endif
@@ -1629,7 +1629,7 @@ library Stage initializer init needs Cart
         elseif HiddenPortalState() == 10 then
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 얼음 동굴" )
         elseif HiddenPortalState() == 15 then
-            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울 세계" )
+            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울세계" )
         elseif TESTMODE == false then
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "World 1: 집 앞마당" )
         endif
@@ -1665,7 +1665,7 @@ library Stage initializer init needs Cart
                         call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
                         if TESTMODE == true then
                             call Status.SetLevel(16, 8)
-                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울 세계" )
+                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울세계" )
                             call tk.start(3.0, false, function WorldTimer)
                         else
                             call tk.start(1.0, false, function WorldTimer)
@@ -1940,6 +1940,7 @@ library Stage initializer init needs Cart
         call SaveRectHandle(StartRectList, 17, 1, gg_rct_StartRect130)
         call SaveRectHandle(StartRectList, 17, 2, gg_rct_StartRect131)
         call SaveRectHandle(StartRectList, 17, 3, gg_rct_StartRect132)
+        call SaveRectHandle(StartRectList, 17, 4, gg_rct_StartRect133)
 
 
         // 2번째 소환위치
