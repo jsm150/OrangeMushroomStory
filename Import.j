@@ -98,6 +98,7 @@
 // Server
 //! import "Server\ConnectCheck.j"
 //! import "Server\JnStashNet.j"
+//! import "Server\MapData.j"
 //! import "Server\Notice.j"
 //! import "Server\Stash.j"
 //! import "Server\User.j"
