@@ -1,4 +1,4 @@
-library TrueEnding3END initializer init needs Cinematic
+library TrueEnding3END initializer init needs Cinematic, MirrorEntranceEvent
     globals
         boolean GameAllOver = false
         boolean BossKill = false
@@ -205,6 +205,10 @@ library TrueEnding3END initializer init needs Cinematic
             call ViewFilter()
             call StartSound(gg_snd_FucX)
             call StartSound(gg_snd_GunSoundEffect001)
+            if SecretEnding2 and MirrorEntranceEvent_GetLeverValue() == 14 then
+                call tk.pause()
+                call MirrorHiddenEvent_FirstMessage.execute(tk, function CMTTick)
+            endif
         elseif tk.data == 40 then
             set GameAllOver = true
             call EndingMsgPrint("제작: z1z1z1")

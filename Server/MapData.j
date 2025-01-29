@@ -4,9 +4,17 @@ library MapData initializer Init
         private integer firstPlayer = 0
 
         public string NoticeString = "Notice"
+        public string MirrorHiddenNoticeString = "MirrorHiddenNotice"
+        public string MirrorHiddenMessage01String = "MirrorHiddenMessage01"
+        public string MirrorHiddenMessage02String = "MirrorHiddenMessage02"
+        public string MirrorHiddenMessage03String = "MirrorHiddenMessage03"
     endglobals
 
     //! runtextmacro MapObject_Init_Load("string", "Notice")
+    //! runtextmacro MapObject_Init_Load("string", "MirrorHiddenNotice")
+    //! runtextmacro MapObject_Init_Load("string", "MirrorHiddenMessage01")
+    //! runtextmacro MapObject_Init_Load("string", "MirrorHiddenMessage02")
+    //! runtextmacro MapObject_Init_Load("string", "MirrorHiddenMessage03")
 
     //! textmacro MapObject_Init_Load takes type, name
         globals

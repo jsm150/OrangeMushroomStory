@@ -1,4 +1,4 @@
-scope MirrorEntranceEvent initializer Init
+library MirrorEntranceEvent initializer Init needs TriggerSleepAction
 
     private function Open takes nothing returns nothing
         local effect e
@@ -98,19 +98,19 @@ scope MirrorEntranceEvent initializer Init
             set waiting = true
             if step == 0 then
                 call TriggerSleepActionByTimer(0.50)
-                if Lever.CurrentValue() == 15 then
+                if Lever.CurrentValue() == 14 then
                     set step = 1
                 endif
             elseif step == 1 then
                 call TriggerSleepActionByTimer(0.50)
-                if Lever.CurrentValue() == 12 then
+                if Lever.CurrentValue() == 3 then
                     set step = 2
                 else
                     set step = 0
                 endif
             elseif step == 2 then
                 call TriggerSleepActionByTimer(0.50)
-                if Lever.CurrentValue() == 3 then
+                if Lever.CurrentValue() == 12 then
                     set step = 3
                 else
                     set step = 0
@@ -128,6 +128,9 @@ scope MirrorEntranceEvent initializer Init
         endmethod
     endstruct
 
+    public function GetLeverValue takes nothing returns integer
+        return Lever.CurrentValue()
+    endfunction
 
     private function Init takes nothing returns nothing
         local trigger t = CreateTrigger()
@@ -148,4 +151,4 @@ scope MirrorEntranceEvent initializer Init
         call TriggerAddAction(Lever.ValueChangedEvent, function OpenEventCheck.Action)
         set t = null
     endfunction
-endscope
+endlibrary

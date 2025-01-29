@@ -64,12 +64,13 @@
 //! import "Control\MouseClick.j"
 
 // EasterEgg
-//! import "EasterEgg\MirrorEntranceEvent.j"
 //! import "EasterEgg\CaveHiddenEvent.j"
 //! import "EasterEgg\CaveHiddenRectHint.j"
 //! import "EasterEgg\HiddenEvent.j"
 //! import "EasterEgg\HiddenWord.j"
 //! import "EasterEgg\Maze.j"
+//! import "EasterEgg\MirrorEntranceEvent.j"
+//! import "EasterEgg\MirrorHiddenEvent.j"
 
 // Library
 //! import "Library\ArrayList.j"
