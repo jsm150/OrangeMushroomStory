@@ -290,6 +290,11 @@ library MorphStone initializer init needs UnitMotion
         call SetRect(t, Unit.Propelly, gg_rct_MorphStone112)
         call SetRect(t, Unit.Bloctopus, gg_rct_MorphStone113)
         call SetRect(t, Unit.KingBloctopus, gg_rct_MorphStone114)
+        call SetRect(t, Unit.Bloctopus, gg_rct_MorphStone115)
+        call SetRect(t, Unit.Bloctopus, gg_rct_MorphStone116)
+        call SetRect(t, Unit.Bloctopus, gg_rct_MorphStone117)
+        call SetRect(t, Unit.Bloctopus, gg_rct_MorphStone118)
+        call SetRect(t, Unit.Bloctopus, gg_rct_MorphStone119)
 
         call TriggerAddAction( t, function Main )
         

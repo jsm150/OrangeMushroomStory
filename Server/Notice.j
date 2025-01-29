@@ -207,7 +207,7 @@ scope MapNotice initializer init
     
     // 공지사항||제목||주소, (마지막 쉼표 무조건 붙여야함.)
     private function Action takes nothing returns nothing
-        local string s = JNObjectMapGetString("Notice")
+        local string s = MapData_Notice
         local integer i = 0
         local integer cnt = JNStringCount(s, ",")
 
@@ -223,8 +223,7 @@ scope MapNotice initializer init
         call TriggerAddAction(t, function Action)
         call MakeFrame()
 
-        call JNUse()
-        call JNObjectMapInit(mapId, secretKey)
+        
 
         set t = null
     endfunction

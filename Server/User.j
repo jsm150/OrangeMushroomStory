@@ -347,10 +347,8 @@ scope User initializer Init
                 call DisplayTimedTextToPlayer(u, 0, 0, 5, JNStashNetGetMessage( ))
                 call DisplayTimedTextToPlayer(u, 0, 0, 5, "|cffFFFC00※ -재연결 / -rec 명령어를 이용하여 다시 시도해주세요.|r")
             endif
-static if DEBUG_MODE then
-        else
+
             call DisplayTimedTextToPlayer(u, 0, 0, 5, "로드 중 : " + I2S(JNStashNetGetProgress()) + "/" + I2S(JNStashNetGetMaximum()))
-endif
         endif
     endfunction
     
@@ -364,10 +362,8 @@ endif
                 call DisplayTimedTextToPlayer(u, 0, 0, 5, "|cffFFFC00※ 서버에 저장하는데 실패하였습니다.|r")
                 call DisplayTimedTextToPlayer(u, 0, 0, 5, JNStashNetGetMessage( ))
             endif
-static if DEBUG_MODE then
-        else
+
             call DisplayTimedTextToPlayer(u, 0, 0, 5, JNStashNetGetMessage( ))
-endif
         endif
     endfunction
     

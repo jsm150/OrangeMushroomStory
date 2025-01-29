@@ -112,7 +112,6 @@ library UnitMotion needs SpecialEffect
     endfunction
 
     public function AddMotion takes IMotionAble motion returns nothing
-        call JNWriteLog("       motionList :" + I2S(motionList))
         if motionList == 0 then
             set motionList = sList.create()
         endif

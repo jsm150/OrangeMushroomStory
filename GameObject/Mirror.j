@@ -38,7 +38,6 @@ library Mirror needs MushroomMoving, Water, UnitMotion
 
             set this.repeat = this.repeat + 1
             if this.repeat * tick >= end then
-                call JNWriteLog("Remove TeleportEffect")
                 call this.Remove()
             endif
         endmethod
@@ -195,6 +194,22 @@ library Mirror needs MushroomMoving, Water, UnitMotion
                 set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain001) + GetRectCenterX(gg_rct_MirrorOffsetSub001)
                 set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain001) + GetRectCenterY(gg_rct_MirrorOffsetSub001)
             endif
+        elseif world == 17 and level == 2 then
+            if inMirrorState[i] then
+                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetSub002) + GetRectCenterX(gg_rct_MirrorOffsetMain002)
+                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetSub002) + GetRectCenterY(gg_rct_MirrorOffsetMain002)
+            else
+                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain002) + GetRectCenterX(gg_rct_MirrorOffsetSub002)
+                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain002) + GetRectCenterY(gg_rct_MirrorOffsetSub002)
+            endif
+        elseif world == 17 and level == 3 then
+            if inMirrorState[i] then
+                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetSub003) + GetRectCenterX(gg_rct_MirrorOffsetMain003)
+                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetSub003) + GetRectCenterY(gg_rct_MirrorOffsetMain003)
+            else
+                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain003) + GetRectCenterX(gg_rct_MirrorOffsetSub003)
+                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain003) + GetRectCenterY(gg_rct_MirrorOffsetSub003)
+            endif
         else
             return null
         endif
@@ -227,6 +242,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
         // 삭제해도 일정시간 남아있기 때문에 좌표를 멀리 이동시킨다.
         call EXSetEffectXY(shadow, 13000, 8000)
         call DestroyEffect(shadow)
+        set shadow = null
     endfunction
 
     private function CreateShadow takes integer i returns nothing
@@ -244,6 +260,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             endif
             
             call KeyEffectAnimation(shadow, LEFT_JUMP_ANIMATION)
+            set shadow = null
         endmethod
 
         public method RightJumpMotion takes integer i returns nothing
@@ -253,6 +270,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             endif
 
             call KeyEffectAnimation(shadow, RIGHT_JUMP_ANIMATION)
+            set shadow = null
         endmethod
 
         public method LeftStandMotion takes integer i returns nothing
@@ -262,6 +280,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             endif
 
             call KeyEffectAnimation(shadow, LEFT_STAND_ANIMATION)
+            set shadow = null
         endmethod
 
         public method RightStandMotion takes integer i returns nothing
@@ -271,6 +290,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             endif
 
             call KeyEffectAnimation(shadow, RIGHT_STAND_ANIMATION)
+            set shadow = null
         endmethod
 
         public method LeftWalkMotion takes integer i returns nothing
@@ -280,6 +300,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             endif
 
             call KeyEffectAnimation(shadow, LEFT_WALK_ANIMATION)
+            set shadow = null
         endmethod
 
         public method RightWalkMotion takes integer i returns nothing
@@ -289,6 +310,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             endif
 
             call KeyEffectAnimation(shadow, RIGHT_WALK_ANIMATION)
+            set shadow = null
         endmethod
 
         public method LeftDownMotion takes integer i returns nothing
@@ -298,6 +320,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             endif
 
             call KeyEffectAnimation(shadow, LEFT_DOWN_ANIMATION)
+            set shadow = null
         endmethod
 
         public method RightDownMotion takes integer i returns nothing
@@ -307,6 +330,7 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             endif
 
             call KeyEffectAnimation(shadow, RIGHT_DOWN_ANIMATION)
+            set shadow = null
         endmethod
     endstruct
 

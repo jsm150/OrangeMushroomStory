@@ -1,0 +1,65 @@
+// User Object
+{
+    "stash.0": "WorldClearCount_CaptainJack/32",
+    "stash.1": "WorldClearCount_Subway/21",
+    "stash.2": "WorldClearCount_Valentine/60",
+    "stash.3": "WorldClearCount_Beach/24",
+    "stash.4": "WorldClearCount_Coke/47",
+    "stash.5": "WorldClearCount_WorldChallenge/24",
+    "stash.6": "WorldClearCount_Cafe/20",
+    "stash.7": "WorldClearCount_Desert/14",
+    "stash.8": "WorldClearCount_Forest/30",
+    "stash.9": "WorldClearCount_IceCave/16",
+    "stash.10": "WorldClearCount_DownTown/12",
+    "stash.11": "WorldClearCount_WorldChallenge2/16",
+    "stash.12": "WorldClearCount_Refre/6",
+    "stash.13": "WorldClearCount_Random/831",
+    "stash.14": "WorldClearCount_HardRandom/132",
+
+    "stash.15": "WorldLastStage_DownTown/8",
+    "stash.16": "WorldLastStage_Valentine/8",
+    "stash.17": "WorldLastStage_Subway/8",
+    "stash.18": "WorldLastStage_Coke/8",
+    "stash.19": "WorldLastStage_WorldChallenge2/5",
+    "stash.20": "WorldLastStage_Cafe/8",
+    "stash.21": "WorldLastStage_Beach/8",
+    "stash.22": "WorldLastStage_CaptainJack/8",
+    "stash.23": "WorldLastStage_Desert/8",
+    "stash.24": "WorldLastStage_WorldChallenge/7",
+    "stash.25": "WorldLastStage_IceCave/8",
+    "stash.26": "WorldLastStage_Refre/8",
+    "stash.27": "WorldLastStage_Forest/5",
+
+    "stash.28": "Item_PinkBeanDesignation/1",
+    "stash.29": "Item_BellaPet/1",
+    "stash.30": "Item_LucidSoul/1",
+    "stash.31": "Item_SpiritPendant/1",
+
+    "stash.32": "Money_GoldLeaf/240614",
+    "stash.size": 33
+}
+
+// Map Object (홈페이지 UI 고장나서 이 데이터를 잃어버리면 안됌)
+{
+    "Notice": "공지사항||서버 연동 오류 관련 안내||https://m16tool.xyz/Game/OM150/Notice/Viewer/66586de5af566b4a7cf5fc16,",
+    "MirrorHiddenNotice": "...||여기 오는길 중간에 기계 장치가 있는 것 같던데.||정확하게 제어하고 오면 좋은 정보를 알려줄께.||그럼 다음에 또 보자고 BOY♂♥",
+    "MirrorHiddenMessage01": "아, 깜빡할뻔 했어.||너.. 진짜 소개팅 장소를 찾고 있는거지?||레버를 순서대로 조작해야 한다던데.||지금 켜져 있는 레버가 첫 번째 순서야.||그러니까, 초기 상태에서 한번에 지금 레버를 켜야 한다는 거지.||..그 다음은 나도 잘 몰라||아무튼.. 주황버섯씨! 화이팅이야!",
+    "MirrorHiddenMessage02": "...||어떻게 찾은거야?||지금 켜져 있는 레버는 두 번째 순서야.||레버들을 순서대로 조작 한다면||진짜 소개팅 장소로 갈 수 있어.||혹시.. 다음 레버의 순서가 궁금해 BOY♂?||하지만, 내가 아는건 이것 뿐이야♂||그럼 다음에 또 보자고 BOY♂♥",
+    "MirrorHiddenMessage03": "훗...||그쪽으로 가면 안될텐데요..||진짜 소개팅 장소는 그 곳에 없어요.||...||지금 켜져 있는 레버가 세 번째 순서에요.||그 다음은 초기 상태로 되돌려야 하죠.||그러면 진짜 소개팅 장소로 갈 수 있을꺼에요.||잘 찾아올 수 있겠죠♥?||그럼.. 먼저가서 기다리고 있을께요♥"
+}
+
+// legacy(User Character)
+{
+    "Forest": 1,
+    "Beach": 1,
+    "IceCave": 1,
+    "Valentine": 4,
+    "HardRandom": 1,
+    "SpiritPendant": 1,
+    "Coke": 4,
+    "CaptainJack": 5,
+    "Desert": 2,
+    "Random": 17,
+    "GoldLeaf": 200,
+    "Subway": 7
+}

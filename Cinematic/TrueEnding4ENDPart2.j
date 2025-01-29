@@ -1,4 +1,4 @@
-library TrueEnding4ENDPart2 initializer init needs Cinematic
+library TrueEnding4ENDPart2 initializer init needs Cinematic, MirrorEntranceEvent
     globals
         private timer TimeLimit = CreateTimer()
         private timer FinalTimer = CreateTimer()
@@ -10,9 +10,7 @@ library TrueEnding4ENDPart2 initializer init needs Cinematic
         private unit SnowMan = null
         private constant string NAME = "|cffff7f27주황버섯|r"
         private constant string NAME2 = "|cffff7f27다른 주황버섯|r"
-        private constant string BLUE_NAME = "|cff0400ff파랑버섯|r"
         private constant string PINK_NAME = "|cffE45AAF분홍버섯|r"
-        private constant string BLACK_NAME = "|cff282828블랙|r"
         private rect ENDING_RECT
         private unit EndingBackground
         public boolean EllinEnding = false
@@ -180,15 +178,31 @@ library TrueEnding4ENDPart2 initializer init needs Cinematic
             call PanCameraToTimed(22592, 9216, 0)
         elseif tk.data == 2 then
                 call CinematicFilterGenericBJ( 2.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 100 )
-                call MsgPrint(NotEscapersName() + ": 야 이 배신자 새끼들아!!")
+                if MirrorEntranceEvent_GetLeverValue() == 12 then
+                    call MsgPrint(NAME + ": 야 이 배신자 새끼들아!!")
+                else
+                    call MsgPrint(NotEscapersName() + ": 야 이 배신자 새끼들아!!")
+                endif
         elseif tk.data == 3 then
+            if MirrorEntranceEvent_GetLeverValue() == 12 then
+                call MsgPrint(NAME + ": 나만 빼고 소개팅 가는거야?")
+            else
                 call MsgPrint(NotEscapersName() + ": 나만 빼고 소개팅 가는거야?")
+            endif
         elseif tk.data == 4 then
-            call MsgPrint(NotEscapersName() + ": ...")
+            if MirrorEntranceEvent_GetLeverValue() == 12 then
+                call MsgPrint(NAME + ": ...")
+            else
+                call MsgPrint(NotEscapersName() + ": ...")
+            endif
         elseif tk.data == 5 then
             call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
             call StartSound(gg_snd_OM_lightdown)
-            call MsgPrint(NotEscapersName() + ": ...")
+            if MirrorEntranceEvent_GetLeverValue() == 12 then
+                call MsgPrint(NAME + ": ...")
+            else
+                call MsgPrint(NotEscapersName() + ": ...")
+            endif
             call tk.start(1.0, false, function CMTTick2)
         elseif tk.data == 6 then
             loop
@@ -202,9 +216,14 @@ library TrueEnding4ENDPart2 initializer init needs Cinematic
             call StartSound(gg_snd_OM_lightdown)
             call StopSound( gg_snd_EllinRainy, false, false )
         elseif tk.data == 8 then
-            call StartSound(gg_snd_OM_GayBar)
-            call MsgPrint(NotEscapersName() + ": 정체를 들킨건가..")
-            call tk.start(2, false, function CMTTick2)
+            call tk.pause()
+            if MirrorEntranceEvent_GetLeverValue() == 12 then
+                call MirrorHiddenEvent_ThirdMessage.execute(tk, function CMTTick2)
+            else
+                call StartSound(gg_snd_OM_GayBar)
+                call MsgPrint(NotEscapersName() + ": 정체를 들킨건가..")
+                call tk.start(2, false, function CMTTick2)
+            endif
         elseif tk.data == 9 then
             call MsgPrint(NotEscapersName() + ": ...")
             call tk.start(2, false, function CMTTick2)

@@ -1,7 +1,25 @@
-library StoneStatue initializer Init needs Key
+library StoneStatue initializer Init needs Key, TriggerSleepAction
+
+    struct CameraShaker
+        private static method Shake takes integer i, real time returns nothing
+            call CameraSetTargetNoiseForPlayer(Player(i), 10, 250)
+            call TriggerSleepActionByTimer(time)
+            call CameraClearNoiseForPlayer(Player(i))
+        endmethod
+
+        public static method All takes real time returns nothing
+            local integer i = 0
+            //! runtextmacro for("set i = 0", "i < PLAYER_MAXINUM")
+                call Shake.execute(i, time)
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
+
+        public static method Play takes integer i, real time returns nothing
+            call Shake.execute(i, time)
+        endmethod
+    endstruct
 
     public struct cameraControler
-        static timer tk = CreateTimer()
         static boolean array IsShakeOffForPlayer
 
         static method ShakeOn takes integer i returns nothing
@@ -14,28 +32,16 @@ library StoneStatue initializer Init needs Key
             call DisplayTimedTextToPlayer(Player(i), 0, 0, 5, "※ 진동을 껏습니다.")
         endmethod
 
-        static method CameraShakeOff takes nothing returns nothing
-            local integer i = 0
-    
-            loop
-                exitwhen i > PLAYER_MAXINUM
-                call CameraClearNoiseForPlayer(Player(i))
-                set i = i + 1
-            endloop
-        endmethod
-    
         static method CameraShakeAll takes real time returns nothing
             local integer i = 0
     
             loop
-                exitwhen i > PLAYER_MAXINUM
+                exitwhen i >= PLAYER_MAXINUM
                 if IsShakeOffForPlayer[i] == false then
-                    call CameraSetTargetNoiseForPlayer(Player(i), 10, 250)
+                    call CameraShaker.Play(i, time)
                 endif
                 set i = i + 1
             endloop
-    
-            call TimerStart(thistype.tk, time, false, function thistype.CameraShakeOff)
         endmethod
 
         private static method onInit takes nothing returns nothing

@@ -828,8 +828,9 @@ scope initialize initializer init
         set s = s + "● Maple Story - The Tune of the Azure Light\n"
         set s = s + "● Waterflame - Red - Layerz OST\n"
         set s = s + "● Waterflame - Everybody Bounce\n"
-        set s = s + "● Maple Story - Full Moon Goblin Night Market"
-        set s = s + "● EverPlanet - Vacation Beach"
+        set s = s + "● Maple Story - Full Moon Goblin Night Market\n"
+        set s = s + "● Powerless - Over the Azure\n"
+        // set s = s + "● EverPlanet - Vacation Beach"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "사용된 BGM", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
     endfunction
 
@@ -872,6 +873,9 @@ scope initialize initializer init
 
         // CaveEnding
         call SetDoodadAnimation(27584, -29504, 128.00, 'D00A', false, "Death", false)
+
+        // Mirror
+        call SetDoodadAnimation(9152, -3456, 128.00, 'YOf3', false, "death", false)
     endfunction
 
     private function SetOpLimit takes integer opLimit returns nothing

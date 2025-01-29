@@ -68,8 +68,9 @@
 //! import "EasterEgg\CaveHiddenRectHint.j"
 //! import "EasterEgg\HiddenEvent.j"
 //! import "EasterEgg\HiddenWord.j"
-//! import "EasterEgg\Lever.j"
 //! import "EasterEgg\Maze.j"
+//! import "EasterEgg\MirrorEntranceEvent.j"
+//! import "EasterEgg\MirrorHiddenEvent.j"
 
 // Library
 //! import "Library\ArrayList.j"
@@ -98,6 +99,7 @@
 // Server
 //! import "Server\ConnectCheck.j"
 //! import "Server\JnStashNet.j"
+//! import "Server\MapData.j"
 //! import "Server\Notice.j"
 //! import "Server\Stash.j"
 //! import "Server\User.j"
