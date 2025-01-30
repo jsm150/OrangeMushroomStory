@@ -83,8 +83,7 @@ scope initialize initializer init
         set s = s + "- 엔딩을 스킵하는 기능이 모든 월드에 추가되었습니다.\n"
         set s = s + "- '카페'월드의 배경이 변경되었습니다.\n"
         set s = s + "- '석상'오브젝트를 상호작용 할 때의 화면 진동 효과를 비활성화 했습니다.\n"
-        set s = s + "- 랜덤을 하드모드로 변경했을 때 랜덤포탈이 변경되지 않던 버그를 수정했습니다.\n"
-        
+        set s = s + "- 랜덤을 하드모드로 변경했을 때 랜덤포탈이 변경되지 않던 버그를 수정했습니다."
         call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.6~12.7", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "12.2\n"
         set s = s + "- 일부 아이템의 기능 및 가격이 수정됩니다\n"

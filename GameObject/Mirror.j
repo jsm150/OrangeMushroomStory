@@ -1,4 +1,4 @@
-library Mirror needs MushroomMoving, Water, UnitMotion
+library Mirror initializer Init needs MushroomMoving, Water, UnitMotion
 
     globals
         private boolean array inMirrorState
@@ -30,6 +30,14 @@ library Mirror needs MushroomMoving, Water, UnitMotion
 
     public function InLevel takes integer world, integer level returns boolean
         return Rects.Find(world, level) != 0
+    endfunction
+
+    public function GetInMirrorState takes integer i returns boolean
+        return inMirrorState[i]
+    endfunction
+
+    public function SetInMirrorState takes integer i, boolean state returns nothing
+        set inMirrorState[i] = state
     endfunction
     
     private struct TeleportEffect

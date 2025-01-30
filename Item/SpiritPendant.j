@@ -54,6 +54,7 @@ library SpiritPendant needs Stage
         private boolean gravityState
         private aList morphUseList
         private aList gravityUseList
+        private boolean array inMirrorState[PLAYER_MAXINUM]
 
         public method Equals takes integer world, integer stage returns boolean
             return this.world == world and this.stage == stage
@@ -112,6 +113,10 @@ library SpiritPendant needs Stage
                             set temp = LeftArrow[i + 1]
                             set LeftArrow[i + 1] = RightArrow[i + 1]
                             set RightArrow[i + 1] = temp
+                        endif
+                        if this.inMirrorState[i] then
+                            call Mirror_SetInMirrorState(i + 1, true)
+                            call Mirror_ChangeBackGround(i + 1, true)
                         endif
                     else
                         call Observer_Start(i + 1)
@@ -243,6 +248,10 @@ library SpiritPendant needs Stage
                         */  GetUnitTypeId(OrangeMushroom[i + 1]), /*
                         */  move /*
                         */)
+
+                        if Mirror_InLevel(Status.World, Status.Level) then
+                            set this.inMirrorState[i] = Mirror_GetInMirrorState(i + 1)
+                        endif
                     endif
 
                 endif
