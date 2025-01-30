@@ -6,6 +6,31 @@ library Mirror needs MushroomMoving, Water, UnitMotion
         private boolean isRunShadowEngine = false
         private boolean registed = false
     endglobals
+
+    private struct Rects
+        private static hashtable table = InitHashtable()
+        public rect Main
+        public rect Sub
+
+        public static method Find takes integer world, integer level returns thistype
+            return LoadInteger(table, world, level)
+        endmethod
+
+        public static method Add takes integer world, integer level, rect mainRect, rect subRect returns nothing
+            call SaveInteger(table, world, level, thistype.create(mainRect, subRect))
+        endmethod
+
+        public static method create takes rect mainRect, rect subRect returns thistype
+            local thistype this = thistype.allocate()
+            set this.Main = mainRect
+            set this.Sub = subRect
+            return this
+        endmethod
+    endstruct
+
+    public function InLevel takes integer world, integer level returns boolean
+        return Rects.Find(world, level) != 0
+    endfunction
     
     private struct TeleportEffect
         private static sList list = 0
@@ -185,34 +210,20 @@ library Mirror needs MushroomMoving, Water, UnitMotion
         local real ny = 0
         local real x = GetUnitX(OrangeMushroom[i])
         local real y = GetUnitY(OrangeMushroom[i])
-
-        if world == 17 and level == 1 then
-            if inMirrorState[i] then
-                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetSub001) + GetRectCenterX(gg_rct_MirrorOffsetMain001)
-                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetSub001) + GetRectCenterY(gg_rct_MirrorOffsetMain001)
-            else
-                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain001) + GetRectCenterX(gg_rct_MirrorOffsetSub001)
-                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain001) + GetRectCenterY(gg_rct_MirrorOffsetSub001)
-            endif
-        elseif world == 17 and level == 2 then
-            if inMirrorState[i] then
-                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetSub002) + GetRectCenterX(gg_rct_MirrorOffsetMain002)
-                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetSub002) + GetRectCenterY(gg_rct_MirrorOffsetMain002)
-            else
-                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain002) + GetRectCenterX(gg_rct_MirrorOffsetSub002)
-                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain002) + GetRectCenterY(gg_rct_MirrorOffsetSub002)
-            endif
-        elseif world == 17 and level == 3 then
-            if inMirrorState[i] then
-                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetSub003) + GetRectCenterX(gg_rct_MirrorOffsetMain003)
-                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetSub003) + GetRectCenterY(gg_rct_MirrorOffsetMain003)
-            else
-                set nx = x - GetRectCenterX(gg_rct_MirrorOffsetMain003) + GetRectCenterX(gg_rct_MirrorOffsetSub003)
-                set ny = y - GetRectCenterY(gg_rct_MirrorOffsetMain003) + GetRectCenterY(gg_rct_MirrorOffsetSub003)
-            endif
-        else
+        local Rects rects = Rects.Find(world, level)
+        
+        if rects == 0 then
             return null
         endif
+
+        if inMirrorState[i] then
+            set nx = x - GetRectCenterX(rects.Sub) + GetRectCenterX(rects.Main)
+            set ny = y - GetRectCenterY(rects.Sub) + GetRectCenterY(rects.Main)
+        else
+            set nx = x - GetRectCenterX(rects.Main) + GetRectCenterX(rects.Sub)
+            set ny = y - GetRectCenterY(rects.Main) + GetRectCenterY(rects.Sub)
+        endif
+        
         return Location(nx, ny)
     endfunction
 
@@ -357,7 +368,12 @@ library Mirror needs MushroomMoving, Water, UnitMotion
     public function Reset takes integer world, integer level returns nothing
         local integer i = 1
 
-        if world != 17 then
+        //! runtextmacro for("set i = 1", "i <= PLAYER_MAXINUM")
+            set inMirrorState[i] = false
+            call RemoveShadow(i)
+        //! runtextmacro for_end("set i = i + 1")
+
+        if InLevel(world, level) == false then
             return
         endif
 
@@ -366,15 +382,17 @@ library Mirror needs MushroomMoving, Water, UnitMotion
             set registed = true
         endif
 
-
         //! runtextmacro for("set i = 1", "i <= PLAYER_MAXINUM")
-            set inMirrorState[i] = false
-            call RemoveShadow(i)
-            
             if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
                 call ChangeBackGround(i, false)
                 call CreateShadow(i)
             endif
         //! runtextmacro for_end("set i = i + 1")
+    endfunction
+
+    private function Init takes nothing returns nothing
+        call Rects.Add(17, 1, gg_rct_MirrorOffsetMain001, gg_rct_MirrorOffsetSub001)
+        call Rects.Add(17, 2, gg_rct_MirrorOffsetMain002, gg_rct_MirrorOffsetSub002)
+        call Rects.Add(17, 3, gg_rct_MirrorOffsetMain003, gg_rct_MirrorOffsetSub003)
     endfunction
 endlibrary  

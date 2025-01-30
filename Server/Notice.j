@@ -222,9 +222,6 @@ scope MapNotice initializer init
         call TriggerRegisterTimerEvent(t, 5.0, false)
         call TriggerAddAction(t, function Action)
         call MakeFrame()
-
-        
-
         set t = null
     endfunction
     
