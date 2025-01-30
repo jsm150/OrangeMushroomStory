@@ -1,4 +1,4 @@
-library GravityChanger initializer init
+library GravityChanger initializer init needs UnitMotion
     globals
         private tick tk
         public boolean Loading = false
@@ -121,17 +121,9 @@ library GravityChanger initializer init
                     call SetUnitBlendTime(OrangeMushroom[i], 0.00)
                     call SetUnitUserData( OrangeMushroom[i], 0 )
                     if Direction[i] == "Left" then
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
-                        else
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand Second" )
-                        endif
+                        call UnitMotion_LeftStand(i)
                     elseif Direction[i] == "Right" then
-                        if GravityChanger_State == false then
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand Second" )
-                        else
-                            call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
-                        endif
+                        call UnitMotion_RightStand(i)
                     endif
                 endif
             endif
@@ -329,6 +321,10 @@ library GravityChanger initializer init
         call SetRect(t, gg_rct_GravityChanger055)
         call SetRect(t, gg_rct_GravityChanger056)
         call SetRect(t, gg_rct_GravityChanger057)
+        call SetRect(t, gg_rct_GravityChanger058)
+        call SetRect(t, gg_rct_GravityChanger059)
+        call SetRect(t, gg_rct_GravityChanger060)
+        call SetRect(t, gg_rct_GravityChanger061)
 
         call TriggerAddAction( t, function Main )
         

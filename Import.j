@@ -3,6 +3,7 @@
 //! import "JN\DzAPIHardware.j"
 //! import "JN\DzAPIPlus.j"
 //! import "JN\DzAPISync.j"
+//! import "JN\JAPIEffect.j"
 //! import "JN\JNCommon.j"
 //! import "JN\JNServer.j"
 //! import "JN\JNStopwatch.j"
@@ -17,6 +18,7 @@
 //! import "GameObject\GravityChanger.j"
 //! import "GameObject\Jumper.j"
 //! import "GameObject\KeySwitch.j"
+//! import "GameObject\Mirror.j"
 //! import "GameObject\MorphStone.j"
 //! import "GameObject\MovePortal.j"
 //! import "GameObject\MovePropelly.j"
@@ -66,8 +68,9 @@
 //! import "EasterEgg\CaveHiddenRectHint.j"
 //! import "EasterEgg\HiddenEvent.j"
 //! import "EasterEgg\HiddenWord.j"
-//! import "EasterEgg\Lever.j"
 //! import "EasterEgg\Maze.j"
+//! import "EasterEgg\MirrorEntranceEvent.j"
+//! import "EasterEgg\MirrorHiddenEvent.j"
 
 // Library
 //! import "Library\ArrayList.j"
@@ -90,11 +93,13 @@
 //! import "Library\TimerTick.j"
 //! import "Library\TimerUtils.j"
 //! import "Library\TriggerSleepAction.j"
+//! import "Library\UnitMotion.j"
 //! import "Library\World.j"
 
 // Server
 //! import "Server\ConnectCheck.j"
 //! import "Server\JnStashNet.j"
+//! import "Server\MapData.j"
 //! import "Server\Notice.j"
 //! import "Server\Stash.j"
 //! import "Server\User.j"

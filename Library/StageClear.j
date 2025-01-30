@@ -105,7 +105,7 @@ library Stage initializer init needs Cart
         local integer i = 1
         local integer j = 1
         local integer sum = 0
-        local integer worldCount = 15
+        local integer worldCount = 16
         
         loop
             exitwhen i > worldCount
@@ -520,6 +520,10 @@ library Stage initializer init needs Cart
             call SetTerrainType(-10208 + 384, 9728, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(-12416, 9728, SENTINEL_TERRAIN, -1, 1, 0)
             call SetTerrainType(-12416 + 256, 9728, SENTINEL_TERRAIN, -1, 1, 0)
+        elseif i == 17 then
+            //! runtextmacro for("set j = 0", "j < 4")
+                call SetTerrainType(-15232+(128*j), -28160, SENTINEL_TERRAIN, -1, 1, 0)
+            //! runtextmacro for_end("set j = j + 1")
         endif
     endfunction
     
@@ -1171,6 +1175,20 @@ library Stage initializer init needs Cart
                 call CreateObject(7, gg_rct_Bomb16_4_005, "Bomb")
                 set BoxsCount = 7
             endif
+        elseif Status.World == 17 then
+            if Status.Level == 1 then
+                call CreateObject(1, gg_rct_Box17_1_001, "null")
+                set BoxsCount = 1
+            elseif Status.Level == 2 then
+                call SentinelChangeTerrain(17)
+                call CreateObject(0, gg_rct_Sentinel17_2_001, "SentinelRight")
+                call CreateObject(1, gg_rct_KingBloctopus17_2_001, "AutoRight")
+                call CreateObject(2, gg_rct_Bloctopus17_2_001, "Right")
+                set BoxsCount = 2
+            elseif Status.Level == 3 then
+                call CreateObject(1, gg_rct_KingBloctopus17_3_001, "AutoRight")
+                set BoxsCount = 1
+            endif
         endif
     endfunction
     
@@ -1284,6 +1302,8 @@ library Stage initializer init needs Cart
                 call Status.SetLevel(14, 9)
             elseif HiddenPortalState() == 14 then
                 call Status.SetLevel(15, 9)
+            elseif HiddenPortalState() == 15 then
+                call Status.SetLevel(16, 9)
             else
                 if Stage_WorldSkip then
                     call Status.SetLevel(2, 8)
@@ -1315,6 +1335,7 @@ library Stage initializer init needs Cart
         set HiddenPortalCount[12] = 0
         set HiddenPortalCount[13] = 0
         set HiddenPortalCount[14] = 0
+        set HiddenPortalCount[15] = 0
         set GravityChanger_SentinelTime = 0
         set GravityChanger_SentinelTime2 = 0
         call PauseTimer(SentinelTimer)
@@ -1363,6 +1384,9 @@ library Stage initializer init needs Cart
                     set change = true
                 elseif Status.World == 15 and User_UserDataList[i].RefreMax < Status.Level then
                     set User_UserDataList[i].RefreMax = Status.Level
+                    set change = true
+                elseif Status.World == 17 and User_UserDataList[i].MirrorMax < Status.Level then
+                    set User_UserDataList[i].MirrorMax = Status.Level
                     set change = true
                 endif
             endif
@@ -1423,6 +1447,8 @@ library Stage initializer init needs Cart
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 레쉬와 다크 레쉬에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명4'을 참고해주세요." )
                 elseif Status.World == 16 and Status.Level == 1 then
                     call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "※ 폭탄에 대해 자세히 알고 싶다면 F9의 '오브젝트 설명4'을 참고해주세요." )
+                elseif Status.World == 17 and Status.Level == 4 then
+                    call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "|cffeeff55※ 아직 미완성 월드 입니다..|r" )
                 endif
             endif
         endif
@@ -1481,6 +1507,7 @@ library Stage initializer init needs Cart
         call MovePortal_ResetCanMove.execute(Status.World, Status.Level)
         call StoneStatue_ResetBlocks.execute(Status.World, Status.Level)
         call Frame_LaserBlockHistory.Clear()
+        call Mirror_Reset(Status.World, Status.Level)
         set StartRect = LoadRectHandle(StartRectList, Status.World, Status.Level)
         if CountUnitsInGroup(SentinelGroup) > 0 then
             call TimerStart(SentinelTimer, 1.5, false, function SentinelAttack)
@@ -1601,6 +1628,8 @@ library Stage initializer init needs Cart
             endif
         elseif HiddenPortalState() == 10 then
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 얼음 동굴" )
+        elseif HiddenPortalState() == 15 then
+            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울세계" )
         elseif TESTMODE == false then
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "World 1: 집 앞마당" )
         endif
@@ -1635,8 +1664,8 @@ library Stage initializer init needs Cart
                     if Status.World == 1 and Status.Level == 0 then
                         call CinematicFilterGenericBJ( 0.00, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\White_mask.blp", 0, 0, 0, 0, 0, 0, 0, 0 )
                         if TESTMODE == true then
-                            call Status.SetLevel(15, 8)
-                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Final World(Part 5): 항구" )
+                            call Status.SetLevel(16, 8)
+                            call DisplayTimedTextToForce( GetPlayersAll(), 10.00, "Secret World: 거울세계" )
                             call tk.start(3.0, false, function WorldTimer)
                         else
                             call tk.start(1.0, false, function WorldTimer)
@@ -1672,7 +1701,7 @@ library Stage initializer init needs Cart
                             call tk.start(2.0, false, function WorldTimer)
                         endif
                     endif
-                elseif HiddenPortalState() == 10 and i > 0 then
+                elseif (HiddenPortalState() == 10 or HiddenPortalState() == 15) and i > 0 then
                     call Inventory_ShowSkinInventoryButton.evaluate(false)
                     call CinematicModeBJ( true, GetPlayersAll() )
                     call StopSound( BackgroundMusic, false, true )
@@ -1908,7 +1937,11 @@ library Stage initializer init needs Cart
         call SaveRectHandle(StartRectList, 16, 3, gg_rct_StartRect124)
         call SaveRectHandle(StartRectList, 16, 4, gg_rct_StartRect125)
 
-    
+        call SaveRectHandle(StartRectList, 17, 1, gg_rct_StartRect130)
+        call SaveRectHandle(StartRectList, 17, 2, gg_rct_StartRect131)
+        call SaveRectHandle(StartRectList, 17, 3, gg_rct_StartRect132)
+        call SaveRectHandle(StartRectList, 17, 4, gg_rct_StartRect133)
+
 
         // 2번째 소환위치
         call SaveRectHandle(StartRectList, -14, 5, gg_rct_StartRectSub109)

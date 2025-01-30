@@ -1,4 +1,4 @@
-library Mute initializer Init
+library Mute initializer Init needs Jumper
     globals
         private hashtable list = InitHashtable()
     endglobals

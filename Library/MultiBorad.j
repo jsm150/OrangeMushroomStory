@@ -1,23 +1,25 @@
 library Multiboard// initializer init
+    function BackGroundChangeById takes integer i, integer unitType returns nothing
+        local real x = GetUnitX(BackGroundUnits[i])
+        local real y = GetUnitY(BackGroundUnits[i])
+        call RemoveUnit(BackGroundUnits[i])
+        set BackGroundUnits[i] = CreateUnit(Player(i-1), unitType, x, y, 270 )
+        if SubString("|", -1, 0) != "o" and GetUnitTypeId(BackGroundUnits[i]) != 'hspt' then
+            call SetUnitScale(BackGroundUnits[i], 4, 4, 4)
+        endif
+        call SetUnitVertexColorBJ( BackGroundUnits[i], 0.00, 0.00, 0.00, 100 )
+        if Player(i-1) == GetLocalPlayer() then
+            call SetUnitVertexColorBJ( BackGroundUnits[i], 100.00, 100.00, 100.00, 0 )
+        endif
+    endfunction
+    
     function BackGroundChange takes integer unitType returns nothing
         local integer i = 1
-        local real x
-        local real y
         
         loop
         exitwhen i > PLAYER_MAXINUM
             if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                set x = GetUnitX(BackGroundUnits[i])
-                set y = GetUnitY(BackGroundUnits[i])
-                call RemoveUnit(BackGroundUnits[i])
-                set BackGroundUnits[i] = CreateUnit(Player(i-1), unitType, x, y, 270 )
-                if SubString("|", -1, 0) != "o" and GetUnitTypeId(BackGroundUnits[i]) != 'hspt' then
-                    call SetUnitScale(BackGroundUnits[i], 4, 4, 4)
-                endif
-                call SetUnitVertexColorBJ( BackGroundUnits[i], 0.00, 0.00, 0.00, 100 )
-                if Player(i-1) == GetLocalPlayer() then
-                    call SetUnitVertexColorBJ( BackGroundUnits[i], 100.00, 100.00, 100.00, 0 )
-                endif
+                call BackGroundChangeById(i, unitType)
             endif
         set i = i + 1
         endloop
@@ -81,6 +83,10 @@ library Multiboard// initializer init
             set BackgroundMusic = gg_snd_Vacation_Beach
             call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
             call BackGroundChange('h00W')
+        elseif world == 17 then 
+            set BackgroundMusic = gg_snd_Over_the_Azure
+            call ForForce( bj_FORCE_ALL_PLAYERS, function PlayersPlayMusic )
+            // 배경은 MirrorTeleport에서 따로 처리.
         endif
     endfunction
 

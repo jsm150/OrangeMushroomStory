@@ -88,7 +88,7 @@ library ItemStore initializer Init needs RandomStage
         private stub method GiveItem takes integer playerId returns nothing
             call DisplayTimedTextToForce( GetPlayersAll(), 10.00, TeamColor[playerId + 1] + GetPlayerName(Player(playerId)) + "|r 님이 랜덤 월드(" + TeamColor[1] + "Hard|r)를 열었습니다!" )
             call CinematicFilterGenericBJ( 1, BLEND_MODE_BLEND, "ReplaceableTextures\\CameraMasks\\DreamFilter_Mask.blp", 100, 0.00, 0.00, 50.00, 100.00, 0, 0, 100.00 )
-            call SetDoodadAnimation(2563, 196, 128.00, 'D000', false, "Stand2", false)
+            call SetDoodadAnimation(5632, 608, 128.00, 'D000', false, "Stand2", false)
             call RandomStage_SetHardMode()
         endmethod
     endstruct

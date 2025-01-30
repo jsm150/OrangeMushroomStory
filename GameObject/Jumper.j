@@ -1,4 +1,4 @@
-library Jumper initializer init
+library Jumper initializer init needs UnitMotion
     globals
         private constant real JUMPER_POWER = 50.00
         private trigger MainTrigger = CreateTrigger()
@@ -6,7 +6,6 @@ library Jumper initializer init
     endglobals
 
     public function Jumping takes integer i, real x, real y returns nothing
-        local Decorate_PetSkin pet = Decorate_GetPetSkin(i - 1)
 
         if GetUnitTypeId(OrangeMushroom[i]) != 'orai' and GetUnitTypeId(OrangeMushroom[i]) != 'o001' then
             set gravity[i] = JUMPER_POWER
@@ -17,31 +16,12 @@ library Jumper initializer init
                 call DestroyEffect(AddSpecialEffect("war3mapImported\\JumperEffect.mdl", x, y+80 ))
             endif
             if i <= PLAYER_MAXINUM then
-                if GravityChanger_State == false then
-                    if Direction[i] == "Left" then
-                        call SetUnitAnimation( OrangeMushroom[i], "Spell First" )
-                        if pet != 0 then
-                            call SetUnitAnimation( pet.Unit, "Spell First" )
-                        endif
-                    elseif Direction[i] == "Right" then
-                        call SetUnitAnimation( OrangeMushroom[i], "Spell Second" )
-                        if pet != 0 then
-                            call SetUnitAnimation( pet.Unit, "Spell Second" )
-                        endif
-                    endif
-                else
-                    if Direction[i] == "Left" then
-                        call SetUnitAnimation( OrangeMushroom[i], "Spell Second" )
-                        if pet != 0 then
-                            call SetUnitAnimation( pet.Unit, "Spell Second" )
-                        endif
-                    elseif Direction[i] == "Right" then
-                        call SetUnitAnimation( OrangeMushroom[i], "Spell First" )
-                        if pet != 0 then
-                            call SetUnitAnimation( pet.Unit, "Spell First" )
-                        endif
-                    endif
+                if Direction[i] == "Left" then
+                    call UnitMotion_LeftJump(i)
+                elseif Direction[i] == "Right" then
+                    call UnitMotion_RightJump(i)
                 endif
+                
             endif
         endif
     endfunction
@@ -375,6 +355,13 @@ library Jumper initializer init
         call RegionAddRect( Rects, gg_rct_Jumper316 )
         call RegionAddRect( Rects, gg_rct_Jumper317 )
 
+        call RegionAddRect( Rects, gg_rct_Jumper318 )
+        call RegionAddRect( Rects, gg_rct_Jumper319 )
+        call RegionAddRect( Rects, gg_rct_Jumper320 )
+        call RegionAddRect( Rects, gg_rct_Jumper321 )
+        call RegionAddRect( Rects, gg_rct_Jumper322 )
+        call RegionAddRect( Rects, gg_rct_Jumper323 )
+        call RegionAddRect( Rects, gg_rct_Jumper324 )
 
     endfunction
 endlibrary

@@ -5,7 +5,7 @@ library Observer needs Stage
         public integer array ViewNumber
     endglobals
 
-    public function Watch takes integer i, integer target returns nothing
+    public function View takes integer i, integer target returns nothing
         if Player(i-1) == GetLocalPlayer() then
             call SetUnitVertexColorBJ( BackGroundUnits[ViewNumber[i]], 0.00, 0.00, 0.00, 100 )
         endif
@@ -14,6 +14,19 @@ library Observer needs Stage
             call SetUnitVertexColorBJ( BackGroundUnits[i], 0.00, 0.00, 0.00, 100 )
             call SetUnitVertexColorBJ( BackGroundUnits[target], 100.00, 100.00, 100.00, 0 )
         endif
+    endfunction
+
+    public function Reload takes integer target returns nothing
+        local integer i = 1
+        //! runtextmacro for("set i = 1", "i <= PLAYER_MAXINUM")
+            if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and ViewNumber[i] == target then
+                call View(i, target)
+            endif
+        //! runtextmacro for_end("set i = i + 1")
+    endfunction
+
+    public function Watch takes integer i, integer target returns nothing
+        call View(i, target)
         call DisplayTimedTextToPlayer(Player(i-1), 0, 0, 1, TeamColor[target] + GetPlayerName(Player(target-1)) + "|r님을 관전합니다.")
     endfunction
 
@@ -58,6 +71,7 @@ library Observer needs Stage
         set State[i] = true
         set SteppedPlayer[i] = 0
         call Status.SetEscapers(Status.Portal+1)
+        call Mirror_RemoveShadow(i)
         if GravityChanger_State == true then
             set x = GetUnitX(OrangeMushroom[i])
             set y = GetUnitY(OrangeMushroom[i])

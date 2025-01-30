@@ -1,4 +1,4 @@
-library Ending initializer init needs Cinematic, EndingSkip
+library Ending initializer init needs Cinematic, EndingSkip, UnitMotion
     globals
         public trigger Trigger
         private tick tk
@@ -6,6 +6,7 @@ library Ending initializer init needs Cinematic, EndingSkip
         private constant string NAME = "|cffff7f27주황버섯|r"
         private constant string BLACK_NAME = "|cff282828블랙|r"
         private constant string BLACK_NAME2 = "|cff282828또 다른 블랙|r"
+        private integer random = 0
     endglobals
     
     private function MsgPrint takes string s returns nothing
@@ -386,7 +387,15 @@ library Ending initializer init needs Cinematic, EndingSkip
             call tk.start(0.15, false, function CMTTick)
         elseif tk.data == 86 then
             call StopSound(gg_snd_OM_GayBar, false, false)
-            call tk.start(5.0, false, function CMTTick)
+            call tk.pause()
+            set random = GetRandomInt(0, 1) + GetRandomInt(0, 1)
+            if Status.World == 3 and MirrorEntranceEvent_GetLeverValue() == 3 then
+                call MirrorHiddenEvent_SecondMessage.execute(tk, function CMTTick)
+            elseif random == 2 then
+                call MirrorHiddenEvent_Notice.execute(tk, function CMTTick)
+            else
+                call tk.start(5.0, false, function CMTTick)
+            endif
         elseif tk.data == 87 then
             call StartSound(gg_snd_OM_EndingSound)
             call EndingMsgPrint("제작: z1z1z1")
