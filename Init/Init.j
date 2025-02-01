@@ -3,7 +3,7 @@ scope initialize initializer init
         hashtable Hash = InitHashtable()
         
         constant integer PLAYER_MAXINUM = 7
-        constant boolean TESTMODE = true
+        constant boolean TESTMODE = false
         boolean PracticeMode = false
         unit array OrangeMushroom
         unit array BackGroundUnits
@@ -83,8 +83,13 @@ scope initialize initializer init
         set s = s + "- 엔딩을 스킵하는 기능이 모든 월드에 추가되었습니다.\n"
         set s = s + "- '카페'월드의 배경이 변경되었습니다.\n"
         set s = s + "- '석상'오브젝트를 상호작용 할 때의 화면 진동 효과를 비활성화 했습니다.\n"
-        set s = s + "- 랜덤을 하드모드로 변경했을 때 랜덤포탈이 변경되지 않던 버그를 수정했습니다."
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.6~12.7", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
+        set s = s + "- 랜덤을 하드모드로 변경했을 때 랜덤포탈이 변경되지 않던 버그를 수정했습니다.\n"
+        set s = s + "\n"
+        set s = s + "12.8\n"
+        set s = s + "- '거울세계' 월드에서 이펙트가 제대로 보이지 않던 버그를 수정합니다.\n"
+        set s = s + "- '거울세계' 월드에서 'G'오브젝트로 맵이 뒤집혔을 때, 그림자는 뒤집히지 않던 버그를 수정합니다.\n"
+        set s = s + "- '해변', '발렌타인 데이' 월드의 인트로를 스킵했을 때, 유닛이 사라지던 버그를 수정합니다."
+        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "12.6~12.8", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomPinkIcon.blp" )
         set s = "12.2\n"
         set s = s + "- 일부 아이템의 기능 및 가격이 수정됩니다\n"
         set s = s + "\n"
@@ -659,13 +664,13 @@ scope initialize initializer init
         set s = s + "\n"
         set s = s + "● 다크 레쉬\n"
         set s = s + "-상자와 동일하나, 다크 레쉬 위에서 방향키(↓)를 누르면 레쉬로 변신합니다.\n"
-        set s = s + "● 폭탄\n"
-        set s = s + "-상자와 동일하나, 폭탄 위에서 방향키(↓)를 누르면 폭탄 위치 기준, 아래 블럭 3칸이 가로 방향으로 파괴됩니다.\n"
-        set s = s + "-열쇠 블럭은 파괴할 수 없습니다."
-        set s = s + "\n"
-        set s = s + "● 카트\n"
-        set s = s + "-분홍 문어 블럭과 동일하나 카트 이동방향에 다른 오브젝트가 있을 경우, 옆으로 부딪혔을 때 그 오브젝트를 카트에 담습니다.\n"
-        set s = s + "-카트 안에 담긴 오브젝트가 있을 경우, 카트 위에서 방향키(↓)를 누르면 카트가 파괴되고, 담겨있던 오브젝트가 나옵니다.\n"
+        // set s = s + "● 폭탄\n"
+        // set s = s + "-상자와 동일하나, 폭탄 위에서 방향키(↓)를 누르면 폭탄 위치 기준, 아래 블럭 3칸이 가로 방향으로 파괴됩니다.\n"
+        // set s = s + "-열쇠 블럭은 파괴할 수 없습니다."
+        // set s = s + "\n"
+        // set s = s + "● 카트\n"
+        // set s = s + "-분홍 문어 블럭과 동일하나 카트 이동방향에 다른 오브젝트가 있을 경우, 옆으로 부딪혔을 때 그 오브젝트를 카트에 담습니다.\n"
+        // set s = s + "-카트 안에 담긴 오브젝트가 있을 경우, 카트 위에서 방향키(↓)를 누르면 카트가 파괴되고, 담겨있던 오브젝트가 나옵니다.\n"
         call CreateQuestBJ( bj_QUESTTYPE_REQ_DISCOVERED, "오브젝트 설명4", s, "ReplaceableTextures\\CommandButtons\\BTNs_OrangeMushroomIcon.blp" )
         set s = "2-8에 분기점 입구가 있습니다.\n"
         set s = s + "이 곳에 입장하기 위해선 호스트가 비밀 코드를 입력하셔야 합니다.\n"
