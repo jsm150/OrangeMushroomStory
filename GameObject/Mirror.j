@@ -251,7 +251,6 @@ library Mirror initializer Init needs MushroomMoving, Water, UnitMotion
             endif
         //! runtextmacro for_end("set i = i + 1")
         call TeleportEffect.Sync()
-
         set xy = null
     endfunction
 
