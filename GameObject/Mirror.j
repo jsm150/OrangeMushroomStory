@@ -255,6 +255,12 @@ library Mirror initializer Init needs MushroomMoving, Water, UnitMotion
         set xy = null
     endfunction
 
+    public function Reverse takes integer i, integer angle returns nothing
+        if shadowEffect[i] != null then
+            call EXEffectMatRotateZ(shadowEffect[i], angle)
+        endif
+    endfunction
+
     public function RemoveShadow takes integer i returns nothing
         local effect shadow = shadowEffect[i]
         set shadowEffect[i] = null

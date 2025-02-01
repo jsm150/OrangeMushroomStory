@@ -1,4 +1,4 @@
-library GravityChanger initializer init needs UnitMotion
+library GravityChanger initializer init needs UnitMotion, Mirror
     globals
         private tick tk
         public boolean Loading = false
@@ -77,10 +77,12 @@ library GravityChanger initializer init needs UnitMotion
                         call SetTextTagVisibility(NameTextTag[i], true)
                         if GravityChanger_State == false then
                             call SetUnitFacing( OrangeMushroom[i], 270 )
+                            call Mirror_Reverse(i, 270)
                             call Decorate_SetUnitAngle(i - 1, 270)
                             call SetTextTagPos(NameTextTag[i], GetUnitX(OrangeMushroom[i])-50, GetUnitY(OrangeMushroom[i])-120, 0)
                         else
                             call SetUnitFacing( OrangeMushroom[i], 90 )
+                            call Mirror_Reverse(i, 180)
                             call Decorate_SetUnitAngle(i - 1, 90)
                             call SetTextTagPos(NameTextTag[i], GetUnitX(OrangeMushroom[i])+50, GetUnitY(OrangeMushroom[i])+120, 0)
                         endif
