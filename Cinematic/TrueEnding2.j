@@ -357,8 +357,30 @@ library TrueEnding2 initializer init needs Cinematic, UnitMotion
             loop
             exitwhen i > PLAYER_MAXINUM
                 if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING then
-                    call SetUnitPosition( OrangeMushroom[i], GetRectMinX(gg_rct_EndingStartRect2)+(128*(i-1)), GetRectCenterY(gg_rct_EndingStartRect2) )
+                    set LeftArrow[i] = false
+                    set RightArrow[i] = false
+                    set gravity[i] = 0
+                    set SteppedPlayer[i] = 0
+                    if GravityChanger_State == true then
+                        call RemoveUnit(OrangeMushroom[i])
+                        set OrangeMushroom[i] = CreateUnit(Player(i-1), OrangeMushroomType[i], GetRectMinX(gg_rct_EndingStartRect2)+(128*(i-1)), GetRectCenterY(gg_rct_EndingStartRect2), 270 )
+                        call SetUnitBlendTime(OrangeMushroom[i], 0.00)
+                    else
+                        call SetUnitPosition( OrangeMushroom[i], GetRectMinX(gg_rct_EndingStartRect2)+(128*(i-1)), GetRectCenterY(gg_rct_EndingStartRect2) )
+                    endif
                     call SetUnitPosition( BackGroundUnits[i], GetRectMinX(gg_rct_EndingStartRect2)+(128*(i-1)), GetRectCenterY(gg_rct_EndingStartRect2) )
+                    call SetUnitVertexColorBJ( BackGroundUnits[i], 0.00, 0.00, 0.00, 100 )
+                    if Player(i-1) == GetLocalPlayer() then
+                        call SetUnitVertexColorBJ( BackGroundUnits[i], 100.00, 100.00, 100.00, 0 )
+                    endif
+                    set Observer_State[i] = false
+                    set LevelClearState[i] = false
+                    set Observer_ViewNumber[i] = 0
+                    call UnitRemoveAbility( OrangeMushroom[i], 'Aloc' )
+                    call ShowUnitShow(OrangeMushroom[i])
+                    call UnitAddAbility( OrangeMushroom[i], 'Aloc' )
+                    call SetTextTagVisibility(NameTextTag[i], true)
+                    call SetUnitAnimation( OrangeMushroom[i], "Stand First" )
                 endif
             set i = i + 1
             endloop

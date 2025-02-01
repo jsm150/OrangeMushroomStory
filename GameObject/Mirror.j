@@ -247,12 +247,17 @@ library Mirror initializer Init needs MushroomMoving, Water, UnitMotion
             if GetPlayerSlotState(Player(i-1)) == PLAYER_SLOT_STATE_PLAYING and shadowEffect[i] != null then
                 set xy = GetXY(i, world, level)
                 call EXSetEffectXY(shadowEffect[i], GetLocationX(xy), GetLocationY(xy))
-                call TeleportEffect.Sync()
                 call RemoveLocation(xy)
             endif
         //! runtextmacro for_end("set i = i + 1")
-
+        call TeleportEffect.Sync()
         set xy = null
+    endfunction
+
+    public function Reverse takes integer i, integer angle returns nothing
+        if shadowEffect[i] != null then
+            call EXEffectMatRotateZ(shadowEffect[i], angle)
+        endif
     endfunction
 
     public function RemoveShadow takes integer i returns nothing
