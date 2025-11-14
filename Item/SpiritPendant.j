@@ -55,6 +55,10 @@ library SpiritPendant needs Stage
         private aList morphUseList
         private aList gravityUseList
         private boolean array inMirrorState[PLAYER_MAXINUM]
+        private integer bombBlockCount
+        private static hashtable bombBlockHistory = InitHashtable()
+        private integer cartStorageCount
+        private static hashtable cartStorage = InitHashtable()
 
         public method Equals takes integer world, integer stage returns boolean
             return this.world == world and this.stage == stage
@@ -71,6 +75,15 @@ library SpiritPendant needs Stage
 
             //! runtextmacro for("set i = 0", "i < blockHistoryCount")
                 call RemoveLocation(LoadLocationHandle(blockHistory, this, i))
+            //! runtextmacro for_end("set i = i + 1")
+
+            //! runtextmacro for("set i = 0", "i < this.bombBlockCount")
+                call RemoveLocation(LoadLocationHandle(bombBlockHistory, this, i * 3))
+                call RemoveLocation(LoadLocationHandle(bombBlockHistory, this, i * 3 + 1))
+            //! runtextmacro for_end("set i = i + 1")
+
+            //! runtextmacro for("set i = 0", "i < this.cartStorageCount")
+                call FlushChildHashtable(cartStorage, this * 8192 + i)
             //! runtextmacro for_end("set i = i + 1")
 
             //! runtextmacro for("set i = 0", "i < this.object.size")
@@ -203,6 +216,45 @@ library SpiritPendant needs Stage
             //! runtextmacro for_end("set i = i + 1")
         endmethod
 
+        private method RestoreBombBlocks takes nothing returns nothing
+            local integer i = 0
+            local location loc
+            local real x
+            local real y
+            local integer blockType
+            //! runtextmacro for("set i = 0", "i < this.bombBlockCount")
+                set loc = LoadLocationHandle(bombBlockHistory, this, i * 3)
+                set x = GetLocationX(loc)
+                set y = GetLocationY(loc)
+                set loc = LoadLocationHandle(bombBlockHistory, this, i * 3 + 1)
+                set blockType = R2I(GetLocationX(loc))
+                call Stage_BlockBoom.SetBlock(i, x, y, blockType)
+            //! runtextmacro for_end("set i = i + 1")
+            call Stage_BlockBoom.SetState(this.bombBlockCount)
+            call Stage_BlockBoom.Reset()
+        endmethod
+
+        private method RestoreCartStorage takes nothing returns nothing
+            local integer i = 0
+            local Unit cartUnit
+            local integer unitId
+            local boolean left
+            local boolean right
+            local string direction
+            //! runtextmacro for("set i = 0", "i < this.cartStorageCount")
+                set unitId = LoadInteger(cartStorage, this, i * 4)
+                if unitId != 0 then
+                    set left = LoadBoolean(cartStorage, this, i * 4 + 1)
+                    set right = LoadBoolean(cartStorage, this, i * 4 + 2)
+                    set direction = LoadStr(cartStorage, this, i * 4 + 3)
+                    set cartUnit = Unit.create(unitId, left, right, direction)
+                    call Cart_SetStorage(i, cartUnit)
+                else
+                    call Cart_SetStorage(i, 0)
+                endif
+            //! runtextmacro for_end("set i = i + 1")
+        endmethod
+
         public method Play takes nothing returns nothing
             call Stage_SetRestartMode()
             call Stage_ResetStage()
@@ -213,6 +265,8 @@ library SpiritPendant needs Stage
             call this.RestoreObjectUnit()
             call this.UseConsumableItem()
             call this.DestroyLaserBlock()
+            call this.RestoreBombBlocks()
+            call this.RestoreCartStorage()
             call this.DragonStoneSetting()
             call this.UseKey()
 
@@ -309,6 +363,26 @@ library SpiritPendant needs Stage
             //! runtextmacro for("set i = 0", "i < GravityChanger_UseCount")
                 call this.gravityUseList.add(GravityChanger_UseList[i])
                 call JNWriteLog("Load " + I2S(GravityChanger_UseList[i]) + " Count " + I2S(i + 1))
+            //! runtextmacro for_end("set i = i + 1")
+
+            // 폭탄으로 파괴된 블록 저장
+            set this.bombBlockCount = Stage_BlockBoom.GetCount()
+            //! runtextmacro for("set i = 0", "i < this.bombBlockCount")
+                call SaveLocationHandle(bombBlockHistory, this, i * 3, Location(Stage_BlockBoom.GetBlockX(i), Stage_BlockBoom.GetBlockY(i)))
+                call SaveLocationHandle(bombBlockHistory, this, i * 3 + 1, Location(I2R(Stage_BlockBoom.GetBlockType(i)), 0))
+            //! runtextmacro for_end("set i = i + 1")
+
+            // 수레에 담긴 오브젝트 저장
+            set this.cartStorageCount = Cart_GetCount()
+            //! runtextmacro for("set i = 0", "i < this.cartStorageCount")
+                if Cart_GetStorage(i) != 0 then
+                    call SaveInteger(cartStorage, this, i * 4, Cart_GetStorage(i).Id)
+                    call SaveBoolean(cartStorage, this, i * 4 + 1, Cart_GetStorage(i).Left)
+                    call SaveBoolean(cartStorage, this, i * 4 + 2, Cart_GetStorage(i).Right)
+                    call SaveStr(cartStorage, this, i * 4 + 3, Cart_GetStorage(i).Direction)
+                else
+                    call SaveInteger(cartStorage, this, i * 4, 0)
+                endif
             //! runtextmacro for_end("set i = i + 1")
 
             set this.world = Status.World

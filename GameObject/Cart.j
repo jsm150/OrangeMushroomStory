@@ -123,12 +123,24 @@ library Cart initializer Init needs TriggerSleepAction, UnitMotion
                 set storage[i] = 0
             endif
         //! runtextmacro for_end("set i = i + 1")
-        
+
         set count = 0
+    endfunction
+
+    public function GetCount takes nothing returns integer
+        return count
+    endfunction
+
+    public function GetStorage takes integer index returns Unit
+        return storage[index]
+    endfunction
+
+    public function SetStorage takes integer index, Unit data returns nothing
+        set storage[index] = data
     endfunction
 
 
     private function Init takes nothing returns nothing
-        
+
     endfunction
 endlibrary

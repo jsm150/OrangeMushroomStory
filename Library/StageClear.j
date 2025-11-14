@@ -49,7 +49,7 @@ library Stage initializer init needs Cart
 
             if GravityChanger_State then
                 set targetY = targetY + 128
-            else 
+            else
                 set targetY = targetY - 128
             endif
 
@@ -78,7 +78,7 @@ library Stage initializer init needs Cart
 
             call SetTerrainType(posX - 128, targetY, UnTerrain, -1, 1, 0)
             call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX - 128, targetY ))
-            
+
             call SetTerrainType(posX, targetY, UnTerrain, -1, 1, 0)
             call DestroyEffect(AddSpecialEffect("war3mapImported\\Boom.mdx", posX, targetY ))
 
@@ -94,6 +94,32 @@ library Stage initializer init needs Cart
                 call SetTerrainType(blockX[i], blockY[i], blockType[i], -1, 1, 0)
             //! runtextmacro for_end("set i = i + 1")
             set count = 0
+        endmethod
+
+        public static method GetCount takes nothing returns integer
+            return count
+        endmethod
+
+        public static method GetBlockX takes integer index returns real
+            return blockX[index]
+        endmethod
+
+        public static method GetBlockY takes integer index returns real
+            return blockY[index]
+        endmethod
+
+        public static method GetBlockType takes integer index returns integer
+            return blockType[index]
+        endmethod
+
+        public static method SetState takes integer newCount returns nothing
+            set count = newCount
+        endmethod
+
+        public static method SetBlock takes integer index, real x, real y, integer bType returns nothing
+            set blockX[index] = x
+            set blockY[index] = y
+            set blockType[index] = bType
         endmethod
     endstruct
 
